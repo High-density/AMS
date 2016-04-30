@@ -14,6 +14,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class Login implements ActionListener{/*ログインクラス*/
+    private system.Controller controller; // 内部動作用
 	private JFrame loginFrame;
 	private Container contentPane;
 	private JLabel idLabel;
@@ -27,6 +28,9 @@ public class Login implements ActionListener{/*ログインクラス*/
 	private JButton loginButton;
 	private JButton endButton;
 	public Login(){
+        // システム呼び出し
+        controller = new system.Controller();
+
 		//各種設定
 		loginFrame = new JFrame("ログインフォーム");
 		loginFrame.setBounds(0, 0, 225, 400);
@@ -71,9 +75,9 @@ public class Login implements ActionListener{/*ログインクラス*/
 		String PA = new String(password.getPassword());
 		//ログインボタンのアクション
 		if(event.getSource() == loginButton){
-			if(ID.equals("i") && PA.equals("p")){
+            if(controller.login(ID, PA) == 0){
 					loginFrame.setVisible(false);
-					new Method();
+					new Method(controller);
 			}else
 				annouceLabel.setText("ログインできません\n");
 		}
