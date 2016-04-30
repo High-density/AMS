@@ -1,7 +1,7 @@
 package main;
 
-public class Main {
+class Main{ /* スタータークラス */
 	public static void main(String args[]){
-		System.out.println("hello");
+		new display.Login();
 	}
 }
