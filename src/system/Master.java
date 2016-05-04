@@ -5,6 +5,7 @@ import java.lang.String;
 class Master extends User{
     public Master(String id, String passwd){
         super(id, passwd);
+        attribute = "master";
     }
 
     // Masterは出席不可

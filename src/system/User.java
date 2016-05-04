@@ -12,8 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class User{
-    private String id     = null; // 名前(ID)
+    private String id     = null; // ID
     private String passwd = null; // パスワード
+    protected String attribute = null; // 属性
 
     public User(String id, String passwd){
         this.id = id;
@@ -113,5 +114,9 @@ public abstract class User{
     public int setPasswd(String passwd){
         this.passwd = passwd;
         return 0; // 成功時
+    }
+
+    public String getAttribute(){
+        return attribute;
     }
 }
