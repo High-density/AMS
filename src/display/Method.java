@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 class Method implements ActionListener{/*機能選択クラス*/
-    private system.Controller controller; // 内部動作用
+	private system.Controller controller; // 内部動作用
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -24,8 +24,8 @@ class Method implements ActionListener{/*機能選択クラス*/
 	private JButton[] day = new JButton[31];
 
 	Method(system.Controller controller){
-        // システム引き継ぎ
-        this.controller = controller;
+		// システム引き継ぎ
+		this.controller = controller;
 
 		//各種設定
 		mainFrame = new JFrame("機能選択");
@@ -55,15 +55,16 @@ class Method implements ActionListener{/*機能選択クラス*/
 		panelButton.add(thrButton);
 		panelButton.add(forButton);
 		panelButton.add(endButton);
-		for(int i=0;i<31;i++){
-			//panelOne.add(day[i]);
-		}
-
+		
+/*		for(int i=0;i<31;i++){
+			panelOne.add(day[i]);
+		}*/
+		
 		//フレームに追加
 		contentPane.add(panelButton, BorderLayout.NORTH);
-		//contentPane.add(panelOne, BorderLayout.CENTER);
+		/*contentPane.add(panelOne, GridLayout.class);*/
 		mainFrame.setVisible(true);
-		
+
 	}
 
 	public void actionPerformed(ActionEvent event){
