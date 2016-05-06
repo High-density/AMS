@@ -6,6 +6,7 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.crypto.spec.IvParameterSpec;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -22,10 +23,7 @@ class Method implements ActionListener{/*機能選択クラス*/
 	private JPanel panelFor;
 	private JPanel cardPanel;
 	private CardLayout cLayout;
-	private JButton oneButton;
-	private JButton twoButton;
-	private JButton thrButton;
-	private JButton forButton;
+	private JButton[] numButton = new JButton[4];
 	private JButton endButton;
 	private JLabel[] labelNum = new JLabel[4];
 	
@@ -48,10 +46,10 @@ class Method implements ActionListener{/*機能選択クラス*/
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
 		cardPanel.setLayout(cLayout);
-		oneButton = new JButton("機能1");
-		twoButton = new JButton("機能2");
-		thrButton = new JButton("機能3");
-		forButton = new JButton("機能4");
+		numButton[0] = new JButton("機能1");
+		numButton[1] = new JButton("機能2");
+		numButton[2] = new JButton("機能3");
+		numButton[3] = new JButton("機能4");
 		endButton = new JButton("終了");
 		labelNum[0] = new JLabel("機能1");
 		labelNum[1] = new JLabel("機能2");
@@ -59,17 +57,13 @@ class Method implements ActionListener{/*機能選択クラス*/
 		labelNum[3] = new JLabel("機能4");
 
 		//ボタンのアクション用
-		oneButton.addActionListener(this);
-		twoButton.addActionListener(this);
-		thrButton.addActionListener(this);
-		forButton.addActionListener(this);
+		for(int i=0;i<4;i++)
+			numButton[i].addActionListener(this);
 		endButton.addActionListener(this);
 
 		//コンテンツの追加
-		panelButton.add(oneButton);
-		panelButton.add(twoButton);
-		panelButton.add(thrButton);
-		panelButton.add(forButton);
+		for(int i=0;i<4;i++)
+			panelButton.add(numButton[i]);
 		panelButton.add(endButton);
 		panelOne.add(labelNum[0]);
 		panelTwo.add(labelNum[1]);
@@ -88,19 +82,19 @@ class Method implements ActionListener{/*機能選択クラス*/
 
 	public void actionPerformed(ActionEvent event){
 		//機能1
-		if(event.getSource() == oneButton){
+		if(event.getSource() == numButton[0]){
 			cLayout.show(cardPanel, "Meth1");
 		}
 		//機能2
-		if(event.getSource() == twoButton){
+		if(event.getSource() == numButton[1]){
 			cLayout.show(cardPanel, "Meth2");
 		}
 		//機能3
-		if(event.getSource() == thrButton){
+		if(event.getSource() == numButton[2]){
 			cLayout.show(cardPanel, "Meth3");
 		}
 		//機能4
-		if(event.getSource() == forButton){
+		if(event.getSource() == numButton[3]){
 			cLayout.show(cardPanel, "Meth4");
 		}
 		//終了
