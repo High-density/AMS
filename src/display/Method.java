@@ -5,6 +5,7 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.peer.PanelPeer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -56,12 +57,14 @@ class Method implements ActionListener{/*機能選択クラス*/
 		panelButton.add(forButton);
 		panelButton.add(endButton);
 		for(int i=0;i<31;i++){
-
+			panelOne.add(day[i]);
 		}
 
 		//フレームに追加
 		contentPane.add(panelButton, BorderLayout.NORTH);
+		contentPane.add(panelOne, BorderLayout.CENTER);
 		mainFrame.setVisible(true);
+		
 	}
 
 	public void actionPerformed(ActionEvent event){

@@ -23,7 +23,7 @@ class Slave extends User{
 
         // 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
         try{
-            File file = new File("../file/" + getId() + "/attendance/" + sdf.format(c.getTime()));
+            File file = new File("./file/" + getId() + "/attendance/" + sdf.format(c.getTime()));
             // 未出席時のみ記録
             if(!file.exists()){
                 file.createNewFile();
