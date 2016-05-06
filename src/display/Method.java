@@ -57,7 +57,7 @@ class Method implements ActionListener{/*機能選択クラス*/
 		panelButton.add(forButton);
 		panelButton.add(endButton);
 		for(int i=0;i<31;i++){
-			panelOne.add(day[i]);
+			//panelOne.add(day[i]);
 		}
 
 		//フレームに追加
