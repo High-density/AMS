@@ -16,7 +16,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class Login extends KeyAdapter implements ActionListener{/*ログインクラス*/
-    private system.Controller controller; // 内部動作用
+	private system.Controller controller; // 内部動作用
 	private JFrame loginFrame;
 	private Container contentPane;
 	private JLabel idLabel;
@@ -30,8 +30,8 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 	private JButton loginButton;
 	private JButton endButton;
 	public Login(){
-        // システム呼び出し
-        controller = new system.Controller();
+		// システム呼び出し
+		controller = new system.Controller();
 
 		//各種設定
 		loginFrame = new JFrame("ログインフォーム");
@@ -55,6 +55,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		//アクションの設定用
 		loginButton.addActionListener(this);
 		endButton.addActionListener(this);
+		password.addKeyListener(this);
 
 		//パネルにいろいろ追加
 		panelText.add(idLabel);
@@ -77,9 +78,9 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		String PA = new String(password.getPassword());
 		//ログインボタンのアクション
 		if(event.getSource() == loginButton){
-            if(controller.login(ID, PA) == 0){
-					loginFrame.setVisible(false);
-					new Method(controller);
+			if(controller.login(ID, PA) == 0){
+				loginFrame.setVisible(false);
+				new Method(controller);
 			}else
 				annouceLabel.setText("ログインできません\n");
 		}
@@ -89,6 +90,14 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		}
 	}
 	public void keyPressed(KeyEvent k){
-		
+		String ID = new String(text.getText());
+		String PA = new String(password.getPassword());
+		if(k.getKeyCode() == KeyEvent.VK_ENTER){
+			if(controller.login(ID, PA) == 0){
+				loginFrame.setVisible(false);
+				new Method(controller);
+			}else
+				annouceLabel.setText("ログインできません\n");
+		}
 	}
 }
