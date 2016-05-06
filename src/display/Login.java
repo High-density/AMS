@@ -5,6 +5,8 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class Login implements ActionListener{/*ログインクラス*/
+public class Login extends KeyAdapter implements ActionListener{/*ログインクラス*/
     private system.Controller controller; // 内部動作用
 	private JFrame loginFrame;
 	private Container contentPane;
@@ -85,5 +87,8 @@ public class Login implements ActionListener{/*ログインクラス*/
 		if(event.getSource() == endButton){
 			System.exit(0);
 		}
+	}
+	public void keyPressed(KeyEvent k){
+		
 	}
 }
