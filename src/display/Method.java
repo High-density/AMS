@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -16,7 +17,8 @@ class Method implements ActionListener{/*機能選択クラス*/
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
-	private JPanel[] panelMethod = new JPanel[4];
+	private JPanel panelOne;
+	private JPanel panelTwo;
 	private JPanel cardPanel;
 	private CardLayout cLayout;
 	private JButton oneButton;
@@ -25,8 +27,8 @@ class Method implements ActionListener{/*機能選択クラス*/
 	private JButton forButton;
 	private JButton endButton;
 	private JButton[] day = new JButton[31];
-	private JTextField txtOne;
-	private JTextField txtTwo;
+	private JLabel labelOne;
+	private JLabel labelTwo;
 	
 
 	Method(system.Controller controller){
@@ -39,6 +41,8 @@ class Method implements ActionListener{/*機能選択クラス*/
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
 		contentPane = mainFrame.getContentPane();
+		panelOne = new JPanel();
+		panelTwo = new JPanel();
 		panelButton = new JPanel();
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
@@ -48,8 +52,8 @@ class Method implements ActionListener{/*機能選択クラス*/
 		thrButton = new JButton("機能3");
 		forButton = new JButton("機能4");
 		endButton = new JButton("終了");
-		txtOne = new JTextField("機能1");
-		txtTwo = new JTextField("機能2");
+		labelOne = new JLabel("機能1");
+		labelTwo = new JLabel("機能2");
 
 		//ボタンのアクション用
 		oneButton.addActionListener(this);
@@ -64,10 +68,10 @@ class Method implements ActionListener{/*機能選択クラス*/
 		panelButton.add(thrButton);
 		panelButton.add(forButton);
 		panelButton.add(endButton);
-		panelMethod[0].add(txtOne);
-		panelMethod[1].add(txtTwo);
-		cardPanel.add(panelMethod[0], "Meth0");
-		cardPanel.add(panelMethod[1], "Meth1");
+		panelOne.add(labelOne);
+		panelTwo.add(labelTwo);
+		cardPanel.add(panelOne, "Meth0");
+		cardPanel.add(panelTwo, "Meth1");
 
 		//フレームに追加
 		contentPane.add(panelButton, BorderLayout.NORTH);
