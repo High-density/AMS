@@ -62,7 +62,7 @@ class Method implements ActionListener{/*機能選択クラス*/
 
 		//フレームに追加
 		contentPane.add(panelButton, BorderLayout.NORTH);
-		contentPane.add(panelOne, BorderLayout.CENTER);
+		//contentPane.add(panelOne, BorderLayout.CENTER);
 		mainFrame.setVisible(true);
 		
 	}
