@@ -28,7 +28,7 @@ public abstract class User{
 
         // ファイルからパスワードの読み込み
         try{
-            File file = new File("../file/" + id + "/passwd");
+            File file = new File("./file/" + id + "/passwd");
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line = br.readLine();
             Pattern p = Pattern.compile(id + ":(.*)$");
@@ -52,7 +52,7 @@ public abstract class User{
         if(pw.equals(passwd)){
             // ファイルから属性の読み込み
             try{
-                File file = new File("../file/user");
+                File file = new File("./file/user");
                 BufferedReader br = new BufferedReader(new FileReader(file));
                 String line;            // Fileから読み取った行
                 Pattern p = Pattern.compile(id + ":(.*)$");
