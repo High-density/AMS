@@ -10,7 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 class Method implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
@@ -19,6 +18,8 @@ class Method implements ActionListener{/*機能選択クラス*/
 	private JPanel panelButton;
 	private JPanel panelOne;
 	private JPanel panelTwo;
+	private JPanel panelThr;
+	private JPanel panelFor;
 	private JPanel cardPanel;
 	private CardLayout cLayout;
 	private JButton oneButton;
@@ -26,9 +27,7 @@ class Method implements ActionListener{/*機能選択クラス*/
 	private JButton thrButton;
 	private JButton forButton;
 	private JButton endButton;
-	private JButton[] day = new JButton[31];
-	private JLabel labelOne;
-	private JLabel labelTwo;
+	private JLabel[] labelNum = new JLabel[4];
 	
 
 	Method(system.Controller controller){
@@ -43,6 +42,8 @@ class Method implements ActionListener{/*機能選択クラス*/
 		contentPane = mainFrame.getContentPane();
 		panelOne = new JPanel();
 		panelTwo = new JPanel();
+		panelThr = new JPanel();
+		panelFor = new JPanel();
 		panelButton = new JPanel();
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
@@ -52,8 +53,10 @@ class Method implements ActionListener{/*機能選択クラス*/
 		thrButton = new JButton("機能3");
 		forButton = new JButton("機能4");
 		endButton = new JButton("終了");
-		labelOne = new JLabel("機能1");
-		labelTwo = new JLabel("機能2");
+		labelNum[0] = new JLabel("機能1");
+		labelNum[1] = new JLabel("機能2");
+		labelNum[2] = new JLabel("機能3");
+		labelNum[3] = new JLabel("機能4");
 
 		//ボタンのアクション用
 		oneButton.addActionListener(this);
@@ -68,10 +71,14 @@ class Method implements ActionListener{/*機能選択クラス*/
 		panelButton.add(thrButton);
 		panelButton.add(forButton);
 		panelButton.add(endButton);
-		panelOne.add(labelOne);
-		panelTwo.add(labelTwo);
-		cardPanel.add(panelOne, "Meth0");
-		cardPanel.add(panelTwo, "Meth1");
+		panelOne.add(labelNum[0]);
+		panelTwo.add(labelNum[1]);
+		panelThr.add(labelNum[2]);
+		panelFor.add(labelNum[3]);
+		cardPanel.add(panelOne, "Meth1");
+		cardPanel.add(panelTwo, "Meth2");
+		cardPanel.add(panelThr, "Meth3");
+		cardPanel.add(panelFor, "Meth4");
 
 		//フレームに追加
 		contentPane.add(panelButton, BorderLayout.NORTH);
@@ -82,19 +89,19 @@ class Method implements ActionListener{/*機能選択クラス*/
 	public void actionPerformed(ActionEvent event){
 		//機能1
 		if(event.getSource() == oneButton){
-			cLayout.show(cardPanel, "Meth0");
+			cLayout.show(cardPanel, "Meth1");
 		}
 		//機能2
 		if(event.getSource() == twoButton){
-			cLayout.show(cardPanel, "Meth1");
+			cLayout.show(cardPanel, "Meth2");
 		}
 		//機能3
 		if(event.getSource() == thrButton){
-			//	mainFrame.setVisible(false);
+			cLayout.show(cardPanel, "Meth3");
 		}
 		//機能4
 		if(event.getSource() == forButton){
-			//	mainFrame.setVisible(false);
+			cLayout.show(cardPanel, "Meth4");
 		}
 		//終了
 		if(event.getSource() == endButton){
