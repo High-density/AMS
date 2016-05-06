@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>swingx-all-1.6.4.jar</name>
+			<type>1</type>
+			<location>C:/Users/dakarann/Desktop/swingx-all-1.6.4.jar</location>
+		</link>
+	</linkedResources>
 </projectDescription>
