@@ -9,7 +9,7 @@ import java.lang.NullPointerException;
 import java.lang.String;
 import java.lang.System;
 import java.net.NetworkInterface;
-import java.util.Calendar;
+import java.time.YearMonth;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -155,14 +155,15 @@ public abstract class User {
 	}
 
 	public abstract int setAttendance(); // 出席
-	public abstract String[][] getAttendance(Calendar calendar); // 出席表示(idから取得すべき情報を自動判断)
+
+	public abstract String[][] getAttendance(YearMonth ym); // 出席表示(idから取得すべき情報を自動判断)
 
 	// 出席表示(id指定)
-	protected static String[] getAttendance(String id ,Calendar calendar) {
-		int maxDay = calendar.getActualMaximum(Calendar.DATE);
+	protected static String[] getAttendance(String id ,YearMonth ym) {
+		int maxDay = ym.lengthOfMonth(); // 月の日数
 		String attendanceBook[] = new String[maxDay];
-		String year = String.format("%02d", calendar.get(Calendar.YEAR));
-		String month = String.format("%02d", calendar.get(Calendar.MONTH) + 1);
+		String year = String.format("%02d", ym.getYear());
+		String month = String.format("%02d", ym.getMonthValue());
 		for (int d = 0; d < maxDay; d++) {
 			// ファイルから出席情報の読み込み
 			String day = String.format("%02d", d + 1);
@@ -193,8 +194,11 @@ public abstract class User {
 	}
 
 	public abstract int submitReport(); // 報告書提出
+
 	public abstract int showReport(); // 報告書閲覧
+
 	public abstract int setEvent(); // 情報配信
+
 	public abstract int createUser(); // ユーザの作成
 
 	// setter getter

@@ -7,12 +7,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.String;
 import java.text.SimpleDateFormat;
+import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.lang.String;
-import java.lang.System;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.lang.String;
+import java.lang.System;
 
 class Master extends User {
 	public Master(String id, String passwd) {
@@ -26,7 +26,7 @@ class Master extends User {
 	}
 
 	// 全slaveから出席取得
-	public String[][] getAttendance(Calendar calendar) {
+	public String[][] getAttendance(YearMonth ym) {
 		String attendanceBook[][]; // 出席情報
 
 		// slaveのidを一旦格納
@@ -56,7 +56,7 @@ class Master extends User {
 		// 取得したidのそれぞれの出席を取得
 		attendanceBook = new String[slaves.size()][];
 		for (int s = 0; s < slaves.size(); s++) {
-			attendanceBook[s] = User.getAttendance(slaves.get(s), calendar);
+			attendanceBook[s] = User.getAttendance(slaves.get(s), ym);
 		}
 
 		return attendanceBook;

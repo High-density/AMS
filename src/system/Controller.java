@@ -1,7 +1,7 @@
 package system;
 
 import java.lang.String;
-import java.util.Calendar;
+import java.time.YearMonth;
 
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -46,8 +46,8 @@ public class Controller {
 	}
 
 	// 出席の取得
-	public String[][] getAttendance(Calendar calendar) {
-		return user.getAttendance(calendar);
+	public String[][] getAttendance(YearMonth ym) {
+		return user.getAttendance(ym);
 	}
 
 	// TODO:アカウント設定
