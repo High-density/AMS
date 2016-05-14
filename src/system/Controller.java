@@ -29,12 +29,12 @@ public class Controller {
 	}
 
 	// TODO:報告書の提出
-	public int submitReport(/*id, date*/) {
+	public int submitReport(Calendar calendar) {
 		return 0;
 	}
 
 	// TODO:報告書の閲覧
-	public int showReport(/* date */) {
+	public int showReport(Calendar calendar) {
 		return 0;
 	}
 
