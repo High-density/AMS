@@ -2,6 +2,7 @@ package system;
 
 import java.lang.String;
 import java.time.YearMonth;
+import java.lang.System;
 
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -38,8 +39,8 @@ public class Controller {
 
 	// 出席の登録
 	private int attend() {
-		// 属性がslaveなら出席
-		if (user.getAttribute().equals("slave")) {
+		// 属性がSlaveなら出席
+		if (user.getAttribute().equals(Slave.class.getSimpleName())) {
 			return user.setAttendance();
 		}
 		return 1;

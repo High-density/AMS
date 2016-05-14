@@ -19,7 +19,7 @@ import java.lang.System;
 class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
-		attribute = "slave";
+		attribute = this.getClass().getSimpleName();
 	}
 
 	// 出席

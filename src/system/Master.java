@@ -17,7 +17,7 @@ import java.lang.System;
 class Master extends User {
 	public Master(String id, String passwd) {
 		super(id, passwd);
-		attribute = "master";
+		attribute = this.getClass().getSimpleName();
 	}
 
 	// Masterは出席不可
@@ -36,10 +36,10 @@ class Master extends User {
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String line;
 			while ((line = br.readLine()) != null){
-				Pattern p = Pattern.compile("([0-9a-z]+):([a-z]+)$");
+				Pattern p = Pattern.compile("([0-9a-z]+):(.*)$");
 				Matcher m = p.matcher(line);
 				if (m.find()){
-					if (m.group(2).equals("slave")) {
+					if (m.group(2).equals(Slave.class.getSimpleName())) {
 						slaves.add(m.group(1));
 					}
 				}

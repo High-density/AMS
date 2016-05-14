@@ -82,9 +82,9 @@ public abstract class User {
 				return null;
 			}
 
-			if (attribute.equals("master")) {
+			if (attribute.equals(Master.class.getSimpleName())) {
 				return new Master(id, passwd);
-			} else if (attribute.equals("slave")) {
+			} else if (attribute.equals(Slave.class.getSimpleName())) {
 				return new Slave(id, passwd);
 			} else {
 				System.out.println("属性読み込みエラー: attribute = " + attribute);
