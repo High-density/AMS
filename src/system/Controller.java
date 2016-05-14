@@ -13,8 +13,10 @@ public class Controller {
 	public int login(String id, String passwd) {
 		user = User.login(id, passwd);
 		if (user == null) {
+			// ログイン失敗
 			return 1;
 		} else {
+			// ログイン成功したら出席チェック
 			attend();
 			return 0;
 		}

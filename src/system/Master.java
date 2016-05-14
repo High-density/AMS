@@ -25,11 +25,11 @@ class Master extends User {
 		return 1;
 	}
 
-	// 全slaveから出席取得
+	// 全Slaveから出席取得
 	public String[][] getAttendance(Calendar calendar) {
 		String attendanceBook[][]; // 出席情報
 
-		// slaveのidを一旦格納
+		// Slaveのidを一旦格納
 		ArrayList<String> slaves = new ArrayList<String>();
 		try {
 			File file = new File("./file/user");
@@ -39,6 +39,7 @@ class Master extends User {
 				Pattern p = Pattern.compile("([0-9a-z]+):([a-z]+)$");
 				Matcher m = p.matcher(line);
 				if (m.find()){
+                    // 属性がSlaveのものだけを格納
 					if (m.group(2).equals("slave")) {
 						slaves.add(m.group(1));
 					}
