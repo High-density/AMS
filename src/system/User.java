@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.lang.NullPointerException;
 import java.lang.String;
-import java.lang.System;
+import java.lang.Throwable;
 import java.net.NetworkInterface;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -37,18 +37,19 @@ public abstract class User {
 			String line = br.readLine();
 			Pattern p = Pattern.compile(id + ":(.*)$");
 			Matcher m = p.matcher(line);
-			if (m.find())
+			if (m.find()) {
 				pw = m.group(1);
+			}
 
 			br.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("このIDは登録されていません");
+			Log.error(e);
 			return null;
 		} catch (IOException e) {
-			System.out.println("パスワード読み込みエラー: " + e);
+			Log.error(e);
 			return null;
 		} catch (NullPointerException e) {
-			System.out.println("パスワード読み込みエラー: " + e);
+			Log.error(e);
 			return null;
 		}
 
@@ -73,13 +74,13 @@ public abstract class User {
 
 				br.close();
 			} catch (FileNotFoundException e) {
-				System.out.println("ユーザファイル読み込みエラー: " + e);
+				Log.error(e);
 				return null;
 			} catch (IOException e) {
-				System.out.println("属性読み込みエラー: " + e);
+				Log.error(e);
 				return null;
 			} catch (NullPointerException e) {
-				System.out.println("属性読み込みエラー: " + e);
+				Log.error(e);
 				return null;
 			}
 
@@ -89,11 +90,11 @@ public abstract class User {
 			} else if (attribute.equals(Slave.class.getSimpleName())) {
 				return new Slave(id, passwd);
 			} else {
-				System.out.println("属性読み込みエラー: attribute = " + attribute);
+				Log.error(new Throwable(), "属性読み込みエラー: attribute = " + attribute);
 				return null;
 			}
 		} else {
-			System.out.println("パスワードが不正です");
+			// 不正なパスワードの入力
 		}
 
 		return null; // 認証失敗
@@ -120,13 +121,13 @@ public abstract class User {
 
 			br.close();
 		} catch (FileNotFoundException e) {
-			System.out.println("このIDは登録されていません");
+			// ID未登録時
 			return false;
 		} catch (IOException e) {
-			System.out.println("パスワード読み込みエラー: " + e);
+			Log.error(e);
 			return false;
 		} catch (NullPointerException e) {
-			System.out.println("パスワード読み込みエラー: " + e);
+			Log.error(e);
 			return false;
 		}
 
@@ -145,10 +146,9 @@ public abstract class User {
 					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
 				}
 				gotNicName = gotNic.getName();
-				// System.out.println(gotNic.getName() + ":" + gotNic.getDisplayName() + " - " + gotMacAddress);
 			}
 		} catch (IOException e) {
-			System.out.println("MACアドレスの取得不可: " + e);
+			Log.error(e);
 			return false;
 		}
 

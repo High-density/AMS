@@ -47,11 +47,11 @@ class Master extends User {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			System.out.println(e);
+			Log.error(e);
 		} catch (IOException e) {
-			System.out.println(e);
+			Log.error(e);
 		} catch (NullPointerException e) {
-			System.out.println(e);
+			Log.error(e);
 		}
 
 		// 取得したidのそれぞれの出席を取得

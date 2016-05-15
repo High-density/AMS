@@ -39,7 +39,7 @@ class Slave extends User {
 				pw.close();
 			}
 		} catch (IOException e) {
-			System.out.println("Slave.java:ファイル書き込みエラー: " + e);
+			Log.error(e);
 			return 1;
 		}
 		return 0;
