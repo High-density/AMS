@@ -2,7 +2,7 @@ package system;
 
 import java.lang.String;
 import java.time.YearMonth;
-import java.lang.System;
+//import java.lang.System;
 
 public class Controller {
 	private User user; // ログインしているユーザ

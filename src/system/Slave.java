@@ -1,10 +1,10 @@
 package system;
 
-import java.io.BufferedReader;
+//import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+//import java.io.FileNotFoundException;
+//import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,9 +12,9 @@ import java.lang.String;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.lang.System;
+//import java.util.regex.Matcher;
+//import java.util.regex.Pattern;
+//import java.lang.System;
 
 class Slave extends User {
 	public Slave(String id, String passwd) {
