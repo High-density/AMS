@@ -18,16 +18,13 @@ class Method implements ActionListener{/*機能選択クラス*/
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
-	private JPanel panelOne;
-	private JPanel panelTwo;
-	private JPanel panelThr;
-	private JPanel panelFor;
+	private JPanel panelNum[];
 	private JPanel cardPanel;
 	private CardLayout cLayout;
 	private JButton[] numButton = new JButton[4];
 	private JButton endButton;
 	private JLabel[] labelNum = new JLabel[4];
-	
+
 
 	Method(system.Controller controller){
 		// システム引き継ぎ
@@ -39,10 +36,9 @@ class Method implements ActionListener{/*機能選択クラス*/
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
 		contentPane = mainFrame.getContentPane();
-		panelOne = new JPanel();
-		panelTwo = new JPanel();
-		panelThr = new JPanel();
-		panelFor = new JPanel();
+		panelNum = new JPanel[4];
+		for(int i=0;i<4;i++)
+			panelNum[i] = new JPanel();
 		panelButton = new JPanel(new GridLayout(1,5));
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
@@ -66,14 +62,11 @@ class Method implements ActionListener{/*機能選択クラス*/
 		for(int i=0;i<4;i++)
 			panelButton.add(numButton[i]);
 		panelButton.add(endButton);
-		panelOne.add(labelNum[0]);
-		panelTwo.add(labelNum[1]);
-		panelThr.add(labelNum[2]);
-		panelFor.add(labelNum[3]);
-		cardPanel.add(panelOne, "Meth1");
-		cardPanel.add(panelTwo, "Meth2");
-		cardPanel.add(panelThr, "Meth3");
-		cardPanel.add(panelFor, "Meth4");
+		for(int i=0;i<4;i++){
+			String str = "Meth" + (i+1);
+			panelNum[i].add(labelNum[i]);
+			cardPanel.add(panelNum[i], str);
+		}
 
 		//フレームに追加
 		contentPane.add(panelButton, BorderLayout.NORTH);
