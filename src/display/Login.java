@@ -64,6 +64,8 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		loginButton.addActionListener(this);
 		endButton.addActionListener(this);
 		passField.addKeyListener(this);
+		loginButton.addKeyListener(this);
+		endButton.addKeyListener(this);
 
 		//パネルにいろいろ追加
 		gbc.gridx = 0;
@@ -91,31 +93,29 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		loginFrame.setVisible(true);
 	}
 
-	public void actionPerformed(ActionEvent event){
-		String ID = new String(idField.getText());
-		String PA = new String(passField.getPassword());
-		//ログインボタンのアクション
-		if(event.getSource() == loginButton){
-			if(controller.login(ID, PA) == 0){
-				loginFrame.setVisible(false);
-				new Method(controller);
-			}else
-				annouceLabel.setText("ログインできません\n");
-		}
-		//終了ボタンのアクション
-		if(event.getSource() == endButton){
+	public void actionPerformed(ActionEvent e){
+		if(e.getSource() == loginButton)
+			ToF();
+		if(e.getSource() == endButton){
 			System.exit(0);
 		}
 	}
-	public void keyPressed(KeyEvent k){
+	public void keyPressed(KeyEvent e){
+		if(KeyEvent.VK_ENTER == e.getKeyCode()){
+			if(e.getSource() == loginButton || e.getSource() == passField)
+				ToF();
+			if(e.getSource() == endButton){
+				System.exit(0);
+			}
+		}
+	}
+	public void ToF(){
 		String ID = new String(idField.getText());
 		String PA = new String(passField.getPassword());
-		if(k.getKeyCode() == KeyEvent.VK_ENTER){
-			if(controller.login(ID, PA) == 0){
-				loginFrame.setVisible(false);
-				new Method(controller);
-			}else
-				annouceLabel.setText("ログインできません\n");
-		}
+		if(controller.login(ID, PA) == 0){
+			loginFrame.setVisible(false);
+			new Method(controller);
+		}else
+			annouceLabel.setText("ログインできません\n");
 	}
 }
