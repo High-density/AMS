@@ -11,7 +11,6 @@ import java.io.PrintWriter;
 import java.lang.String;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.lang.System;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +37,7 @@ class Slave extends User {
 				pw.close();
 			}
 		} catch (IOException e) {
-			System.out.println("Slave.java:ファイル書き込みエラー: " + e);
+			Log.error(e);
 			return 1;
 		}
 		return 0;

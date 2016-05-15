@@ -10,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.lang.String;
-import java.lang.System;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,11 +45,11 @@ class Master extends User {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			System.out.println(e);
+			Log.error(e);
 		} catch (IOException e) {
-			System.out.println(e);
+			Log.error(e);
 		} catch (NullPointerException e) {
-			System.out.println(e);
+			Log.error(e);
 		}
 
 		// 取得したidのそれぞれの出席を取得
