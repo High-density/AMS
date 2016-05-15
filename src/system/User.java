@@ -9,7 +9,8 @@ import java.lang.NullPointerException;
 import java.lang.String;
 import java.lang.System;
 import java.net.NetworkInterface;
-import java.util.Calendar;
+import java.time.LocalTime;
+import java.time.YearMonth;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -83,9 +84,9 @@ public abstract class User {
 			}
 
 			// 属性に合わせてユーザの作成
-			if (attribute.equals("master")) {
+			if (attribute.equals(Master.class.getSimpleName())) {
 				return new Master(id, passwd);
-			} else if (attribute.equals("slave")) {
+			} else if (attribute.equals(Slave.class.getSimpleName())) {
 				return new Slave(id, passwd);
 			} else {
 				System.out.println("属性読み込みエラー: attribute = " + attribute);
@@ -161,14 +162,14 @@ public abstract class User {
 
 	public abstract int setAttendance(); // 出席
 
-	public abstract String[][] getAttendance(Calendar calendar); // 出席表示(idから取得すべき情報を自動判断)
+	public abstract AttendanceBook[] getAttendance(YearMonth ym); // 出席表示(idから取得すべき情報を自動判断)
 
 	// 出席表示(id指定)
-	protected static String[] getAttendance(String id ,Calendar calendar) {
-		int maxDay = calendar.getActualMaximum(Calendar.DATE);
-		String attendanceBook[] = new String[maxDay]; // 出席簿
-		String year = String.format("%02d", calendar.get(Calendar.YEAR)); // 取得する年
-		String month = String.format("%02d", calendar.get(Calendar.MONTH) + 1); // 取得する月
+	protected static AttendanceBook getAttendance(String id ,YearMonth ym) {
+		AttendanceBook book = new AttendanceBook(id, ym); // 1 Slave分の出席簿
+		String year = String.format("%02d", ym.getYear()); // 取得する年
+		String month = String.format("%02d", ym.getMonthValue()); // 取得する月
+		int maxDay = ym.lengthOfMonth(); // 月の日数
 		for (int d = 0; d < maxDay; d++) {
 			// ファイルから出席情報の読み込み
 			String day = String.format("%02d", d + 1);
@@ -178,24 +179,29 @@ public abstract class User {
 				File file = new File("./file/" + id + "/attendance/" + fileName);
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				String line = br.readLine();
-				Pattern p = Pattern.compile("([0-9]{2})([0-9]{2}):([a-z]+)$");
+				Pattern p = Pattern.compile("([0-9]{2})([0-9]{2}):([0-9]+)$");
 				Matcher m = p.matcher(line);
 				if (m.find()){
-					attendanceBook[d] = m.group(1) + m.group(2) + ":" + m.group(3);
+					// 出席時間の設定
+					int hour = Integer.parseInt(m.group(1));
+					int minute = Integer.parseInt(m.group(2));
+					LocalTime lt = LocalTime.of(hour, minute);
+					// 出席簿に記入
+					book.setBook(d, Integer.parseInt(m.group(3)), lt);
 				}
 
 				br.close();
 			} catch (FileNotFoundException e) {
 				// 欠席のとき
-				attendanceBook[d] = "absent";
+				book.setBook(d, AttendanceBook.ABSENCE);
 			} catch (IOException e) {
-				attendanceBook[d] = "error";
+				book.setBook(d, AttendanceBook.ERROR);
 			} catch (NullPointerException e) {
-				attendanceBook[d] = "error";
+				book.setBook(d, AttendanceBook.ERROR);
 			}
 		}
 
-		return attendanceBook;
+		return book;
 	}
 
 	public abstract int submitReport(); // 報告書提出

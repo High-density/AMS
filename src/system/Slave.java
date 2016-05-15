@@ -9,32 +9,33 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.String;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.lang.System;
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.lang.System;
 
 class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
-		attribute = "slave";
+		attribute = this.getClass().getSimpleName();
 	}
 
 	// 出席
 	public int setAttendance() {
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		LocalDateTime ldt = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
 		// 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
 		try {
-			File file = new File("./file/" + getId() + "/attendance/" + sdf.format(c.getTime()));
+			File file = new File("./file/" + getId() + "/attendance/" + ldt.format(formatter));
 			// 未出席時のみ記録
 			if (!file.exists()) {
 				file.createNewFile();
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-				sdf.applyPattern("HHmm");
-				pw.println(sdf.format(c.getTime()) + ":attended");
+				formatter = DateTimeFormatter.ofPattern("HHmm");
+				pw.println(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED);
 				pw.close();
 			}
 		} catch (IOException e) {
@@ -45,10 +46,10 @@ class Slave extends User {
 	}
 
 	// 出席取得
-	public String[][] getAttendance(Calendar calendar) {
-		String attendanceBook[][] = new String[1][];
-		attendanceBook[0] = User.getAttendance(id, calendar);
-		return attendanceBook;
+	public AttendanceBook[] getAttendance(YearMonth ym) {
+		AttendanceBook book[] = new AttendanceBook[1];
+		book[0] = User.getAttendance(id, ym);
+		return book;
 	}
 
 	// TODO:報告書提出
