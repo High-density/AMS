@@ -1,6 +1,7 @@
 package system;
 
 import java.lang.String;
+import java.time.LocalDate;
 import java.time.YearMonth;
 
 public class Controller {
@@ -29,12 +30,12 @@ public class Controller {
 	}
 
 	// TODO:報告書の提出
-	public int submitReport(Calendar calendar) {
+	public int submitReport(LocalDate ld) {
 		return 0;
 	}
 
 	// TODO:報告書の閲覧
-	public int showReport(Calendar calendar) {
+	public int showReport(LocalDate ld) {
 		return 0;
 	}
 
