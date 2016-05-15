@@ -26,8 +26,8 @@ class Master extends User {
 	}
 
 	// 全slaveから出席取得
-	public String[][] getAttendance(YearMonth ym) {
-		String attendanceBook[][]; // 出席情報
+	public AttendanceBook[] getAttendance(YearMonth ym) {
+		AttendanceBook book[]; // 出席情報
 
 		// slaveのidを一旦格納
 		ArrayList<String> slaves = new ArrayList<String>();
@@ -54,12 +54,12 @@ class Master extends User {
 		}
 
 		// 取得したidのそれぞれの出席を取得
-		attendanceBook = new String[slaves.size()][];
+		book = new AttendanceBook[slaves.size()];
 		for (int s = 0; s < slaves.size(); s++) {
-			attendanceBook[s] = User.getAttendance(slaves.get(s), ym);
+			book[s] = User.getAttendance(slaves.get(s), ym);
 		}
 
-		return attendanceBook;
+		return book;
 	}
 
 	// Masterは報告書提出不可

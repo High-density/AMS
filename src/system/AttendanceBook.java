@@ -1,3 +1,5 @@
+package system;
+
 import java.lang.String;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -31,9 +33,13 @@ public class AttendanceBook {
 		book[day] = status;
 	}
 
-	public void setBook(int day, int status, LocalTime attendedTime, LocalTime returnTime) {
+	public void setBook(int day, int status, LocalTime attendedTime) {
 		setBook(day, status);
 		this.attendedTime[day] = attendedTime;
+	}
+
+	public void setBook(int day, int status, LocalTime attendedTime, LocalTime returnTime) {
+		setBook(day, status, attendedTime);
 		this.returnTime[day] = returnTime;
 	}
 
@@ -60,6 +66,11 @@ public class AttendanceBook {
 	// 取得している月
 	public int getMonth() {
 		return yearMonth.getMonthValue();
+	}
+
+	// 月の日数
+	public int getMaxDate() {
+		return yearMonth.lengthOfMonth();
 	}
 
 	// 取得しているSlaveのid

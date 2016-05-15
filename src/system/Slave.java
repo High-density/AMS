@@ -35,7 +35,7 @@ class Slave extends User {
 				file.createNewFile();
 				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 				formatter = DateTimeFormatter.ofPattern("HHmm");
-				pw.println(ldt.format(formatter) + ":attended");
+				pw.println(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED);
 				pw.close();
 			}
 		} catch (IOException e) {
@@ -46,10 +46,10 @@ class Slave extends User {
 	}
 
 	// 出席取得
-	public String[][] getAttendance(YearMonth ym) {
-		String attendanceBook[][] = new String[1][];
-		attendanceBook[0] = User.getAttendance(id, ym);
-		return attendanceBook;
+	public AttendanceBook[] getAttendance(YearMonth ym) {
+		AttendanceBook book[] = new AttendanceBook[1];
+		book[0] = User.getAttendance(id, ym);
+		return book;
 	}
 
 	// TODO:報告書提出

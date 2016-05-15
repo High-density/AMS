@@ -16,6 +16,7 @@ public class Controller {
 		if (user == null) {
 			return 1;
 		} else {
+			// ログインできたら出席
 			attend();
 			return 0;
 		}
@@ -47,7 +48,7 @@ public class Controller {
 	}
 
 	// 出席の取得
-	public String[][] getAttendance(YearMonth ym) {
+	public AttendanceBook[] getAttendance(YearMonth ym) {
 		return user.getAttendance(ym);
 	}
 
