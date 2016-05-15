@@ -25,8 +25,8 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 	private JPanel panelText;
 	private JPanel panelButton;
 	private JPanel panelError;
-	private JTextField text;
-	private JPasswordField password;
+	private JTextField idField;
+	private JPasswordField passField;
 	private JButton loginButton;
 	private JButton endButton;
 	public Login(){
@@ -35,7 +35,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 
 		//各種設定
 		loginFrame = new JFrame("ログインフォーム");
-		loginFrame.setBounds(0, 0, 225, 400);
+		loginFrame.setBounds(0, 0, 400, 225);
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginFrame.setLocationRelativeTo(null);
 		contentPane = loginFrame.getContentPane();
@@ -46,26 +46,26 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		panelText.setLayout(new GridLayout(4,1));
 		panelButton = new JPanel();
 		panelError = new JPanel();
-		text = new JTextField();
-		password = new JPasswordField();
-		text.setColumns(10);
+		idField = new JTextField();
+		passField = new JPasswordField();
+		idField.setColumns(10);
 		loginButton = new JButton("ログイン");
 		endButton = new JButton("終了");
 
 		//アクションの設定用
 		loginButton.addActionListener(this);
 		endButton.addActionListener(this);
-		password.addKeyListener(this);
+		passField.addKeyListener(this);
 
 		//パネルにいろいろ追加
 		panelText.add(idLabel);
-		panelText.add(text);
+		panelText.add(idField);
 		panelText.add(passLabel);
-		panelText.add(password);
+		panelText.add(passField);
 		panelButton.add(loginButton);
 		panelButton.add(endButton);
 		panelError.add(annouceLabel);
-
+		
 		//フレームにパネルを追加
 		contentPane.add(panelText, BorderLayout.NORTH);
 		contentPane.add(panelButton, BorderLayout.CENTER);
@@ -74,8 +74,8 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 	}
 
 	public void actionPerformed(ActionEvent event){
-		String ID = new String(text.getText());
-		String PA = new String(password.getPassword());
+		String ID = new String(idField.getText());
+		String PA = new String(passField.getPassword());
 		//ログインボタンのアクション
 		if(event.getSource() == loginButton){
 			if(controller.login(ID, PA) == 0){
@@ -90,8 +90,8 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		}
 	}
 	public void keyPressed(KeyEvent k){
-		String ID = new String(text.getText());
-		String PA = new String(password.getPassword());
+		String ID = new String(idField.getText());
+		String PA = new String(passField.getPassword());
 		if(k.getKeyCode() == KeyEvent.VK_ENTER){
 			if(controller.login(ID, PA) == 0){
 				loginFrame.setVisible(false);

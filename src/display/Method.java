@@ -3,6 +3,7 @@ package display;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -42,14 +43,14 @@ class Method implements ActionListener{/*機能選択クラス*/
 		panelTwo = new JPanel();
 		panelThr = new JPanel();
 		panelFor = new JPanel();
-		panelButton = new JPanel();
+		panelButton = new JPanel(new GridLayout(1,5));
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
 		cardPanel.setLayout(cLayout);
-		numButton[0] = new JButton("機能1");
-		numButton[1] = new JButton("機能2");
-		numButton[2] = new JButton("機能3");
-		numButton[3] = new JButton("機能4");
+		numButton[0] = new JButton("出席管理");
+		numButton[1] = new JButton("週報アップロード");
+		numButton[2] = new JButton("予定確認");
+		numButton[3] = new JButton("アカウント情報");
 		endButton = new JButton("終了");
 		labelNum[0] = new JLabel("機能1");
 		labelNum[1] = new JLabel("機能2");
