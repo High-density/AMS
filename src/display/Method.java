@@ -3,21 +3,16 @@ package display;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Container;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-
-
-
-
+import java.io.File;
 
 //import javax.crypto.spec.IvParameterSpec;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -55,25 +50,26 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			panelNum[i] = new JPanel();
 			panelNum[i].setLayout(null);
 		}
-		
+
 		numButton[0] = new JButton("出席管理");
 		numButton[1] = new JButton("週報アップロード");
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
 		numButton[4] = new JButton("終了");
 		referButton  = new JButton("参照");
-		referButton.setBounds(450,200,100,30);
+		referButton.setBounds(500,100,100,30);
 		upButton = new JButton("アップロード");
-		upButton.setBounds(300,300,200,30);
+		upButton.setBounds(300,200,200,30);
 		
+		pathTextField = new JTextField("ファイルを参照してください");
+		pathTextField.setBounds(200,100,300,31);
+
 		labelNum[0] = new JLabel("出席");
 		labelNum[1] = new JLabel("週報");
 		labelNum[2] = new JLabel("予定");
 		labelNum[3] = new JLabel("アカウント");
 		for(int i=0;i<4;i++)
 			labelNum[i].setBounds(380,10,200,40);
-		pathTextField = new JTextField("ファイルを参照してください");
-		pathTextField.setBounds(200,200,250,31);
 
 		//ボタンのアクション用
 		for(int i=0;i<5;i++){
@@ -82,7 +78,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 		referButton.addActionListener(this);
 		referButton.addKeyListener(this);
-		
+
 		//コンテンツの追加
 		for(int i=0;i<5;i++)
 			panelButton.add(numButton[i]);
@@ -118,6 +114,21 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		if(e.getSource() == numButton[3]){
 			cLayout.show(cardPanel, "Meth4");
 		}
+		if(e.getSource() == referButton){//ファイル参照用
+			JFileChooser filechooser = new JFileChooser();
+			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
+			if (selected == JFileChooser.APPROVE_OPTION){
+				File file = filechooser.getSelectedFile();
+				pathTextField.setText(file.getPath());//ファイルが選ばれたらパスを表示
+			}else if (selected == JFileChooser.CANCEL_OPTION){
+				pathTextField.setText("キャンセルされました");
+			}else if (selected == JFileChooser.ERROR_OPTION){
+				pathTextField.setText("エラー又は取消しがありました");
+			}
+		}
+		if(e.getSource() == upButton){//アップロード
+			//アップロードしよう
+		}
 		//終了
 		if(e.getSource() == numButton[4]){
 			System.exit(0);
@@ -125,24 +136,34 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 	public void keyPressed(KeyEvent e){
 		if(KeyEvent.VK_ENTER == e.getKeyCode()){
-			//機能1
-			if(e.getSource() == numButton[0]){
+			if(e.getSource() == numButton[0]){//機能1
 				cLayout.show(cardPanel, "Meth1");
 			}
-			//機能2
-			if(e.getSource() == numButton[1]){
+			if(e.getSource() == numButton[1]){//機能2
 				cLayout.show(cardPanel, "Meth2");
 			}
-			//機能3
-			if(e.getSource() == numButton[2]){
+			if(e.getSource() == numButton[2]){//機能3
 				cLayout.show(cardPanel, "Meth3");
 			}
-			//機能4
-			if(e.getSource() == numButton[3]){
+			if(e.getSource() == numButton[3]){//機能4
 				cLayout.show(cardPanel, "Meth4");
 			}
-			//終了
-			if(e.getSource() == numButton[4]){
+			if(e.getSource() == referButton){//ファイル参照用
+				JFileChooser filechooser = new JFileChooser();
+				int selected = filechooser.showOpenDialog(null);//ダイアログ表示
+				if (selected == JFileChooser.APPROVE_OPTION){
+					File file = filechooser.getSelectedFile();
+					pathTextField.setText(file.getPath());//ファイルが選ばれたらパスを表示
+				}else if (selected == JFileChooser.CANCEL_OPTION){
+					pathTextField.setText("キャンセルされました");
+				}else if (selected == JFileChooser.ERROR_OPTION){
+					pathTextField.setText("エラー又は取消しがありました");
+				}
+			}
+			if(e.getSource() == upButton){//アップロード
+				//アップロードしよう
+			}
+			if(e.getSource() == numButton[4]){//終了
 				System.exit(0);
 			}
 		}
