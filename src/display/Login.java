@@ -61,10 +61,10 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		endButton = new JButton("終了");
 
 		//アクションの設定用
-		loginButton.addActionListener(this);
-		endButton.addActionListener(this);
 		passField.addKeyListener(this);
+		loginButton.addActionListener(this);
 		loginButton.addKeyListener(this);
+		endButton.addActionListener(this);
 		endButton.addKeyListener(this);
 
 		//パネルにいろいろ追加
