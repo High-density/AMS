@@ -1,10 +1,7 @@
 package system;
 
-//import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-//import java.io.FileNotFoundException;
-//import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,9 +9,6 @@ import java.lang.String;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-//import java.util.regex.Matcher;
-//import java.util.regex.Pattern;
-//import java.lang.System;
 
 class Slave extends User {
 	public Slave(String id, String passwd) {
@@ -29,7 +23,14 @@ class Slave extends User {
 
 		// 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
 		try {
-			File file = new File("./file/" + getId() + "/attendance/" + ldt.format(formatter));
+			// ディレクトリがないときには先に作成
+			String dirName = "./file/" + getId() + "/attendance/";
+			File directory = new File(dirName);
+			if (!directory.exists()) {
+				directory.mkdirs();
+			}
+
+			File file = new File(dirName + ldt.format(formatter));
 			// 未出席時のみ記録
 			if (!file.exists()) {
 				file.createNewFile();
