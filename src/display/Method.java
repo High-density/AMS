@@ -60,7 +60,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		referButton.setBounds(500,100,100,30);
 		upButton = new JButton("アップロード");
 		upButton.setBounds(300,200,200,30);
-		
+
 		pathTextField = new JTextField("ファイルを参照してください");
 		pathTextField.setBounds(200,100,300,31);
 
@@ -115,11 +115,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			cLayout.show(cardPanel, "Meth4");
 		}
 		if(e.getSource() == referButton){//ファイル参照用
+			String pathStr;
 			JFileChooser filechooser = new JFileChooser();
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 			if (selected == JFileChooser.APPROVE_OPTION){
 				File file = filechooser.getSelectedFile();
-				pathTextField.setText(file.getPath());//ファイルが選ばれたらパスを表示
+				pathStr = file.getPath();
+				pathTextField.setText(pathStr);//ファイルが選ばれたらパスを表示
 			}else if (selected == JFileChooser.CANCEL_OPTION){
 				pathTextField.setText("キャンセルされました");
 			}else if (selected == JFileChooser.ERROR_OPTION){
