@@ -45,7 +45,12 @@ public class AttendanceBook {
 
 	// 日ごとの出席状況の取得
 	public int getStatus(int day) {
-		return book[day];
+		int maxDate = yearMonth.lengthOfMonth();
+		if (0 <= day && day < maxDate) {
+			return book[day];
+		} else {
+			return AttendanceBook.ERROR;
+		}
 	}
 
 	// 出席時間の取得
