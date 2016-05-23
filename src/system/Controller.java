@@ -10,15 +10,15 @@ public class Controller {
 	}
 
 	// ログイン
-	public int login(String id, String passwd) {
+	public boolean login(String id, String passwd) {
 		user = User.login(id, passwd);
 		if (user == null) {
 			// ログイン失敗
-			return 1;
+			return false;
 		} else {
 			// ログイン成功したら出席チェック
 			attend();
-			return 0;
+			return true;
 		}
 	}
 

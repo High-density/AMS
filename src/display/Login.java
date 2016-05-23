@@ -97,7 +97,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 	public void ToF(){
 		String ID = new String(idField.getText());//ID
 		String PA = new String(passField.getPassword());//パスワード
-		if(controller.login(ID, PA) == 0){//IDとPassがそれぞれ一致したら
+		if(controller.login(ID, PA)){//IDとPassがそれぞれ一致したら
 			loginFrame.setVisible(false);
 			new Method(controller);
 		}else
