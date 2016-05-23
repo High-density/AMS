@@ -6,13 +6,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.String;
-//import java.text.SimpleDateFormat;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-//import java.lang.String;
-//import java.lang.System;
 
 class Master extends User {
 	public Master(String id, String passwd) {
