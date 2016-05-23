@@ -25,18 +25,21 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel panelButton;
 	private JPanel cardPanel;
 	private JPanel panelNum[] = new JPanel[4];
+	private JPanel calPanel;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
+	private JButton dayButton[] = new JButton[42];
 	private JButton referButton;
 	private JButton upButton;
 	private JLabel labelNum[] = new JLabel[4];
+	private JLabel testPathLabel;//ファイルパス取得テスト
 	private JTextField pathTextField;
 
 	Method(system.Controller controller){
-		// システム引き継ぎ
+		/* システム引き継ぎ */
 		//this.controller = controller;
 
-		//各種設定
+		/* 各種設定 */
 		mainFrame = new JFrame("機能選択");
 		mainFrame.setBounds(0, 0, 800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -50,12 +53,16 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			panelNum[i] = new JPanel();
 			panelNum[i].setLayout(null);
 		}
+		calPanel = new JPanel(new GridLayout(7,6));
+		calPanel.setBounds(20,100,400,400);
 
 		numButton[0] = new JButton("出席管理");
 		numButton[1] = new JButton("週報アップロード");
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
 		numButton[4] = new JButton("終了");
+		for(int i=0;i<42;i++)
+			dayButton[i] = new JButton(""+(i+1));
 		referButton  = new JButton("参照");
 		referButton.setBounds(500,100,100,30);
 		upButton = new JButton("アップロード");
@@ -70,16 +77,20 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		labelNum[3] = new JLabel("アカウント");
 		for(int i=0;i<4;i++)
 			labelNum[i].setBounds(380,10,200,40);
-
-		//ボタンのアクション用
+		testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得テスト
+		testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テスト
+		
+		/* ボタンのアクション用 */
 		for(int i=0;i<5;i++){
 			numButton[i].addActionListener(this);
 			numButton[i].addKeyListener(this);
 		}
 		referButton.addActionListener(this);
 		referButton.addKeyListener(this);
+		upButton.addActionListener(this);
+		upButton.addKeyListener(this);
 
-		//コンテンツの追加
+		/* コンテンツの追加 */
 		for(int i=0;i<5;i++)
 			panelButton.add(numButton[i]);
 		for(int i=0;i<4;i++){
@@ -87,87 +98,88 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			panelNum[i].add(labelNum[i]);
 			cardPanel.add(panelNum[i], str);
 		}
-		panelNum[3].add(pathTextField);
-		panelNum[3].add(referButton);
-		panelNum[3].add(upButton);
+		for(int i=0;i<42;i++)
+			calPanel.add(dayButton[i]);
+		panelNum[0].add(calPanel);
+		panelNum[1].add(pathTextField);
+		panelNum[1].add(referButton);
+		panelNum[1].add(upButton);
+		panelNum[1].add(testPathLabel);
 
-		//フレームに追加
+		/* フレームに追加 */
 		contentPane.add(panelButton, BorderLayout.NORTH);
 		contentPane.add(cardPanel, BorderLayout.CENTER);
 		mainFrame.setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent e){
-		//機能1
-		if(e.getSource() == numButton[0]){
+		if(e.getSource() == numButton[0]){/*機能1*/
 			cLayout.show(cardPanel, "Meth1");
 		}
-		//機能2
-		if(e.getSource() == numButton[1]){
+		
+		if(e.getSource() == numButton[1]){/*機能2*/
 			cLayout.show(cardPanel, "Meth2");
 		}
-		//機能3
-		if(e.getSource() == numButton[2]){
+		
+		if(e.getSource() == numButton[2]){/*機能3*/
 			cLayout.show(cardPanel, "Meth3");
 		}
-		//機能4
-		if(e.getSource() == numButton[3]){
+		
+		if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
 		}
-		if(e.getSource() == referButton){//ファイル参照用
-			String pathStr;
+		
+		if(e.getSource() == referButton){/*ファイル参照用*/
 			JFileChooser filechooser = new JFileChooser();
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 			if (selected == JFileChooser.APPROVE_OPTION){
 				File file = filechooser.getSelectedFile();
-				pathStr = file.getPath();
-				pathTextField.setText(pathStr);//ファイルが選ばれたらパスを表示
+				pathTextField.setText(file.getPath());//ファイルが選ばれたらパスを表示
 			}else if (selected == JFileChooser.CANCEL_OPTION){
 				pathTextField.setText("キャンセルされました");
 			}else if (selected == JFileChooser.ERROR_OPTION){
 				pathTextField.setText("エラー又は取消しがありました");
 			}
 		}
-		if(e.getSource() == upButton){//アップロード
-			//アップロードしよう
+		
+		if(e.getSource() == upButton){/*アップロード*/
+			testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
 		}
-		//終了
-		if(e.getSource() == numButton[4]){
+		
+		if(e.getSource() == numButton[4]){/*終了*/
 			System.exit(0);
 		}
 	}
 	public void keyPressed(KeyEvent e){
 		if(KeyEvent.VK_ENTER == e.getKeyCode()){
-			if(e.getSource() == numButton[0]){//機能1
+			if(e.getSource() == numButton[0]){/*機能1*/
 				cLayout.show(cardPanel, "Meth1");
 			}
-			if(e.getSource() == numButton[1]){//機能2
+			if(e.getSource() == numButton[1]){/*機能2*/
 				cLayout.show(cardPanel, "Meth2");
 			}
-			if(e.getSource() == numButton[2]){//機能3
+			if(e.getSource() == numButton[2]){/*機能3*/
 				cLayout.show(cardPanel, "Meth3");
 			}
-			if(e.getSource() == numButton[3]){//機能4
+			if(e.getSource() == numButton[3]){/*機能4*/
 				cLayout.show(cardPanel, "Meth4");
 			}
-			if(e.getSource() == referButton){//ファイル参照用
-				String pathStr;
+			if(e.getSource() == referButton){/*ファイル参照用*/
 				JFileChooser filechooser = new JFileChooser();
 				int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 				if (selected == JFileChooser.APPROVE_OPTION){
 					File file = filechooser.getSelectedFile();
-					pathStr = file.getPath();
-					pathTextField.setText(pathStr);//ファイルが選ばれたらパスを表示
+					pathTextField.setText(file.getPath());	//ファイルが選ばれたらパスを表示
 				}else if (selected == JFileChooser.CANCEL_OPTION){
 					pathTextField.setText("キャンセルされました");
 				}else if (selected == JFileChooser.ERROR_OPTION){
 					pathTextField.setText("エラー又は取消しがありました");
 				}
 			}
-			if(e.getSource() == upButton){//アップロード
-				//アップロードしよう
+			if(e.getSource() == upButton){/*アップロード*/
+				testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
 			}
-			if(e.getSource() == numButton[4]){//終了
+			if(e.getSource() == numButton[4]){/*終了*/
 				System.exit(0);
 			}
 		}
