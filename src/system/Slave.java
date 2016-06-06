@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class Slave extends User {
 	public Slave(String id, String passwd) {
@@ -55,13 +57,27 @@ class Slave extends User {
 
 	// 報告書提出
 	public boolean submitReport(String file) {
+		String dirName = "file/" + getId() + "/report/"; // 報告書ディレクトリの名前
+		File dir = new File(dirName); // 報告書ディレクトリ
+		String today = LocalDate.now().toString(); // 今日の日付
+
 		// 報告書ディレクトリの作成
-		if (!Controller.mkdirs("./file/" + getId() + "/report/")) {
+		if (!Controller.mkdirs(dirName)) {
 			return false;
 		}
 
+		// ディレクトリ内を検索し，その日に報告書が出てたら再提出不可
+		Pattern p = Pattern.compile("^" + today);
+		for (String fileName: dir.list()) {
+			Matcher m = p.matcher(fileName);
+			if (m.find()) {
+				Log.popup("本日分の報告書は提出済みです．\n更新したい場合は管理者に問い合わせてください．");
+				return false;
+			}
+		}
+
 		// コピー先ファイル名の決定
-		String outFileName = "file/" + getId() + "/report/" + LocalDate.now().toString();
+		String outFileName = dirName + today;
 		String suffix = Controller.getSuffixWithDot(file);
 		if (suffix != null) {
 			// 元ファイルに拡張子がついていれば，コピーファイルにもつける
