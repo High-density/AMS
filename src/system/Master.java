@@ -65,7 +65,7 @@ class Master extends User {
 		return false;
 	}
 
-	// TODO:報告書閲覧
+	// 教員はIDを指定しないと報告書が閲覧できない
 	public boolean showReport() {
 		return false;
 	}

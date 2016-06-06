@@ -208,6 +208,41 @@ public abstract class User {
 
 	public abstract boolean showReport(); // 報告書閲覧
 
+	// 報告書閲覧（ID指定）
+	public boolean showReport(String id){
+		String dirName = "file/" + getId() + "/report/"; // 報告書ディレクトリ
+
+		// ディレクトリ作成
+		if (!Controller.mkdirs(dirName)) {
+			return false;
+		}
+
+		try {
+			// コマンドとして実行して，ファイルを開く
+			Runtime r = Runtime.getRuntime();
+			String cmd; // 実行するコマンド
+			String osname = System.getProperty("os.name");
+			// OSごとに開くためのコマンドを変える
+			if (osname.indexOf("Windows") >= 0) {
+				cmd = "start";
+			} else if (osname.indexOf("Linux") >= 0) {
+				cmd = "xdg-open";
+			} else if (osname.indexOf("Mac") >= 0) {
+				cmd = "open";
+			} else {
+				Log.popup("現在使用中のOSには対応していません");
+				return false;
+			}
+			cmd += " " + dirName;
+			Log.popup(cmd);
+			r.exec(cmd);
+		} catch (IOException e) {
+			Log.error(e);
+			return false;
+		}
+		return true;
+	}
+
 	public abstract boolean setEvent(); // 情報配信
 
 	public abstract boolean createUser(); // ユーザの作成

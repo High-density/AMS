@@ -40,9 +40,12 @@ public class Controller {
 		return user.submitReport(file);
 	}
 
-	// TODO:報告書の閲覧
-	public boolean showReport(LocalDate ld) {
-		return false;
+	// 報告書の閲覧
+	public boolean showReport() {
+		return user.showReport();
+	}
+	public boolean showReport(String id) {
+		return user.showReport(id);
 	}
 
 	// 出席の登録
