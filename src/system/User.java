@@ -204,7 +204,7 @@ public abstract class User {
 		return book;
 	}
 
-	public abstract int submitReport(); // 報告書提出
+	public abstract boolean submitReport(String file); // 報告書提出
 
 	public abstract int showReport(); // 報告書閲覧
 

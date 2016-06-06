@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.String;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -23,11 +24,10 @@ class Slave extends User {
 
 		// 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
 		try {
-			// ディレクトリがないときには先に作成
+			// 出席ディレクトリの作成
 			String dirName = "./file/" + getId() + "/attendance/";
-			File directory = new File(dirName);
-			if (!directory.exists()) {
-				directory.mkdirs();
+			if (!Controller.mkdirs(dirName)) {
+				return 1;
 			}
 
 			File file = new File(dirName + ldt.format(formatter));
@@ -53,9 +53,31 @@ class Slave extends User {
 		return book;
 	}
 
-	// TODO:報告書提出
-	public int submitReport() {
-		return 0;
+	// 報告書提出
+	public boolean submitReport(String file) {
+		// 報告書ディレクトリの作成
+		if (!Controller.mkdirs("./file/" + getId() + "/report/")) {
+			return false;
+		}
+
+		// コピー先ファイル名の決定
+		String outFileName = "file/" + getId() + "/report/" + LocalDate.now().toString();
+		String suffix = Controller.getSuffixWithDot(file);
+		if (suffix != null) {
+			// 元ファイルに拡張子がついていれば，コピーファイルにもつける
+			outFileName += suffix;
+		}
+
+		// ファイルのコピー
+		File inFile = new File(file);
+		File outFile = new File(outFileName);
+		try {
+			Controller.copyFile(inFile, outFile);
+		} catch (IOException e) {
+			Log.error(e);
+		}
+
+		return false;
 	}
 
 	// TODO:報告書閲覧
