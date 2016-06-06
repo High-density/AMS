@@ -160,7 +160,7 @@ public abstract class User {
 		}
 	}
 
-	public abstract int setAttendance(); // 出席
+	public abstract boolean setAttendance(); // 出席
 
 	public abstract AttendanceBook[] getAttendance(YearMonth ym); // 出席表示(idから取得すべき情報を自動判断)
 
@@ -206,11 +206,11 @@ public abstract class User {
 
 	public abstract boolean submitReport(String file); // 報告書提出
 
-	public abstract int showReport(); // 報告書閲覧
+	public abstract boolean showReport(); // 報告書閲覧
 
-	public abstract int setEvent(); // 情報配信
+	public abstract boolean setEvent(); // 情報配信
 
-	public abstract int createUser(); // ユーザの作成
+	public abstract boolean createUser(); // ユーザの作成
 
 	// setter getter
 	public int setId(String id) {

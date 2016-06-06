@@ -20,7 +20,7 @@ class Slave extends User {
 	}
 
 	// 出席
-	public int setAttendance() {
+	public boolean setAttendance() {
 		LocalDateTime ldt = LocalDateTime.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 
@@ -29,7 +29,7 @@ class Slave extends User {
 			// 出席ディレクトリの作成
 			String dirName = "./file/" + getId() + "/attendance/";
 			if (!Controller.mkdirs(dirName)) {
-				return 1;
+				return false;
 			}
 
 			File file = new File(dirName + ldt.format(formatter));
@@ -43,9 +43,9 @@ class Slave extends User {
 			}
 		} catch (IOException e) {
 			Log.error(e);
-			return 1;
+			return false;
 		}
-		return 0;
+		return true;
 	}
 
 	// 出席取得
@@ -97,17 +97,17 @@ class Slave extends User {
 	}
 
 	// TODO:報告書閲覧
-	public int showReport() {
-		return 0;
+	public boolean showReport() {
+		return false;
 	}
 
 	// Slaveは情報配信不可
-	public int setEvent() {
-		return 1;
+	public boolean setEvent() {
+		return false;
 	}
 
 	// Slaveはユーザの作成不可
-	public int createUser() {
-		return 1;
+	public boolean createUser() {
+		return false;
 	}
 }

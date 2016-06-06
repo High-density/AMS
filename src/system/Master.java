@@ -18,8 +18,8 @@ class Master extends User {
 	}
 
 	// Masterは出席不可
-	public int setAttendance() {
-		return 1;
+	public boolean setAttendance() {
+		return false;
 	}
 
 	// 全Slaveから出席取得
@@ -66,17 +66,17 @@ class Master extends User {
 	}
 
 	// TODO:報告書閲覧
-	public int showReport() {
-		return 0;
+	public boolean showReport() {
+		return false;
 	}
 
 	// TODO:マスターからの情報発信
-	public int setEvent() {
-		return 0;
+	public boolean setEvent() {
+		return false;
 	}
 
 	// TODO:ユーザの作成
-	public int createUser() {
-		return 0;
+	public boolean createUser() {
+		return false;
 	}
 }

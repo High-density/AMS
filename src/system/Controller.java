@@ -30,9 +30,9 @@ public class Controller {
 	}
 
 	// ログアウト
-	public int logout() {
+	public boolean logout() {
 		user = null;
-		return 0;
+		return true;
 	}
 
 	// 報告書の提出
@@ -41,17 +41,17 @@ public class Controller {
 	}
 
 	// TODO:報告書の閲覧
-	public int showReport(LocalDate ld) {
-		return 0;
+	public boolean showReport(LocalDate ld) {
+		return false;
 	}
 
 	// 出席の登録
-	private int attend() {
+	private boolean attend() {
 		// 属性がSlaveなら出席
 		if (user.getAttribute().equals(Slave.class.getSimpleName())) {
 			return user.setAttendance();
 		}
-		return 1;
+		return false;
 	}
 
 	// 出席の取得
@@ -60,8 +60,8 @@ public class Controller {
 	}
 
 	// TODO:アカウント設定
-	public int setAccount(String id, String passwd) {
-		return 0;
+	public boolean setAccount(String id, String passwd) {
+		return false;
 	}
 
 	// ディレクトリがないときに作成
