@@ -173,7 +173,7 @@ public abstract class User {
 		for (int d = 0; d < maxDay; d++) {
 			// ファイルから出席情報の読み込み
 			String day = String.format("%02d", d + 1);
-			String fileName = year + month + day;
+			String fileName = year + "-" + month + "-" + day;
 			try {
 				// 出席のとき
 				File file = new File("./file/" + id + "/attendance/" + fileName);

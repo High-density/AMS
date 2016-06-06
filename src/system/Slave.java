@@ -23,7 +23,7 @@ class Slave extends User {
 	// 出席
 	public boolean setAttendance() {
 		LocalDateTime ldt = LocalDateTime.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		// 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
 		try {
