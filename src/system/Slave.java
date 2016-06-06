@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.Runtime;
 import java.lang.String;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -96,9 +97,9 @@ class Slave extends User {
 		return false;
 	}
 
-	// TODO:報告書閲覧
-	public int showReport() {
-		return 0;
+	// 報告書閲覧
+	public boolean showReport() {
+		return showReport(getId());
 	}
 
 	// Slaveは情報配信不可

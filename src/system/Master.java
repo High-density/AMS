@@ -65,9 +65,9 @@ class Master extends User {
 		return false;
 	}
 
-	// TODO:報告書閲覧
-	public int showReport() {
-		return 0;
+	// 教員はIDを指定しないと報告書が閲覧できない
+	public boolean showReport() {
+		return false;
 	}
 
 	// TODO:マスターからの情報発信
