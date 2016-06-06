@@ -8,10 +8,10 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 class Log {
-    // 改行コード
+	// 改行コード
 	public static final String br = System.getProperty("line.separator");
-    private static final String placePrefix = "  at ";
-    // エラー時の接尾語
+	private static final String placePrefix = "	 at ";
+	// エラー時の接尾語
 	private static final String suffix = "エラーが発生しました．この事象はシステム改善のために記録されます．";
 
 	// エラー処理（例外が投げられるとき）
@@ -52,6 +52,11 @@ class Log {
 
 	// TODO:エラーの書き出し
 	private static void writeError(String message) {
+		System.out.println(message);
+	}
+
+	// TODO:ポップアップ表示
+	public static void popup(String message) {
 		System.out.println(message);
 	}
 

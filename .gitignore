@@ -1,3 +1,4 @@
 bin/
 *.class
 file/s125*/attendance/*
+file/s125*/report/*

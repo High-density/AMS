@@ -36,7 +36,7 @@ class Master extends User {
 				Pattern p = Pattern.compile("([0-9a-z]+):(.*)$");
 				Matcher m = p.matcher(line);
 				if (m.find()){
-                    // 属性がSlaveのものだけを格納
+					// 属性がSlaveのものだけを格納
 					if (m.group(2).equals(Slave.class.getSimpleName())) {
 						slaves.add(m.group(1));
 					}
@@ -61,8 +61,8 @@ class Master extends User {
 	}
 
 	// Masterは報告書提出不可
-	public int submitReport() {
-		return 1;
+	public boolean submitReport(String file) {
+		return false;
 	}
 
 	// TODO:報告書閲覧

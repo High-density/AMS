@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
-	//private system.Controller controller; // 内部動作用
+	private system.Controller controller; // 内部動作用
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -37,7 +37,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	Method(system.Controller controller){
 		/* システム引き継ぎ */
-		//this.controller = controller;
+		this.controller = controller;
 
 		/* 各種設定 */
 		mainFrame = new JFrame("機能選択");
@@ -63,7 +63,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		numButton[4] = new JButton("終了");
 		for(int i=0;i<42;i++)
 			dayButton[i] = new JButton(""+(i+1));
-		referButton  = new JButton("参照");
+		referButton = new JButton("参照");
 		referButton.setBounds(500,100,100,30);
 		upButton = new JButton("アップロード");
 		upButton.setBounds(300,200,200,30);
@@ -79,7 +79,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			labelNum[i].setBounds(380,10,200,40);
 		testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得テスト
 		testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テスト
-		
+
 		/* ボタンのアクション用 */
 		for(int i=0;i<5;i++){
 			numButton[i].addActionListener(this);
@@ -116,19 +116,19 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		if(e.getSource() == numButton[0]){/*機能1*/
 			cLayout.show(cardPanel, "Meth1");
 		}
-		
+
 		if(e.getSource() == numButton[1]){/*機能2*/
 			cLayout.show(cardPanel, "Meth2");
 		}
-		
+
 		if(e.getSource() == numButton[2]){/*機能3*/
 			cLayout.show(cardPanel, "Meth3");
 		}
-		
+
 		if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
 		}
-		
+
 		if(e.getSource() == referButton){/*ファイル参照用*/
 			JFileChooser filechooser = new JFileChooser();
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
@@ -141,11 +141,12 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				pathTextField.setText("エラー又は取消しがありました");
 			}
 		}
-		
+
 		if(e.getSource() == upButton){/*アップロード*/
 			testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
+			controller.submitReport(pathTextField.getText());
 		}
-		
+
 		if(e.getSource() == numButton[4]){/*終了*/
 			System.exit(0);
 		}
