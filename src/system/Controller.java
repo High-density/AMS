@@ -62,9 +62,9 @@ public class Controller {
 		return user.getAttendance(ym);
 	}
 
-	// TODO:アカウント設定
-	public boolean setAccount(String id, String passwd) {
-		return false;
+	// アカウント設定
+	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
+		return user.setAccount(oldAccount, newAccount);
 	}
 
 	// ディレクトリがないときに作成

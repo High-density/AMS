@@ -102,6 +102,11 @@ class Slave extends User {
 		return showReport(getId());
 	}
 
+	// TODO:アカウント作成
+	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
+		return false;
+	}
+
 	// Slaveは情報配信不可
 	public boolean setEvent() {
 		return false;

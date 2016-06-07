@@ -243,23 +243,25 @@ public abstract class User {
 		return true;
 	}
 
+	//アカウント作成
+	public abstract boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount);
+
 	public abstract boolean setEvent(); // 情報配信
 
 	public abstract boolean createUser(); // ユーザの作成
 
-	// setter getter
-	public int setId(String id) {
+	// setter
+	public void setId(String id) {
 		this.id = id;
-		return 0;
 	}
 
+	public void setPasswd(String passwd) {
+		this.passwd = passwd;
+	}
+
+	// gettter
 	public String getId() {
 		return id;
-	}
-
-	public int setPasswd(String passwd) {
-		this.passwd = passwd;
-		return 0;
 	}
 
 	public String getAttribute() {

@@ -70,6 +70,11 @@ class Master extends User {
 		return false;
 	}
 
+	// TODO:アカウント作成
+	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
+		return false;
+	}
+
 	// TODO:マスターからの情報発信
 	public boolean setEvent() {
 		return false;
