@@ -27,34 +27,10 @@ public abstract class User {
 
 	// パスワードによる認証
 	public static User login(String id, String passwd) {
-		String pw = null; // パスワード
 		String attribute = null; // 属性
 
-		// ファイルからパスワードの読み込み
-		try {
-			File file = new File("./file/" + id + "/passwd");
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line = br.readLine();
-			Pattern p = Pattern.compile(id + ":(.*)$");
-			Matcher m = p.matcher(line);
-			if (m.find()) {
-				pw = m.group(1);
-			}
-
-			br.close();
-		} catch (FileNotFoundException e) {
-			Log.error(e);
-			return null;
-		} catch (IOException e) {
-			Log.error(e);
-			return null;
-		} catch (NullPointerException e) {
-			Log.error(e);
-			return null;
-		}
-
 		// パスワードが一致するかどうか検証
-		if (pw.equals(passwd) && true/*hasCertifiedMacAddress(id)*/) {
+		if (isCorrectPasswd(id, passwd) && true/*hasCertifiedMacAddress(id)*/) {
 			// ファイルから属性の読み込み
 			try {
 				File file = new File("./file/user");
@@ -98,6 +74,35 @@ public abstract class User {
 		}
 
 		return null; // 認証失敗
+	}
+
+	// 入力されたパスワードがIDに対して正しいか
+	private static boolean isCorrectPasswd(String id, String passwd) {
+		String pw = null; // パスワード
+
+		// ファイルからパスワードの読み込み
+		try {
+			File file = new File("./file/" + id + "/passwd");
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			String line = br.readLine();
+			Pattern p = Pattern.compile(id + ":(.*)$");
+			Matcher m = p.matcher(line);
+			if (m.find()) {
+				pw = m.group(1);
+			}
+			br.close();
+		} catch (FileNotFoundException e) {
+			Log.error(e);
+			return false;
+		} catch (IOException e) {
+			Log.error(e);
+			return false;
+		} catch (NullPointerException e) {
+			Log.error(e);
+			return false;
+		}
+
+		return pw.equals(passwd);
 	}
 
 	// 認証されたMacAddressを保持しているか
