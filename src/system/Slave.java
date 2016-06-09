@@ -106,7 +106,7 @@ class Slave extends User {
 		return showReport(getId());
 	}
 
-	// TODO:アカウント管理
+	// アカウント管理
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
 		// パスワード認証
 		if (!isCorrectPasswd(oldAccount.getId(), oldAccount.getPasswd())) {
