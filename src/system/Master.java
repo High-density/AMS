@@ -10,7 +10,9 @@ import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.lang.Throwable;
 import java.lang.String;
+import java.net.NetworkInterface;
 import java.time.YearMonth;
+import java.util.Enumeration;
 import java.util.ArrayList;
 
 class Master extends User {
@@ -113,13 +115,82 @@ class Master extends User {
 		return true;
 	}
 
-	// TODO:マスターからの情報発信
-	public boolean setEvent() {
-		return false;
+	// ユーザの作成
+	public boolean createUser(AccountInformation account) {
+		File file; // 作成するファイル用
+		PrintWriter pw; // ファイルへの書き込み用
+
+		// 必要な要素が抜けてたらエラー
+		if (account.getId() == null ||
+			account.getName() == null ||
+			account.getPasswd() == null) {
+			Log.error(new Throwable(), "要素がnull");
+			return false;
+		}
+
+		// ディレクトリ作成
+		String userDirName = "file/" + account.getId() + "/";
+		(new File(userDirName + "attendance")).mkdirs();
+		(new File(userDirName + "report")).mkdirs();
+
+		try {
+			// 属性ファイル作成
+			file = new File(userDirName + "/attribute");
+			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			pw.println(Slave.class.getSimpleName());
+			pw.close();
+
+			// 名前ファイル作成
+			file = new File(userDirName + "/name");
+			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			pw.println(account.getName());
+			pw.close();
+
+			// パスワードファイル作成
+			file = new File(userDirName + "/passwd");
+			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			pw.println(account.getPasswd());
+			pw.close();
+
+			// MACアドレスファイル作成
+			String gotNicName = null;
+			String gotMacAddress = "";
+			// 全NICを取得
+			Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
+			// 登録MACアドレスと同じものを探す
+			do {
+				NetworkInterface gotNic = gotNics.nextElement();
+				byte[] hardwareAddress = gotNic.getHardwareAddress();
+				if (hardwareAddress != null) {
+					for (byte b : hardwareAddress) {
+						gotMacAddress += String.format("%02X:", b);
+					}
+					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
+				}
+				gotNicName = gotNic.getName();
+			} while("lo".equals(gotNicName));
+			// ファイルへの書き込み
+			file = new File(userDirName + "/nics");
+			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			pw.println(gotNicName + ":[" + gotMacAddress + "]");
+			pw.close();
+
+		} catch(IOException e) {
+			Log.error(e);
+			return false;
+		}
+
+		return true;
 	}
 
-	// TODO:ユーザの作成
-	public boolean createUser() {
+	// ユーザの削除
+	public boolean deleteUser(String id) {
+		Controller.deleteFile(new File("file/" + id));
+		return true;
+	}
+
+	// TODO:マスターからの情報発信
+	public boolean setEvent() {
 		return false;
 	}
 }

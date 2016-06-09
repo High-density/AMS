@@ -235,9 +235,11 @@ public abstract class User {
 	// アカウント管理
 	public abstract boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount);
 
-	public abstract boolean setEvent(); // 情報配信
+	public abstract boolean createUser(AccountInformation account); // ユーザの作成
 
-	public abstract boolean createUser(); // ユーザの作成
+	public abstract boolean deleteUser(String id); // ユーザの削除
+
+	public abstract boolean setEvent(); // 情報配信
 
 	// setter
 	public void setId(String id) {

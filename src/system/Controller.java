@@ -103,4 +103,20 @@ public class Controller {
 			throw e;
 		}
 	}
+
+    // ファイルまたはディレクトリの削除
+    public static void deleteFile(File f) {
+        if (f.exists() == false) {
+            return;
+        }
+        if(f.isFile()) {
+            f.delete();
+        } else if(f.isDirectory()) {
+            File files[] = f.listFiles();
+            for(int i = 0; i < files.length; i++) {
+                deleteFile(files[i]);
+            }
+            f.delete();
+        }
+    }
 }
