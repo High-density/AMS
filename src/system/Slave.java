@@ -19,9 +19,6 @@ class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
 		attribute = this.getClass().getSimpleName();
-		AccountInformation oldAccount = AccountInformation.ofIdPasswd("s12548", "s12548");
-		AccountInformation newAccount = AccountInformation.ofPasswd("0000");
-		setAccount(oldAccount, newAccount);
 	}
 
 	// 出席
@@ -115,15 +112,16 @@ class Slave extends User {
 
 		// 必要な要素が抜けてたらエラー
 		if (newAccount.getPasswd() == null) {
+			Log.error(new Throwable(), "要素がnull");
 			return false;
 		}
 
 		// ファイルを更新する
 		// 更新対象はパスワードのみ
 		try {
-			File file = new File("./file/" + getId() + "/passwd");
+			File file = new File("file/" + id + "/passwd");
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-			pw.println(getId() + ":" + newAccount.getPasswd());
+			pw.println(newAccount.getPasswd());
 			pw.close();
 		} catch (FileNotFoundException e) {
 			Log.error(e);
@@ -136,7 +134,7 @@ class Slave extends User {
 			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	// Slaveは情報配信不可

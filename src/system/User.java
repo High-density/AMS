@@ -30,23 +30,12 @@ public abstract class User {
 		String attribute = null; // 属性
 
 		// パスワードが一致するかどうか検証
-		if (isCorrectPasswd(id, passwd) && true/*hasCertifiedMacAddress(id)*/) {
+		if (isCorrectPasswd(id, passwd) /*&& hasCertifiedMacAddress(id)*/) {
 			// ファイルから属性の読み込み
 			try {
-				File file = new File("./file/user");
+				File file = new File("./file/" + id + "/attribute");
 				BufferedReader br = new BufferedReader(new FileReader(file));
-				String line; // Fileから読み取った行
-				Pattern p = Pattern.compile(id + ":(.*)$");
-				Matcher m = null;
-				boolean finded = false; // マッチしたかどうか
-
-				// 各行を読み込んでマッチするか検証
-				while (attribute == null) {
-					line = br.readLine();
-					m = p.matcher(line);
-					if (m.find())
-						attribute = m.group(1);
-				}
+				attribute = br.readLine(); // Fileから読み取った行
 
 				br.close();
 			} catch (FileNotFoundException e) {
@@ -84,12 +73,7 @@ public abstract class User {
 		try {
 			File file = new File("./file/" + id + "/passwd");
 			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line = br.readLine();
-			Pattern p = Pattern.compile(id + ":(.*)$");
-			Matcher m = p.matcher(line);
-			if (m.find()) {
-				pw = m.group(1);
-			}
+			pw = br.readLine();
 			br.close();
 		} catch (FileNotFoundException e) {
 			// 入力されたidを持つユーザがいない
@@ -117,7 +101,7 @@ public abstract class User {
 			File file = new File("./file/" + id + "/nics");
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String line = br.readLine();
-			Pattern p = Pattern.compile(id + ":(.*):\\[([0-9A-F:]+)");
+			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 			Matcher m = p.matcher(line);
 			if (m.find()) {
 				registeredNicName = m.group(1);

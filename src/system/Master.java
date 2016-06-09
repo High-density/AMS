@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.lang.Throwable;
 import java.lang.String;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 class Master extends User {
 	public Master(String id, String passwd) {
@@ -28,27 +30,24 @@ class Master extends User {
 
 		// Slaveのidを一旦格納
 		ArrayList<String> slaves = new ArrayList<String>();
-		try {
-			File file = new File("./file/user");
-			BufferedReader br = new BufferedReader(new FileReader(file));
-			String line;
-			while ((line = br.readLine()) != null){
-				Pattern p = Pattern.compile("([0-9a-z]+):(.*)$");
-				Matcher m = p.matcher(line);
-				if (m.find()){
-					// 属性がSlaveのものだけを格納
-					if (m.group(2).equals(Slave.class.getSimpleName())) {
-						slaves.add(m.group(1));
+		String fileDirName = "file/";
+		File fileDir = new File(fileDirName);
+		for (String userDirName: fileDir.list()) {
+			File file = new File(fileDirName + userDirName + "/attribute");
+			if (file.exists()) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					if (br.readLine().equals(Slave.class.getSimpleName())) {
+						slaves.add(userDirName);
 					}
+				} catch (FileNotFoundException e) {
+					Log.error(e);
+				} catch (IOException e) {
+					Log.error(e);
+				} catch (NullPointerException e) {
+					Log.error(e);
 				}
 			}
-			br.close();
-		} catch (FileNotFoundException e) {
-			Log.error(e);
-		} catch (IOException e) {
-			Log.error(e);
-		} catch (NullPointerException e) {
-			Log.error(e);
 		}
 
 		// 取得したidのそれぞれの出席を取得
@@ -70,8 +69,47 @@ class Master extends User {
 		return false;
 	}
 
-	// TODO:アカウント管理
-	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
+	// アカウント管理
+	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
+		String target = oldAccount.getId(); // 変更対象のユーザID
+
+		// 必要な要素が抜けてたらエラー
+		if (newAccount.getId() == null ||
+			newAccount.getName() == null ||
+			newAccount.getPasswd() == null) {
+			Log.error(new Throwable(), "要素がnull");
+			return false;
+		}
+
+		// ユーザ情報を更新する
+		try {
+			// 名前の更新
+			File file = new File("file/" + target + "/name");
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			pw.println(newAccount.getName());
+			pw.close();
+
+			// パスワードの更新
+			file = new File("file/" + target + "/passwd");
+			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			pw.println(newAccount.getPasswd());
+			pw.close();
+
+			// ディレクトリの変更
+			File oldFile = new File("file/" + target);
+			File newFile = new File("file/" + newAccount.getId());
+			oldFile.renameTo(newFile);
+		} catch (FileNotFoundException e) {
+			Log.error(e);
+			return false;
+		} catch (IOException e) {
+			Log.error(e);
+			return false;
+		} catch (NullPointerException e) {
+			Log.error(e);
+			return false;
+		}
+
 		return false;
 	}
 

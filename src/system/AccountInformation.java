@@ -15,6 +15,10 @@ public class AccountInformation {
 		return new AccountInformation(null, null, passwd);
 	}
 
+	public static AccountInformation ofId(String id) {
+		return new AccountInformation(id, null, null);
+	}
+
 	public static AccountInformation ofIdPasswd(String id, String passwd) {
 		return new AccountInformation(id, null, passwd);
 	}
