@@ -237,7 +237,7 @@ public abstract class User {
 
 	public abstract boolean setEvent(); // 情報配信
 
-	public abstract boolean createUser(); // ユーザの作成
+	public abstract boolean createUser(AccountInformation account); // ユーザの作成
 
 	// setter
 	public void setId(String id) {

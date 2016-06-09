@@ -143,7 +143,7 @@ class Slave extends User {
 	}
 
 	// Slaveはユーザの作成不可
-	public boolean createUser() {
+	public boolean createUser(AccountInformation account) {
 		return false;
 	}
 }
