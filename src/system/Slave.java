@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.lang.Runtime;
 import java.lang.String;
@@ -18,6 +19,9 @@ class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
 		attribute = this.getClass().getSimpleName();
+		AccountInformation oldAccount = AccountInformation.ofIdPasswd("s12548", "s12548");
+		AccountInformation newAccount = AccountInformation.ofPasswd("0000");
+		setAccount(oldAccount, newAccount);
 	}
 
 	// 出席
@@ -102,8 +106,36 @@ class Slave extends User {
 		return showReport(getId());
 	}
 
-	// TODO:アカウント作成
+	// TODO:アカウント管理
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
+		// パスワード認証
+		if (!isCorrectPasswd(oldAccount.getId(), oldAccount.getPasswd())) {
+			return false;
+		}
+
+		// 必要な要素が抜けてたらエラー
+		if (newAccount.getPasswd() == null) {
+			return false;
+		}
+
+		// ファイルを更新する
+		// 更新対象はパスワードのみ
+		try {
+			File file = new File("./file/" + getId() + "/passwd");
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			pw.println(getId() + ":" + newAccount.getPasswd());
+			pw.close();
+		} catch (FileNotFoundException e) {
+			Log.error(e);
+			return false;
+		} catch (IOException e) {
+			Log.error(e);
+			return false;
+		} catch (NullPointerException e) {
+			Log.error(e);
+			return false;
+		}
+
 		return false;
 	}
 

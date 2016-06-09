@@ -77,7 +77,7 @@ public abstract class User {
 	}
 
 	// 入力されたパスワードがIDに対して正しいか
-	private static boolean isCorrectPasswd(String id, String passwd) {
+	protected static boolean isCorrectPasswd(String id, String passwd) {
 		String pw = null; // パスワード
 
 		// ファイルからパスワードの読み込み
@@ -92,7 +92,7 @@ public abstract class User {
 			}
 			br.close();
 		} catch (FileNotFoundException e) {
-			Log.error(e);
+			// 入力されたidを持つユーザがいない
 			return false;
 		} catch (IOException e) {
 			Log.error(e);
@@ -248,7 +248,7 @@ public abstract class User {
 		return true;
 	}
 
-	//アカウント作成
+	// アカウント管理
 	public abstract boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount);
 
 	public abstract boolean setEvent(); // 情報配信

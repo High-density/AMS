@@ -70,7 +70,7 @@ class Master extends User {
 		return false;
 	}
 
-	// TODO:アカウント作成
+	// TODO:アカウント管理
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
 		return false;
 	}

@@ -11,15 +11,15 @@ public class AccountInformation {
 		this.passwd = passwd;
 	}
 
-	public AccountInformation ofPasswd(String passwd) {
+	public static AccountInformation ofPasswd(String passwd) {
 		return new AccountInformation(null, null, passwd);
 	}
 
-	public AccountInformation ofIdPasswd(String id, String passwd) {
+	public static AccountInformation ofIdPasswd(String id, String passwd) {
 		return new AccountInformation(id, null, passwd);
 	}
 
-	public AccountInformation ofAll(String id, String name, String passwd) {
+	public static AccountInformation ofAll(String id, String name, String passwd) {
 		return new AccountInformation(id, name, passwd);
 	}
 
