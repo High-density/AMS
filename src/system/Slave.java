@@ -137,13 +137,18 @@ class Slave extends User {
 		return true;
 	}
 
-	// Slaveは情報配信不可
-	public boolean setEvent() {
+	// Slaveはユーザの作成不可
+	public boolean createUser(AccountInformation account) {
 		return false;
 	}
 
-	// Slaveはユーザの作成不可
-	public boolean createUser(AccountInformation account) {
+	// Slaveはユーザの削除不可
+	public boolean deleteUser(String id) {
+		return false;
+	}
+
+	// Slaveは情報配信不可
+	public boolean setEvent() {
 		return false;
 	}
 }

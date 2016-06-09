@@ -12,6 +12,7 @@ import java.lang.Throwable;
 import java.lang.String;
 import java.net.NetworkInterface;
 import java.time.YearMonth;
+import java.util.Enumeration;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -19,8 +20,6 @@ class Master extends User {
 	public Master(String id, String passwd) {
 		super(id, passwd);
 		attribute = this.getClass().getSimpleName();
-
-		createUser(AccountInformation.ofAll("s12599", "サレジオ太郎", "s12599"));
 	}
 
 	// Masterは出席不可
@@ -117,12 +116,7 @@ class Master extends User {
 		return true;
 	}
 
-	// TODO:マスターからの情報発信
-	public boolean setEvent() {
-		return false;
-	}
-
-	// TODO:ユーザの作成
+	// ユーザの作成
 	public boolean createUser(AccountInformation account) {
 		File file; // 作成するファイル用
 		PrintWriter pw; // ファイルへの書き込み用
@@ -188,5 +182,16 @@ class Master extends User {
 		}
 
 		return true;
+	}
+
+	// ユーザの削除
+	public boolean deleteUser(String id) {
+		Controller.deleteFile(new File("file/" + id));
+		return true;
+	}
+
+	// TODO:マスターからの情報発信
+	public boolean setEvent() {
+		return false;
 	}
 }
