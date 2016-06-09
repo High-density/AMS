@@ -110,7 +110,7 @@ class Master extends User {
 			return false;
 		}
 
-		return false;
+		return true;
 	}
 
 	// TODO:マスターからの情報発信
