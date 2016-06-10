@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -22,7 +21,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 
 class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
