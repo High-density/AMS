@@ -2,15 +2,18 @@ package display;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.time.YearMonth;
+import java.util.Calendar;
 
-//import javax.crypto.spec.IvParameterSpec;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -31,85 +34,192 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton dayButton[] = new JButton[42];
 	private JButton referButton;
 	private JButton upButton;
+	private JButton nextButton;
+	private JButton backButton;
 	private JLabel labelNum[] = new JLabel[4];
 	private JLabel testPathLabel;//ファイルパス取得テスト
+	private JLabel monthLabel;
+	private JLabel weekLabel[];
 	private JTextField pathTextField;
+
+	private YearMonth yearMonth;
+	private Calendar calendar = Calendar.getInstance();
+	private final String weekName[] = {"日","月","火","水","木","金","土"};
+	private int year = calendar.get(Calendar.YEAR);
+	private int month = calendar.get(Calendar.MONTH)+1;
 
 	Method(system.Controller controller){
 		/* システム引き継ぎ */
 		this.controller = controller;
 
-		/* 各種設定 */
+		/* メインフレーム設定 */
 		mainFrame = new JFrame("機能選択");
 		mainFrame.setBounds(0, 0, 800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
 		contentPane = mainFrame.getContentPane();
-		panelButton = new JPanel(new GridLayout(1,5));
-		cardPanel = new JPanel();
-		cLayout = new CardLayout();
-		cardPanel.setLayout(cLayout);
-		for (int i=0;i<4;i++){
-			panelNum[i] = new JPanel();
-			panelNum[i].setLayout(null);
-		}
-		calPanel = new JPanel(new GridLayout(7,6));
-		calPanel.setBounds(20,100,400,400);
 
-		numButton[0] = new JButton("出席管理");
-		numButton[1] = new JButton("週報アップロード");
-		numButton[2] = new JButton("予定確認");
-		numButton[3] = new JButton("アカウント情報");
-		numButton[4] = new JButton("終了");
-		for(int i=0;i<42;i++)
-			dayButton[i] = new JButton(""+(i+1));
-		referButton = new JButton("参照");
-		referButton.setBounds(500,100,100,30);
-		upButton = new JButton("アップロード");
-		upButton.setBounds(300,200,200,30);
-
-		pathTextField = new JTextField("ファイルを参照してください");
-		pathTextField.setBounds(200,100,300,31);
-
-		labelNum[0] = new JLabel("出席");
-		labelNum[1] = new JLabel("週報");
-		labelNum[2] = new JLabel("予定");
-		labelNum[3] = new JLabel("アカウント");
-		for(int i=0;i<4;i++)
-			labelNum[i].setBounds(380,10,200,40);
-		testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得テスト
-		testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テスト
+		/* 各種設定*/
+		PanelButton();//機能選択ボタンの追加
+		Method0();//機能1用パネル設定
+		Method1();//機能2用パネル設定
+		Method2();
+		Method3();
+		CardPanel();//機能パネル
 
 		/* ボタンのアクション用 */
-		for(int i=0;i<5;i++){
-			numButton[i].addActionListener(this);
-			numButton[i].addKeyListener(this);
-		}
-		referButton.addActionListener(this);
-		referButton.addKeyListener(this);
-		upButton.addActionListener(this);
-		upButton.addKeyListener(this);
-
-		/* コンテンツの追加 */
-		for(int i=0;i<5;i++)
-			panelButton.add(numButton[i]);
-		for(int i=0;i<4;i++){
-			String str = "Meth" + (i+1);
-			panelNum[i].add(labelNum[i]);
-			cardPanel.add(panelNum[i], str);
-		}
-		for(int i=0;i<42;i++)
-			calPanel.add(dayButton[i]);
-		panelNum[0].add(calPanel);
-		panelNum[1].add(pathTextField);
-		panelNum[1].add(referButton);
-		panelNum[1].add(upButton);
-		panelNum[1].add(testPathLabel);
+		actionButton();
 
 		/* フレームに追加 */
 		contentPane.add(panelButton, BorderLayout.NORTH);
 		contentPane.add(cardPanel, BorderLayout.CENTER);
 		mainFrame.setVisible(true);
+	}
+
+	private void PanelButton(){
+		panelButton = new JPanel(new GridLayout(1,5));
+		numButton[0] = new JButton("出席管理");
+		numButton[1] = new JButton("週報アップロード");
+		numButton[2] = new JButton("予定確認");
+		numButton[3] = new JButton("アカウント情報");
+		numButton[4] = new JButton("ログアウト");
+		for(int i=0;i<5;i++)
+			numButton[i].setBackground(Color.WHITE);
+
+		panelButton.add(numButton[0]);
+		panelButton.add(numButton[1]);
+		panelButton.add(numButton[2]);
+		panelButton.add(numButton[3]);
+		panelButton.add(numButton[4]);
+	}
+
+	private void Method0(){
+		panelNum[0] = new JPanel();
+		panelNum[0].setLayout(null);
+		calPanel = new JPanel(new GridLayout(6,7));
+		calPanel.setBounds(200,130,400,400);
+		nextButton = new JButton("next");
+		nextButton.setBounds(550,60,200,40);
+		nextButton.setBackground(Color.WHITE);
+		backButton = new JButton("back");
+		backButton.setBounds(050,60,200,40);
+		backButton.setBackground(Color.WHITE);
+		labelNum[0] = new JLabel("出席");
+		labelNum[0].setBounds(380,10,200,40);
+		monthLabel = new JLabel(year+"年"+month+"月");
+		monthLabel.setBounds(340,60,200,40);
+		monthLabel.setFont(new Font(null, Font.PLAIN, 24));
+		weekLabel = new JLabel[7];
+		for(int i=0;i<7;i++){
+			weekLabel[i] = new JLabel(weekName[i]);
+			weekLabel[i].setBounds(220+(i*57),100,200,40);
+			weekLabel[i].setFont(new Font(null, Font.PLAIN, 16));
+		}
+
+		calendar.set(year, month-1, 1);
+		yearMonth = YearMonth.of(year, month);
+		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+		int maxDate = yearMonth.lengthOfMonth();
+		//System.out.println(year+"年"+month+"月");
+		//System.out.println("今月は"+maxDate+"日あります");
+		//System.out.println("今月の1日は" +weekName[dayOfWeek]+ "曜日です");
+		for(int i=0;i<dayOfWeek;i++)
+			dayButton[i] = new JButton("");
+
+		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
+			dayButton[i] = new JButton(""+(1+i-dayOfWeek));
+		for (int i=dayOfWeek+maxDate;i<42;i++)
+			dayButton[i] = new JButton("");
+		for(int i=0;i<42;i++){
+			dayButton[i].setBackground(Color.WHITE);
+			calPanel.add(dayButton[i]);//カレンダーボタン追加
+		}
+
+		panelNum[0].add(labelNum[0]);
+		panelNum[0].add(weekLabel[0]);
+		panelNum[0].add(weekLabel[1]);
+		panelNum[0].add(weekLabel[2]);
+		panelNum[0].add(weekLabel[3]);
+		panelNum[0].add(weekLabel[4]);
+		panelNum[0].add(weekLabel[5]);
+		panelNum[0].add(weekLabel[6]);
+		panelNum[0].add(calPanel);
+		panelNum[0].add(nextButton);
+		panelNum[0].add(backButton);
+		panelNum[0].add(monthLabel);
+	}
+
+	private void Method1(){
+		panelNum[1] = new JPanel();
+		panelNum[1].setLayout(null);
+		labelNum[1] = new JLabel("週報");
+		labelNum[1].setBounds(380,10,200,40);
+		referButton  = new JButton("参照");
+		referButton.setBounds(500,100,100,30);
+		referButton.setBackground(Color.WHITE);
+		upButton = new JButton("アップロード");
+		upButton.setBounds(300,200,200,30);
+		upButton.setBackground(Color.WHITE);
+		pathTextField = new JTextField("ファイルを参照してください");
+		pathTextField.setBounds(200,100,300,31);
+		testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得
+		testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テ
+
+		panelNum[1].add(labelNum[1]);
+		panelNum[1].add(pathTextField);
+		panelNum[1].add(referButton);
+		panelNum[1].add(upButton);
+		panelNum[1].add(testPathLabel);
+	}
+
+	private void Method2(){
+		panelNum[2] = new JPanel();
+		panelNum[2].setLayout(null);
+		labelNum[2] = new JLabel("予定");
+		labelNum[2].setBounds(380,10,200,40);
+
+		panelNum[2].add(labelNum[2]);
+	}
+
+	private void Method3(){
+		panelNum[3] = new JPanel();
+		panelNum[3].setLayout(null);
+		labelNum[3] = new JLabel("アカウント");
+		labelNum[3].setBounds(380,10,200,40);
+
+		panelNum[3].add(labelNum[3]);
+	}
+
+	private void CardPanel(){
+		cardPanel = new JPanel();
+		cLayout = new CardLayout();
+		cardPanel.setLayout(cLayout);
+
+		for(int i=0;i<4;i++){//それぞれの機能名を入れる
+			String str = "Meth" + (i+1);
+			cardPanel.add(panelNum[i], str);
+		}
+	}
+
+	private void actionButton(){
+		numButton[0].addActionListener(this);
+		numButton[0].addKeyListener(this);
+		numButton[1].addActionListener(this);
+		numButton[1].addKeyListener(this);
+		numButton[2].addActionListener(this);
+		numButton[2].addKeyListener(this);
+		numButton[3].addActionListener(this);
+		numButton[3].addKeyListener(this);
+		numButton[4].addActionListener(this);
+		numButton[4].addKeyListener(this);
+		referButton.addActionListener(this);
+		referButton.addKeyListener(this);
+		upButton.addActionListener(this);
+		upButton.addKeyListener(this);
+		nextButton.addActionListener(this);
+		nextButton.addKeyListener(this);
+		backButton.addActionListener(this);
+		backButton.addKeyListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e){
@@ -147,8 +257,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			controller.submitReport(pathTextField.getText());
 		}
 
-		if(e.getSource() == numButton[4]){/*終了*/
-			System.exit(0);
+		if(e.getSource() == numButton[4]){/*ログアウト*/
+			controller.logout();
+			mainFrame.setVisible(false);
+			Login.loginFrame.setVisible(true);
 		}
 	}
 	public void keyPressed(KeyEvent e){
@@ -180,8 +292,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			if(e.getSource() == upButton){/*アップロード*/
 				testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
 			}
-			if(e.getSource() == numButton[4]){/*終了*/
-				System.exit(0);
+			if(e.getSource() == numButton[4]){/*ログアウト*/
+				controller.logout();
+				mainFrame.setVisible(false);
+				Login.loginFrame.setVisible(true);
 			}
 		}
 	}

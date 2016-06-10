@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,11 +14,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-//import javax.swing.LayoutFocusTraversalPolicy;
 
 public class Login extends KeyAdapter implements ActionListener{/*ログインクラス*/
 	private system.Controller controller; // 内部動作用
-	private JFrame loginFrame;
+	static JFrame loginFrame;
 	private Container contentPane;
 	private JLabel idLabel;
 	private JLabel passLabel;
@@ -45,19 +45,21 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		idLabel.setBounds(120, 10, 50, 20);
 		idField = new JTextField();
 		idField.setBounds(120, 35, 150, 20);
-		
+
 		passLabel = new JLabel("Pass");
 		passLabel.setBounds(120, 60, 50, 20);
 		passField = new JPasswordField();
 		passField.setBounds(120, 85, 150, 20);
-		
+
 		annouceLabel = new JLabel("ログインしてください");
 		annouceLabel.setBounds(140,180,150,20);
-		
+
 		loginButton = new JButton("ログイン");
 		loginButton.setBounds(95, 120, 100, 30);
+		loginButton.setBackground(Color.white);
 		endButton = new JButton("終了");
 		endButton.setBounds(205, 120, 100, 30);
+		endButton.setBackground(Color.white);
 
 		/* アクションの設定用 */
 		passField.addKeyListener(this);
