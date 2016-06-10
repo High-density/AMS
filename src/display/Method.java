@@ -233,6 +233,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		if(e.getSource() == numButton[2]){/*機能3*/
 			cLayout.show(cardPanel, "Meth3");
+			new Message("おおおおおおお");
 		}
 
 		if(e.getSource() == numButton[3]){/*機能4*/
