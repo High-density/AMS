@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -20,6 +21,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 
 class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
@@ -29,9 +32,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel cardPanel;
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
+	private JPanel planPanel;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[42];
+	private JButton dayButton_clone[] = new JButton[42];
+	private JButton weekButton[] = new JButton[7];
+	private JButton weekButton_clone[] = new JButton[7];
 	private JButton referButton;
 	private JButton upButton;
 	private JButton nextButton;
@@ -39,7 +46,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel labelNum[] = new JLabel[4];
 	private JLabel testPathLabel;//ファイルパス取得テスト
 	private JLabel monthLabel;
-	private JLabel weekLabel[];
 	private JTextField pathTextField;
 
 	private YearMonth yearMonth;
@@ -96,7 +102,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void Method0(){
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		calPanel = new JPanel(new GridLayout(6,7));
+		calPanel = new JPanel(new GridLayout(7,7));
 		calPanel.setBounds(200,130,400,400);
 		nextButton = new JButton("next");
 		nextButton.setBounds(550,60,200,40);
@@ -106,14 +112,15 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		backButton.setBackground(Color.WHITE);
 		labelNum[0] = new JLabel("出席");
 		labelNum[0].setBounds(380,10,200,40);
+		labelNum[0].setFont(new Font(null, Font.PLAIN, 18));
 		monthLabel = new JLabel(year+"年"+month+"月");
 		monthLabel.setBounds(340,60,200,40);
 		monthLabel.setFont(new Font(null, Font.PLAIN, 24));
-		weekLabel = new JLabel[7];
 		for(int i=0;i<7;i++){
-			weekLabel[i] = new JLabel(weekName[i]);
-			weekLabel[i].setBounds(220+(i*57),100,200,40);
-			weekLabel[i].setFont(new Font(null, Font.PLAIN, 16));
+			weekButton[i] = new JButton(weekName[i]);
+			weekButton[i].setFont(new Font(null, Font.PLAIN, 16));
+			weekButton[i].setBackground(Color.YELLOW);
+			weekButton[i].setBorder(new LineBorder(Color.BLACK,1,true));
 		}
 
 		calendar.set(year, month-1, 1);
@@ -130,19 +137,15 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			dayButton[i] = new JButton(""+(1+i-dayOfWeek));
 		for (int i=dayOfWeek+maxDate;i<42;i++)
 			dayButton[i] = new JButton("");
+		
+		for(int i=0;i<7;i++)
+			calPanel.add(weekButton[i]);
 		for(int i=0;i<42;i++){
 			dayButton[i].setBackground(Color.WHITE);
 			calPanel.add(dayButton[i]);//カレンダーボタン追加
 		}
 
 		panelNum[0].add(labelNum[0]);
-		panelNum[0].add(weekLabel[0]);
-		panelNum[0].add(weekLabel[1]);
-		panelNum[0].add(weekLabel[2]);
-		panelNum[0].add(weekLabel[3]);
-		panelNum[0].add(weekLabel[4]);
-		panelNum[0].add(weekLabel[5]);
-		panelNum[0].add(weekLabel[6]);
 		panelNum[0].add(calPanel);
 		panelNum[0].add(nextButton);
 		panelNum[0].add(backButton);
@@ -154,6 +157,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[1].setLayout(null);
 		labelNum[1] = new JLabel("週報");
 		labelNum[1].setBounds(380,10,200,40);
+		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
 		referButton  = new JButton("参照");
 		referButton.setBounds(500,100,100,30);
 		referButton.setBackground(Color.WHITE);
@@ -175,10 +179,40 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void Method2(){
 		panelNum[2] = new JPanel();
 		panelNum[2].setLayout(null);
+		planPanel = new JPanel();
+		planPanel.setLayout(new GridLayout(7, 7));
+		planPanel.setBounds(10, 80, 400, 400);
 		labelNum[2] = new JLabel("予定");
-		labelNum[2].setBounds(380,10,200,40);
-
+		labelNum[2].setBounds(180,10,200,40);
+		labelNum[2].setFont(new Font(null, Font.PLAIN, 18));
+		for(int i=0;i<7;i++){
+			weekButton_clone[i] = new JButton(weekName[i]);
+			weekButton_clone[i].setFont(new Font(null, Font.PLAIN, 16));
+			//weekButton[i].setForeground(Color.WHITE);
+			weekButton_clone[i].setBackground(Color.ORANGE);
+			weekButton_clone[i].setBorder(new LineBorder(Color.BLACK,1,true));
+		}
+		
+		calendar.set(year, month-1, 1);
+		yearMonth = YearMonth.of(year, month);
+		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+		int maxDate = yearMonth.lengthOfMonth();
+		for(int i=0;i<dayOfWeek;i++)
+			dayButton_clone[i] = new JButton("");
+		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
+			dayButton_clone[i] = new JButton(""+(1+i-dayOfWeek));
+		for (int i=dayOfWeek+maxDate;i<42;i++)
+			dayButton_clone[i] = new JButton("");
+		
+		for(int i=0;i<7;i++)
+			planPanel.add(weekButton_clone[i]);
+		for(int i=0;i<42;i++){
+			dayButton_clone[i].setBackground(Color.WHITE);
+			planPanel.add(dayButton_clone[i]);//カレンダーボタン追加
+		}
+		
 		panelNum[2].add(labelNum[2]);
+		panelNum[2].add(planPanel);
 	}
 
 	private void Method3(){
@@ -186,6 +220,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3].setLayout(null);
 		labelNum[3] = new JLabel("アカウント");
 		labelNum[3].setBounds(380,10,200,40);
+		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
 
 		panelNum[3].add(labelNum[3]);
 	}
