@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
+class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
 	private display.Message message;
 	private JFrame mainFrame;
@@ -50,10 +50,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
-	private int year = calendar.get(Calendar.YEAR);
-	private int month = calendar.get(Calendar.MONTH)+1;
+	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
+	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
 
-	Method(system.Controller controller, display.Message message){
+	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
 		this.controller = controller;
 		this.message = message;
@@ -142,17 +142,14 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void calr(){
-		month = calendar.get(Calendar.MONTH);
+		month[0] = calendar.get(Calendar.MONTH);
+		System.out.println(month[0]);
+		monthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
 
-		monthLabel.setText(year+"年"+month+"月");
-
-		calendar.set(year, month-1, 1);
-		yearMonth = YearMonth.of(year, month);
+		calendar.set(year[0], month[0], 1);
+		yearMonth = YearMonth.of(year[0], month[0]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
-		//System.out.println(year+"年"+month+"月");
-		//System.out.println("今月は"+maxDate+"日あります");
-		//System.out.println("今月の1日は" +weekName[dayOfWeek]+ "曜日です");
 		for(int i=0;i<dayOfWeek;i++)
 			dayButton[i].setText("");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
@@ -202,8 +199,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekButton_clone[i].setBorder(new LineBorder(Color.BLACK,1,true));
 		}
 
-		calendar.set(year, month-1, 1);
-		yearMonth = YearMonth.of(year, month);
+		calendar.set(year[1], month[1], 1);
+		yearMonth = YearMonth.of(year[1], month[1]);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
 		for(int i=0;i<dayOfWeek;i++)
@@ -270,7 +267,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		backButton.addKeyListener(this);
 	}
 
-	public void actionPerformed(ActionEvent e){
+	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == numButton[0]){/*機能1*/
 			cLayout.show(cardPanel, "Meth1");
 		}
@@ -281,7 +278,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		if(e.getSource() == numButton[2]){/*機能3*/
 			cLayout.show(cardPanel, "Meth3");
-			message("おおおおおおおお");
+			message("うううううう");
 		}
 
 		if(e.getSource() == numButton[3]){/*機能4*/
@@ -312,13 +309,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 
 		if(e.getSource() == nextButton){
-			calendar.set(Calendar.MONTH, month +1);	//1ヶ月増やす
+			calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
 			calr();
 			panelNum[0].repaint();
 		}
 
 		if(e.getSource() == backButton){
-			calendar.set(Calendar.MONTH, month -1);	//1ヶ月減らす
+			calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
 			calr();
 			panelNum[0].repaint();
 		}
@@ -358,13 +355,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				Login.loginFrame.setVisible(true);
 			}
 			if(e.getSource() == nextButton){
-				calendar.set(Calendar.MONTH, month +1);	//1ヶ月増やす
+				calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
 				calr();
 				panelNum[0].repaint();
 			}
 
 			if(e.getSource() == backButton){
-				calendar.set(Calendar.MONTH, month -1);	//1ヶ月減らす
+				calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
 				calr();
 				panelNum[0].repaint();
 			}
