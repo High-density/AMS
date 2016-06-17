@@ -14,6 +14,7 @@ import java.io.File;
 import java.time.YearMonth;
 import java.util.Calendar;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -32,6 +33,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
 	private JPanel planPanel;
+	private JPanel planPanel2;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[42];
@@ -41,10 +43,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton referButton;
 	private JButton upButton;
 	private JButton nextButton;
+	private JButton nextButton2;
 	private JButton backButton;
+	private JButton backButton2;
 	private JLabel labelNum[] = new JLabel[4];
 	private JLabel testPathLabel;//ファイルパス取得テスト
 	private JLabel monthLabel;
+	private JLabel testLabel;
 	private JTextField pathTextField;
 
 	private YearMonth yearMonth;
@@ -150,9 +155,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		yearMonth = YearMonth.of(year, month);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
-		//System.out.println(year+"年"+month+"月");
-		//System.out.println("今月は"+maxDate+"日あります");
-		//System.out.println("今月の1日は" +weekName[dayOfWeek]+ "曜日です");
 		for(int i=0;i<dayOfWeek;i++)
 			dayButton[i].setText("");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
@@ -186,13 +188,28 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Plan(){
-		panelNum[2] = new JPanel();
+		panelNum[2] = new JPanel();/*左半分*/
 		panelNum[2].setLayout(null);
 		planPanel = new JPanel();
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 80, 400, 400);
+		nextButton2 = new JButton("next");
+		nextButton2.setBounds(10,50,100,40);
+		nextButton2.setBackground(Color.WHITE);
+		backButton2 = new JButton("back");
+		backButton2.setBounds(309,50,100,40);
+		backButton2.setBackground(Color.WHITE);
+		monthLabel = new JLabel(year+"年"+month+"月");
+		monthLabel.setBounds(195,50,200,40);//ファイルパス取得テ
+		//右半分
+		planPanel2 = new JPanel();
+		planPanel2.setLayout(new BoxLayout(planPanel2,BoxLayout.Y_AXIS));
+		planPanel2.setBounds(460, 100, 300, 400);
+
+		testLabel = new JLabel("ためしたよ");
+		testLabel.setFont(new Font(null, Font.PLAIN, 40));
 		labelNum[2] = new JLabel("予定");
-		labelNum[2].setBounds(180,10,200,40);
+		labelNum[2].setBounds(380,10,200,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 18));
 		for(int i=0;i<7;i++){
 			weekButton_clone[i] = new JButton(weekName[i]);
@@ -219,9 +236,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			dayButton_clone[i].setBackground(Color.WHITE);
 			planPanel.add(dayButton_clone[i]);//カレンダーボタン追加
 		}
-
+		panelNum[2].add(nextButton2);
+		panelNum[2].add(backButton2);
+		panelNum[2].add(monthLabel);
+		panelNum[2].add(testLabel);
 		panelNum[2].add(labelNum[2]);
 		panelNum[2].add(planPanel);
+		panelNum[2].add(planPanel2);
 	}
 
 	private void Account(){
