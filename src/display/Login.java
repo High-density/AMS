@@ -1,3 +1,4 @@
+
 package display;
 
 import java.awt.BorderLayout;
@@ -17,6 +18,7 @@ import javax.swing.JTextField;
 
 public class Login extends KeyAdapter implements ActionListener{/*ログインクラス*/
 	private system.Controller controller; // 内部動作用
+	private display.Message message; //メッセージ表示用
 	static JFrame loginFrame;
 	private Container contentPane;
 	private JLabel idLabel;
@@ -31,6 +33,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 	public Login(){
 		/* システム呼び出し */
 		controller = new system.Controller();
+		message = new display.Message();
 
 		/* 各種設定 */
 		loginFrame = new JFrame("ログインフォーム");
@@ -101,7 +104,10 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		String PA = new String(passField.getPassword());//パスワード
 		if(controller.login(ID, PA)){//IDとPassがそれぞれ一致したら
 			loginFrame.setVisible(false);
-			new Method(controller);
+			if(ID.equals("root"))
+				new Method(controller, message);
+			else
+				new Method(controller, message);
 		}else
 			annouceLabel.setText("ログインできません\n");
 	}

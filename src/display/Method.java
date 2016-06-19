@@ -25,6 +25,7 @@ import javax.swing.border.LineBorder;
 
 class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
+	private display.Message message;
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -57,9 +58,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private int year = calendar.get(Calendar.YEAR);
 	private int month = calendar.get(Calendar.MONTH)+1;
 
-	Method(system.Controller controller){
+	Method(system.Controller controller, display.Message message){
 		/* システム引き継ぎ */
 		this.controller = controller;
+		this.message = message;
 
 		/* メインフレーム設定 */
 		mainFrame = new JFrame("機能選択");
@@ -207,10 +209,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		planPanel2 = new JPanel();
 		planPanel2.setLayout(new BoxLayout(planPanel2,BoxLayout.Y_AXIS));
 		planPanel2.setBounds(460, 100, 300, 400);
-		
+
 		testLabel = new JLabel("ためしたよ");
 		testLabel.setFont(new Font(null, Font.PLAIN, 40));
-		
+
 		labelNum[2] = new JLabel("予定");
 		labelNum[2].setBounds(380,10,200,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 18));
@@ -243,7 +245,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[2].add(backButton2);
 		panelNum[2].add(monthLabel);
 		panelNum[2].add(testLabel);
-		
+
 		panelNum[2].add(labelNum[2]);
 		panelNum[2].add(planPanel);
 		panelNum[2].add(planPanel2);
@@ -268,6 +270,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			String str = "Meth" + (i+1);
 			cardPanel.add(panelNum[i], str);
 		}
+	}
+
+	private void message(String mess){
+		message.showMessage("うううう");
 	}
 
 	private void actionButton(){
@@ -302,7 +308,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		if(e.getSource() == numButton[2]){/*機能3*/
 			cLayout.show(cardPanel, "Meth3");
-			new Message("おお");
+			message("おおおおおおおお");
 		}
 
 		if(e.getSource() == numButton[3]){/*機能4*/
