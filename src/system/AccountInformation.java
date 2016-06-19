@@ -1,41 +1,86 @@
 package system;
 
+/**
+ * アカウントに必要な情報一式を保持するクラス
+ * @author Shinichi Yanagido
+ * @version 1.0
+ */
 public class AccountInformation {
 	private String id; // ID
 	private String name; // 名前
 	private String passwd; // パスワード
 
+	/**
+	 * コンストラクタ
+	 * @param id 対象者のID
+	 * @param name 対象者の名前
+	 * @param passwd 対象者のパスワード
+	 */
 	private AccountInformation(String id, String name, String passwd) {
 		this.id = id;
 		this.name = name;
 		this.passwd = passwd;
 	}
 
+	/**
+	 * パスワードが登録されたAccountInformationのインスタンスを取得する
+	 * @param passwd 対象者のパスワード
+	 * @return パスワードが設定されたインスタンス
+	 */
 	public static AccountInformation ofPasswd(String passwd) {
 		return new AccountInformation(null, null, passwd);
 	}
 
+	/**
+	 * idが登録されたAccountInformationのインスタンスを取得する
+	 * @param id 対象者のID
+	 * @return IDが設定されたインスタンス
+	 */
 	public static AccountInformation ofId(String id) {
 		return new AccountInformation(id, null, null);
 	}
 
+	/**
+	 * IDとパスワードが登録されたAccountInformationのインスタンスを取得する
+	 * @param id 対象者のID
+	 * @param passwd 対象者のパスワード
+	 * @return IDとパスワードが設定されたインスタンス
+	 */
 	public static AccountInformation ofIdPasswd(String id, String passwd) {
 		return new AccountInformation(id, null, passwd);
 	}
 
+	/**
+	 * IDと名前とパスワードが登録されたAccountInformationのインスタンスを取得する
+	 * @param id 対象者のID
+	 * @param name 対象者の名前
+	 * @param passwd 対象者のパスワード
+	 * @return 全てのフィールドが設定されたインスタンス
+	 */
 	public static AccountInformation ofAll(String id, String name, String passwd) {
 		return new AccountInformation(id, name, passwd);
 	}
 
-	// getter
+	/**
+	 * idフィールドの値を取得する
+	 * @return idフィールド
+	 */
 	public String getId() {
 		return id;
 	}
 
+	/**
+	 * nameフィールドの値を取得する
+	 * @return nameフィールド
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * passwdフィールドの値を取得する
+	 * @return passwdフィールド
+	 */
 	public String getPasswd() {
 		return passwd;
 	}
