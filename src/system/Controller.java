@@ -10,13 +10,25 @@ import java.lang.String;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
+/**
+ * 内部の動作を一括で管理するクラス<br>
+ * GUIとのやりとりはここを通して行う
+ * @author Shinichi Yanagido
+ * @version 1.0
+ */
 public class Controller {
 	private User user; // ログインしているユーザ
 
 	public Controller() {
 	}
 
-	// ログイン
+	/**
+	 * ログインを行う<br>
+	 * IDに沿ったインスタンスを作成する
+	 * @param id ユーザID
+	 * @param passwd パスワード
+	 * @return ログイン成功時true，失敗時false
+	 */
 	public boolean login(String id, String passwd) {
 		user = User.login(id, passwd);
 		if (user == null) {
@@ -29,26 +41,46 @@ public class Controller {
 		}
 	}
 
-	// ログアウト
+	/**
+	 * ログアウトを行う
+	 * @return ログアウト成功時true，失敗時false
+	 */
 	public boolean logout() {
 		user = null;
 		return true;
 	}
 
-	// 報告書の提出
+	/**
+	 * 報告書の提出を行う
+	 * @param file 提出対象へのファイルパス
+	 * @return 提出成功時true，失敗時false
+	 */
 	public boolean submitReport(String file) {
 		return user.submitReport(file);
 	}
 
-	// 報告書の閲覧
+	/**
+	 * 報告書の入ったディレクトリをファイルマネージャで開く<br>
+	 * どのディレクトリを開けばいいかをログイン中のIDから判断して開く
+	 * @return ディレクトリが開けた時true，どのディレクトリを開いたらいいか判断がつかない等で開けない時false
+	 */
 	public boolean showReport() {
 		return user.showReport();
 	}
+
+	/**
+	 * 報告書の入ったディレクトリをファイルマネージャで開く
+	 * @param id 開きたいディレクトリの所有者ID
+	 * @return ディレクトリが開けた時true，開けなかった時false
+	 */
 	public boolean showReport(String id) {
 		return user.showReport(id);
 	}
 
-	// 出席の登録
+	/**
+	 * 出席の登録を行う
+	 * @return 登録が完了したらtrue，できなかったらfalse
+	 */
 	private boolean attend() {
 		// 属性がSlaveなら出席
 		if (user.getAttribute().equals(Slave.class.getSimpleName())) {
@@ -57,17 +89,31 @@ public class Controller {
 		return false;
 	}
 
-	// 出席の取得
+	/**
+	 * 出席状況の取得を行う
+	 * @param ym 取得したい年月
+	 * @return 取得した各学生の一月分の出席簿配列<br>
+	 * @see AttendanceBook
+	 */
 	public AttendanceBook[] getAttendance(YearMonth ym) {
 		return user.getAttendance(ym);
 	}
 
-	// アカウント設定
+	/**
+	 * アカウントの更新を行う
+	 * @param oldAccount 現在のアカウント情報
+	 * @param newAccount 更新したいアカウント情報
+	 * @return 更新成功時true，失敗時false
+	 */
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
 		return user.setAccount(oldAccount, newAccount);
 	}
 
-	// ディレクトリがないときに作成
+	/**
+	 * ディレクトリの作成を行う
+	 * @param dir 作成したいディレクトリのパス
+	 * @return 作成成功時true，失敗時false
+	 */
 	public static boolean mkdirs(String dir) {
 		File directory = new File(dir);
 		if (!directory.exists()) {
@@ -76,7 +122,11 @@ public class Controller {
 		return true;
 	}
 
-	// ファイルの拡張子取得
+	/**
+	 * ファイルの拡張子をドット付きで取得する
+	 * @param fileName ファイルの名前
+	 * @return 拡張子を返す．fileNameがnullのときや拡張子が存在しない時はnull
+	 */
 	public static String getSuffixWithDot(String fileName) {
 		if (fileName == null) {
 			return null;
@@ -88,7 +138,13 @@ public class Controller {
 		return null;
 	}
 
-	// ファイルのコピー
+	/**
+	 * ファイルのコピーを行う
+	 * @param in コピー元ファイル
+	 * @param out コピー先ファイル
+	 * @return ファイルのコピー成功時true，失敗時false
+	 * @throws IOException コピー失敗
+	 */
 	public static boolean copyFile(File in, File out) throws IOException {
 		try {
 			FileChannel inChannel = new FileInputStream(in).getChannel();
@@ -104,19 +160,22 @@ public class Controller {
 		}
 	}
 
-    // ファイルまたはディレクトリの削除
-    public static void deleteFile(File f) {
-        if (f.exists() == false) {
-            return;
-        }
-        if(f.isFile()) {
-            f.delete();
-        } else if(f.isDirectory()) {
-            File files[] = f.listFiles();
-            for(int i = 0; i < files.length; i++) {
-                deleteFile(files[i]);
-            }
-            f.delete();
-        }
-    }
+	/**
+	 * ファイルまたはディレクトリの削除を行う
+	 * @param f 削除対象
+	 */
+	public static void deleteFile(File f) {
+		if (f.exists() == false) {
+			return;
+		}
+		if(f.isFile()) {
+			f.delete();
+		} else if(f.isDirectory()) {
+			File files[] = f.listFiles();
+			for(int i = 0; i < files.length; i++) {
+				deleteFile(files[i]);
+			}
+			f.delete();
+		}
+	}
 }
