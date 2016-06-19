@@ -155,9 +155,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		yearMonth = YearMonth.of(year, month);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
-		//System.out.println(year+"年"+month+"月");
-		//System.out.println("今月は"+maxDate+"日あります");
-		//System.out.println("今月の1日は" +weekName[dayOfWeek]+ "曜日です");
 		for(int i=0;i<dayOfWeek;i++)
 			dayButton[i].setText("");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
@@ -218,10 +215,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 100, 400, 400);
 		nextButton2 = new JButton("next");
-		nextButton2.setBounds(10,50,100,40);
+		nextButton2.setBounds(309,50,100,40);
 		nextButton2.setBackground(Color.WHITE);
 		backButton2 = new JButton("back");
-		backButton2.setBounds(309,50,100,40);
+		backButton2.setBounds(10,50,100,40);
 		backButton2.setBackground(Color.WHITE);
 		monthLabel = new JLabel(year+"年"+month+"月");
 		monthLabel.setBounds(180,50,200,40);//ファイルパス取得テ
@@ -230,7 +227,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		planPanel2.setLayout(new BoxLayout(planPanel2,BoxLayout.Y_AXIS));
 		planPanel2.setBounds(460, 100, 300, 400);
 
-		testLabel = new JLabel("ためしたよ");
+		testLabel = new JLabel("");
 		testLabel.setFont(new Font(null, Font.PLAIN, 40));
 
 		labelNum[2] = new JLabel("予定");
@@ -239,7 +236,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		for(int i=0;i<7;i++){
 			weekButton_clone[i] = new JButton(weekName[i]);
 			weekButton_clone[i].setFont(new Font(null, Font.PLAIN, 16));
-			//weekButton[i].setForeground(Color.WHITE);
 			weekButton_clone[i].setBackground(Color.ORANGE);
 			weekButton_clone[i].setBorder(new LineBorder(Color.BLACK,1,true));
 		}
@@ -314,6 +310,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	public void actionPerformed(ActionEvent e){
+		int i;
 		if(e.getSource() == numButton[0]){/*機能1*/
 			cLayout.show(cardPanel, "Meth1");
 		}
@@ -353,7 +350,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			mainFrame.setVisible(false);
 			Login.loginFrame.setVisible(true);
 		}
-
 		if(e.getSource() == nextButton){
 			calendar.set(Calendar.MONTH, month +1);	//1ヶ月増やす
 			calr();
@@ -376,6 +372,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calr_clone();
 			panelNum[2].repaint();
 		}
+				String str = e.getActionCommand();
+				testLabel.setText(str);
+				Plan();
+				panelNum[2].repaint();
 	}
 	public void keyPressed(KeyEvent e){
 		if(KeyEvent.VK_ENTER == e.getKeyCode()){
