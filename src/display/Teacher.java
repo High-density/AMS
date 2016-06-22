@@ -306,23 +306,15 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calendar.set(Calendar.YEAR, year[0]);
 			calendar.set(Calendar.MONTH, month[0]);
 			cLayout.show(cardPanel, "Meth1");
-		}
-
-		if(e.getSource() == numButton[1]){/*機能2*/
+		}else if(e.getSource() == numButton[1]){/*機能2*/
 			cLayout.show(cardPanel, "Meth2");
-		}
-
-		if(e.getSource() == numButton[2]){/*機能3*/
+		}else if(e.getSource() == numButton[2]){/*機能3*/
 			calendar.set(Calendar.YEAR, year[1]);
 			calendar.set(Calendar.MONTH, month[1]);
 			cLayout.show(cardPanel, "Meth3");
-		}
-
-		if(e.getSource() == numButton[3]){/*機能4*/
+		}else if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
-		}
-
-		if(e.getSource() == referButton){/*ファイル参照用*/
+		}else if(e.getSource() == referButton){/*ファイル参照用*/
 			JFileChooser filechooser = new JFileChooser();
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 			if (selected == JFileChooser.APPROVE_OPTION){
@@ -333,42 +325,29 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}else if (selected == JFileChooser.ERROR_OPTION){
 				pathTextField.setText("エラー又は取消しがありました");
 			}
-		}
-
-		if(e.getSource() == upButton){/*アップロード*/
+		}else if(e.getSource() == upButton){/*アップロード*/
 			message("アップロードしてもよろしいですか?");
 			testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
 			controller.submitReport(pathTextField.getText());
-		}
-		if(e.getSource() == numButton[4]){/*ログアウト*/
+		}else if(e.getSource() == numButton[4]){/*ログアウト*/
 			controller.logout();
 			mainFrame.setVisible(false);
 			Login.loginFrame.setVisible(true);
-		}
-
-		if(e.getSource() == aNextButton){
+		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
 			calr();
 			panelNum[0].repaint();
-		}
-
-		if(e.getSource() == aBackButton){
+		}else if(e.getSource() == aBackButton){
 			calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
 			calr();
 			panelNum[0].repaint();
-		}
-
-		if(e.getSource() == addPlanButton){
+		}else if(e.getSource() == addPlanButton){
 			//ここに予定を追加機能を実装する
-		}
-
-		if(e.getSource() == pNextButton){
+		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
 			calr_clone();
 			panelNum[2].repaint();
-		}
-
-		if(e.getSource() == pBackButton){
+		}else if(e.getSource() == pBackButton){
 			calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
 			calr_clone();
 			panelNum[2].repaint();
@@ -381,22 +360,18 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calendar.set(Calendar.YEAR, year[0]);
 				calendar.set(Calendar.MONTH, month[0]);
 				cLayout.show(cardPanel, "Meth1");
-			}
-			if(e.getSource() == numButton[1]){/*機能2*/
+			}else if(e.getSource() == numButton[1]){/*機能2*/
 				cLayout.show(cardPanel, "Meth2");
-			}
-			if(e.getSource() == numButton[2]){/*機能3*/
+			}else if(e.getSource() == numButton[2]){/*機能3*/
 				calendar.set(Calendar.YEAR, year[1]);
 				calendar.set(Calendar.MONTH, month[1]);
 				cLayout.show(cardPanel, "Meth3");
-			}
-			if(e.getSource() == numButton[3]){/*機能4*/
+			}else if(e.getSource() == numButton[3]){/*機能4*/
 				cLayout.show(cardPanel, "Meth4");
-			}
-			if(e.getSource() == referButton){/*ファイル参照用*/
+			}else if(e.getSource() == referButton){/*ファイル参照用*/
 				JFileChooser filechooser = new JFileChooser();
 				int selected = filechooser.showOpenDialog(null);//ダイアログ表示
-				if (selected == JFileChooser.APPROVE_OPTION){
+				if(selected == JFileChooser.APPROVE_OPTION){
 					File file = filechooser.getSelectedFile();
 					pathTextField.setText(file.getPath());	//ファイルが選ばれたらパスを表示
 				}else if (selected == JFileChooser.CANCEL_OPTION){
@@ -404,38 +379,27 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				}else if (selected == JFileChooser.ERROR_OPTION){
 					pathTextField.setText("エラー又は取消しがありました");
 				}
-			}
-			if(e.getSource() == upButton){/*アップロード*/
+			}else if(e.getSource() == upButton){/*アップロード*/
 				testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
-			}
-			if(e.getSource() == numButton[4]){/*ログアウト*/
+			}else if(e.getSource() == numButton[4]){/*ログアウト*/
 				controller.logout();
 				mainFrame.setVisible(false);
 				Login.loginFrame.setVisible(true);
-			}
-			if(e.getSource() == aNextButton){
+			}else if(e.getSource() == aNextButton){
 				calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
 				calr();
 				panelNum[0].repaint();
-			}
-
-			if(e.getSource() == aBackButton){
+			}else if(e.getSource() == aBackButton){
 				calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
 				calr();
 				panelNum[0].repaint();
-			}
-
-			if(e.getSource() == addPlanButton){
+			}else if(e.getSource() == addPlanButton){
 				//ここに予定を追加機能を実装する
-			}
-
-			if(e.getSource() == pNextButton){
+			}else if(e.getSource() == pNextButton){
 				calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
 				calr_clone();
 				panelNum[2].repaint();
-			}
-
-			if(e.getSource() == pBackButton){
+			}else if(e.getSource() == pBackButton){
 				calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
 				calr_clone();
 				panelNum[2].repaint();
