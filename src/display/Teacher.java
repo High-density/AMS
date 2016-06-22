@@ -24,7 +24,7 @@ import javax.swing.border.LineBorder;
 
 class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
-	private display.Message message;
+	private display.Message message; //エラー呼び出し用
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -234,6 +234,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void calr_clone(){
+		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
 		System.out.println(month[1]);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
@@ -345,10 +346,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			//ここに予定を追加機能を実装する
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
+			if(month[1]+1 == 13)
+				calendar.set(Calendar.YEAR, year[1]+1);
 			calr_clone();
 			panelNum[2].repaint();
 		}else if(e.getSource() == pBackButton){
 			calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
+			if(month[1]-1 == -1)
+				calendar.set(Calendar.YEAR, year[1]-1);
 			calr_clone();
 			panelNum[2].repaint();
 		}
