@@ -37,7 +37,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JScrollPane scrollPane;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
-	private JButton dayButton[] = new JButton[42];
+	private JButton dayButton[][];
 	private JButton weekButton[] = new JButton[7];
 	private JButton aNextButton;
 	private JButton aBackButton;
@@ -59,6 +59,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
+	private int numSize;
 
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
@@ -131,17 +132,24 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekButton[i].setBorder(new LineBorder(Color.BLACK,1,true));
 		}
 
-		//int size;
+		numSize = 5;
 		//System.out.println(size);
 
-		for(int i=0;i<42;i++)
-			dayButton[i] = new JButton();
-		calr();
+		dayButton = new JButton[5][31];
+
+		for(int i=0;i<5;i++){
+			for(int j=0;j<31;j++)
+				dayButton[i][j] = new JButton();
+		}
+		calr(numSize);/*カレンダーのボタン作成用*/
+
 		for(int i=0;i<7;i++)
 			calPanel.add(weekButton[i]);
-		for(int i=0;i<42;i++){
-			dayButton[i].setBackground(Color.WHITE);
-			calPanel.add(dayButton[i]);//カレンダーボタン追加
+		for(int i=0;i<5;i++){
+			for(int j=0;j<42;j++){
+				dayButton[i][j].setBackground(Color.WHITE);
+				calPanel.add(dayButton[i][j]);//カレンダーボタン追加
+			}
 		}
 
 		panelNum[0].add(labelNum[0]);
@@ -154,22 +162,19 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		scrollPane = new JScrollPane(panelNum[0]);
 	}
 
-	private void calr(){
+	private void calr(int size){
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
-		//System.out.println(month[0]);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
 
 		calendar.set(year[0], month[0], 1);
 		yearMonth = YearMonth.of(year[0], month[0]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
-		for(int i=0;i<dayOfWeek;i++)
-			dayButton[i].setText("");
-		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
-			dayButton[i].setText(""+(1+i-dayOfWeek));
-		for (int i=dayOfWeek+maxDate;i<42;i++)
-			dayButton[i].setText("");
+
+		for(int i=0;i<size;i++)
+		for (int j=maxDate;j<dayButton.length;j++)
+			dayButton[i][j].setText("");
 	}
 
 	private void Report(){
@@ -223,14 +228,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekButton_clone[i].setBackground(Color.ORANGE);
 			weekButton_clone[i].setBorder(new LineBorder(Color.BLACK,1,true));
 		}
-		for(int i=0;i<42;i++)
+		for(int i=0;i<dayButton_clone.length;i++)
 			dayButton_clone[i] = new JButton();
 
 		calr_clone();/*カレンダーの表示*/
 
 		for(int i=0;i<7;i++)
 			planPanel.add(weekButton_clone[i]);
-		for(int i=0;i<42;i++){
+		for(int i=0;i<dayButton_clone.length;i++){
 			dayButton_clone[i].setBackground(Color.WHITE);
 			planPanel.add(dayButton_clone[i]);//カレンダーボタン追加
 		}
@@ -246,18 +251,17 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void calr_clone(){
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
-		//System.out.println(month[1]);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
 		yearMonth = YearMonth.of(year[1], month[1]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
 		for(int i=0;i<dayOfWeek;i++)
-			dayButton_clone[i].setText("");
+			dayButton_clone[i].setText(" ");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
 			dayButton_clone[i].setText(""+(1+i-dayOfWeek));
-		for (int i=dayOfWeek+maxDate;i<42;i++)
-			dayButton_clone[i].setText("");
+		for (int i=dayOfWeek+maxDate;i<dayButton_clone.length;i++)
+			dayButton_clone[i].setText(" ");
 	}
 
 	private void Account(){
@@ -311,6 +315,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pNextButton.addKeyListener(this);
 		pBackButton.addActionListener(this);
 		pBackButton.addKeyListener(this);
+		for(int i=0;i<dayButton_clone.length;i++){
+			dayButton_clone[i].addActionListener(this);
+			dayButton_clone[i].addKeyListener(this);
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -347,11 +355,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			Login.loginFrame.setVisible(true);
 		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
-			calr();
+			calr(numSize);
 			panelNum[0].repaint();
 		}else if(e.getSource() == aBackButton){
 			calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
-			calr();
+			calr(numSize);
 			panelNum[0].repaint();
 		}else if(e.getSource() == addPlanButton){
 			//ここに予定を追加機能を実装する
@@ -363,6 +371,16 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
 			calr_clone();
 			panelNum[2].repaint();
+		}else{
+			for(int i=0;i<42;i++){
+				if(e.getSource() == dayButton_clone[i]){
+					String dayName = dayButton_clone[i].getText();
+					if(!dayName.equals(" "))
+						System.out.println(year[1]+"年"+(month[1]+1)+"月"+dayName+"日");
+					else
+						System.out.println("日付なし");
+				}
+			}
 		}
 	}
 
@@ -399,11 +417,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				Login.loginFrame.setVisible(true);
 			}else if(e.getSource() == aNextButton){
 				calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
-				calr();
+				calr(numSize);
 				panelNum[0].repaint();
 			}else if(e.getSource() == aBackButton){
 				calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
-				calr();
+				calr(numSize);
 				panelNum[0].repaint();
 			}else if(e.getSource() == addPlanButton){
 				//ここに予定を追加機能を実装する
@@ -415,6 +433,16 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
 				calr_clone();
 				panelNum[2].repaint();
+			}else{
+				for(int i=0;i<42;i++){
+					if(e.getSource() == dayButton_clone[i]){
+						String dayName = dayButton_clone[i].getText();
+						if(!dayName.equals(" "))
+							System.out.println(year[1]+"年"+(month[1]+1)+"月"+dayName+"日");
+						else
+							System.out.println("日付なし");
+					}
+				}
 			}
 		}
 	}
