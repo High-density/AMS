@@ -1,8 +1,10 @@
 package system;
 
 import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -12,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -150,5 +153,33 @@ class Slave extends User {
 	// Slaveは情報配信不可
 	public boolean setEvent() {
 		return false;
+	}
+
+	// ユーザ一覧を取得する
+	public static ArrayList<String> getSlaves() {
+		// Slaveのid格納
+		ArrayList<String> slaves = new ArrayList<String>();
+
+		String fileDirName = "file/";
+		File fileDir = new File(fileDirName);
+		for (String userDirName: fileDir.list()) {
+			File file = new File(fileDirName + userDirName + "/attribute");
+			if (file.exists()) {
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					if (br.readLine().equals(Slave.class.getSimpleName())) {
+						slaves.add(userDirName);
+					}
+				} catch (FileNotFoundException e) {
+					Log.error(e);
+				} catch (IOException e) {
+					Log.error(e);
+				} catch (NullPointerException e) {
+					Log.error(e);
+				}
+			}
+		}
+
+		return slaves;
 	}
 }

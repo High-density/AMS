@@ -9,6 +9,7 @@ import java.nio.channels.FileChannel;
 import java.lang.String;
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 
 /**
  * 内部の動作を一括で管理するクラス<br>

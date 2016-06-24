@@ -32,26 +32,7 @@ class Master extends User {
 		AttendanceBook book[]; // 出席情報
 
 		// Slaveのidを一旦格納
-		ArrayList<String> slaves = new ArrayList<String>();
-		String fileDirName = "file/";
-		File fileDir = new File(fileDirName);
-		for (String userDirName: fileDir.list()) {
-			File file = new File(fileDirName + userDirName + "/attribute");
-			if (file.exists()) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(file));
-					if (br.readLine().equals(Slave.class.getSimpleName())) {
-						slaves.add(userDirName);
-					}
-				} catch (FileNotFoundException e) {
-					Log.error(e);
-				} catch (IOException e) {
-					Log.error(e);
-				} catch (NullPointerException e) {
-					Log.error(e);
-				}
-			}
-		}
+		ArrayList<String> slaves = Slave.getSlaves();
 
 		// 取得したidのそれぞれの出席を取得
 		book = new AttendanceBook[slaves.size()];
