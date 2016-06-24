@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 学生用クラス
+ * @author Shinichi Yanagido
+ * @version 1.0
+ */
 class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
@@ -155,7 +160,10 @@ class Slave extends User {
 		return false;
 	}
 
-	// ユーザ一覧を取得する
+	/**
+	 * Slaveの一覧を取得する
+	 * @return ユーザのIDをListで返す
+	 */
 	public static ArrayList<String> getSlaves() {
 		// Slaveのid格納
 		ArrayList<String> slaves = new ArrayList<String>();
