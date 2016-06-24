@@ -42,13 +42,15 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton upButton;
 	private JButton dayButton_clone[] = new JButton[42];
 	private JButton weekButton_clone[] = new JButton[7];
-	private JButton addPlanButton;
 	private JButton pNextButton;
 	private JButton pBackButton;
 	private JLabel labelNum[] = new JLabel[4];
 	private JLabel testPathLabel;//ファイルパス取得テスト
 	private JLabel aMonthLabel;
 	private JLabel pMonthLabel;
+	private JLabel planDate;
+	private JLabel ID;
+	private JLabel UserName;
 	private JTextField pathTextField;
 
 	private YearMonth yearMonth;
@@ -56,6 +58,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
+	private int button;
 
 	Method(system.Controller controller, display.Message message){
 		/* システム引き継ぎ */
@@ -147,7 +150,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	private void calr(){
 		month[0] = calendar.get(Calendar.MONTH);
-		System.out.println(month[0]);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
 
 		calendar.set(year[0], month[0], 1);
@@ -198,9 +200,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
-		addPlanButton = new JButton("予定追加");
-		addPlanButton.setBounds(550,20,200,40);
-		addPlanButton.setBackground(Color.WHITE);
+		planDate = new JLabel("指定された日付け");
+		planDate.setBounds(550,20,200,40);
+		planDate.setBackground(Color.WHITE);
 		pNextButton = new JButton("next");
 		pNextButton.setBounds(300,70,100,40);
 		pNextButton.setBackground(Color.WHITE);
@@ -225,8 +227,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			planPanel.add(dayButton_clone[i]);//カレンダーボタン追加
 		}
 
+		panelNum[2].add(planDate);
 		panelNum[2].add(labelNum[2]);
-		panelNum[2].add(addPlanButton);
 		panelNum[2].add(pMonthLabel);
 		panelNum[2].add(pNextButton);
 		panelNum[2].add(pBackButton);
@@ -236,12 +238,12 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void calr_clone(){
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
-		System.out.println(month[1]);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
 		yearMonth = YearMonth.of(year[1], month[1]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
+		button = dayOfWeek;
 		for(int i=0;i<dayOfWeek;i++)
 			dayButton_clone[i].setText("");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
@@ -256,8 +258,16 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		labelNum[3] = new JLabel("アカウント");
 		labelNum[3].setBounds(380,10,200,40);
 		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
+		ID = new JLabel("ID");
+		ID.setBounds(380,30,200,40);
+		ID.setFont(new Font(null, Font.PLAIN, 18));
+		UserName = new JLabel("ユーザ名");
+		UserName.setBounds(380,50,200,40);
+		UserName.setFont(new Font(null, Font.PLAIN, 18));
 
 		panelNum[3].add(labelNum[3]);
+		panelNum[3].add(ID);
+		panelNum[3].add(UserName);
 	}
 
 	private void CardPanel(){
@@ -294,12 +304,14 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aNextButton.addKeyListener(this);
 		aBackButton.addActionListener(this);
 		aBackButton.addKeyListener(this);
-		addPlanButton.addActionListener(this);
-		addPlanButton.addKeyListener(this);
 		pNextButton.addActionListener(this);
 		pNextButton.addKeyListener(this);
 		pBackButton.addActionListener(this);
 		pBackButton.addKeyListener(this);
+		for(int i = button;i < 42;i++){
+			dayButton_clone[i].addActionListener(this);
+			dayButton_clone[i].addKeyListener(this);
+		}
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -342,8 +354,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
 			calr();
 			panelNum[0].repaint();
-		}else if(e.getSource() == addPlanButton){
-			//ここに予定を追加機能を実装する
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
 			if(month[1]+1 == 13)
@@ -356,6 +366,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calendar.set(Calendar.YEAR, year[1]-1);
 			calr_clone();
 			panelNum[2].repaint();
+		}
+		for(int i=button;i < 42;i++){
+			if(e.getSource() == dayButton_clone[i]){
+			    String str = dayButton_clone[i].getText();
+			    planDate.setText(str);
+			    panelNum[2].repaint();
+			}
 		}
 	}
 
@@ -398,8 +415,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
 				calr();
 				panelNum[0].repaint();
-			}else if(e.getSource() == addPlanButton){
-				//ここに予定を追加機能を実装する
 			}else if(e.getSource() == pNextButton){
 				calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
 				calr_clone();
