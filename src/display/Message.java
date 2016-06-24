@@ -15,13 +15,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class Message extends KeyAdapter implements ActionListener{
-	static JFrame messFrame;
+	private JFrame messFrame;
 	private Container contentPane;
 	private JPanel panelMaster;
 	private JLabel messageLabel;
 	private JButton returnButton;
 
-	public Message(String textMessage){
+	public Message(){
 		/* 各種設定 */
 		messFrame = new JFrame("メッセージ");
 		messFrame.setBounds(0, 0, 400, 240);
@@ -36,8 +36,6 @@ public class Message extends KeyAdapter implements ActionListener{
 		returnButton.setBounds(50,160,100,35);
 		returnButton.setBackground(Color.WHITE);
 
-		messageLabel.setText(textMessage);//ここでメッセージを入れるための関数を実行
-
 		returnButton.addActionListener(this);
 		returnButton.addKeyListener(this);
 
@@ -45,16 +43,26 @@ public class Message extends KeyAdapter implements ActionListener{
 		panelMaster.add(returnButton);
 
 		contentPane.add(panelMaster, BorderLayout.CENTER);
+		messFrame.setVisible(false);
+	}
+
+	public void showMessage(String textMessage){
+		messageLabel.setText(textMessage);//ここでメッセージを入れるための関数を実行
 		messFrame.setVisible(true);
 	}
+
 	public void actionPerformed(ActionEvent e){
-		if(e.getSource() == returnButton)
+		if(e.getSource() == returnButton){
 			messFrame.setVisible(false);
+			messFrame.dispose();
+		}
 	}
 	public void keyPressed(KeyEvent e){
 		if(KeyEvent.VK_ENTER == e.getKeyCode()){
-			if(e.getSource() == returnButton)
+			if(e.getSource() == returnButton){
 				messFrame.setVisible(false);
+				messFrame.dispose();
+			}
 		}
 	}
 }
