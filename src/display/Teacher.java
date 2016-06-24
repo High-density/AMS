@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -19,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
@@ -32,6 +34,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
 	private JPanel planPanel;
+	private JScrollPane scrollPane;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[42];
@@ -64,7 +67,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		/* メインフレーム設定 */
 		mainFrame = new JFrame("機能選択");
-		mainFrame.setBounds(0, 0, 800, 600);
+		mainFrame.setSize(800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
 		contentPane = mainFrame.getContentPane();
@@ -128,6 +131,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekButton[i].setBorder(new LineBorder(Color.BLACK,1,true));
 		}
 
+		//int size;
+		//System.out.println(size);
+
 		for(int i=0;i<42;i++)
 			dayButton[i] = new JButton();
 		calr();
@@ -143,11 +149,15 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
 		panelNum[0].add(aMonthLabel);
+		panelNum[0].setPreferredSize(new Dimension(760, 1000));
+
+		scrollPane = new JScrollPane(panelNum[0]);
 	}
 
 	private void calr(){
+		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
-		System.out.println(month[0]);
+		//System.out.println(month[0]);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
 
 		calendar.set(year[0], month[0], 1);
@@ -236,7 +246,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void calr_clone(){
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
-		System.out.println(month[1]);
+		//System.out.println(month[1]);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
 		yearMonth = YearMonth.of(year[1], month[1]+1);
@@ -265,7 +275,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		cLayout = new CardLayout();
 		cardPanel.setLayout(cLayout);
 
-		for(int i=0;i<4;i++){//それぞれの機能名を入れる
+		cardPanel.add(scrollPane, "Meth1");
+		for(int i=1;i<4;i++){//それぞれの機能名を入れる
 			String str = "Meth" + (i+1);
 			cardPanel.add(panelNum[i], str);
 		}
@@ -346,14 +357,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			//ここに予定を追加機能を実装する
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
-			if(month[1]+1 == 13)
-				calendar.set(Calendar.YEAR, year[1]+1);
 			calr_clone();
 			panelNum[2].repaint();
 		}else if(e.getSource() == pBackButton){
 			calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
-			if(month[1]-1 == -1)
-				calendar.set(Calendar.YEAR, year[1]-1);
 			calr_clone();
 			panelNum[2].repaint();
 		}
