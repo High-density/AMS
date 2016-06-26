@@ -4,6 +4,11 @@ import java.lang.String;
 import java.time.YearMonth;
 import java.util.ArrayList;
 
+/**
+ * 一月分のデータを扱うクラス
+ * @author Shinichi Yanagido
+ * @version 1.0
+ */
 abstract public class DataForAMonth<T> {
 	protected YearMonth yearMonth; // いつの情報を取得しているのか
 	protected ArrayList<T> data; // その日のデータを格納
