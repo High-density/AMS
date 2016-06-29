@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -37,14 +36,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JScrollPane scrollPane;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
-	private JButton dayButton[][];
-	private JButton weekButton[] = new JButton[7];
+	private JButton dayButton[] = new JButton[31];
+	private JButton attButton[][];
 	private JButton aNextButton;
 	private JButton aBackButton;
 	private JButton referButton;
 	private JButton upButton;
 	private JButton dayButton_clone[] = new JButton[42];
-	private JButton weekButton_clone[] = new JButton[7];
+	private JButton weekButton[] = new JButton[7];
 	private JButton addPlanButton;
 	private JButton pNextButton;
 	private JButton pBackButton;
@@ -108,10 +107,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Attendance(){
+		numSize = 5;//アカウントの数
+
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		calPanel = new JPanel(new GridLayout(7,7));
-		calPanel.setBounds(200,130,400,400);
+		calPanel = new JPanel(new GridLayout((numSize+1), 32));
+		calPanel.setBounds(0,130,32*50,(numSize+1)*40);
 		aNextButton = new JButton("next");
 		aNextButton.setBounds(550,60,200,40);
 		aNextButton.setBackground(Color.WHITE);
@@ -125,56 +126,69 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
-		for(int i=0;i<7;i++){
-			weekButton[i] = new JButton(weekName[i]);
-			weekButton[i].setFont(new Font(null, Font.PLAIN, 16));
-			weekButton[i].setBackground(Color.YELLOW);
-			weekButton[i].setBorder(new LineBorder(Color.BLACK,1,true));
+
+		attButton = new JButton[numSize][31];
+
+		for(int i=0;i<31;i++){/*日付表示*/
+			dayButton[i] = new JButton((String.format("%1$02d", i+1)));
+			dayButton[i].setBounds(0,0,50,40);
+			dayButton[i].setBackground(Color.YELLOW);
 		}
 
-		numSize = 5;
-		//System.out.println(size);
-
-		dayButton = new JButton[5][31];
-
-		for(int i=0;i<5;i++){
-			for(int j=0;j<31;j++)
-				dayButton[i][j] = new JButton();
-		}
-		calr(numSize);/*カレンダーのボタン作成用*/
-
-		for(int i=0;i<7;i++)
-			calPanel.add(weekButton[i]);
-		for(int i=0;i<5;i++){
-			for(int j=0;j<42;j++){
-				dayButton[i][j].setBackground(Color.WHITE);
-				calPanel.add(dayButton[i][j]);//カレンダーボタン追加
+		for(int i=0;i<numSize;i++){/*出欠席ボタン*/
+			for(int j=0;j<31;j++){
+				attButton[i][j] = new JButton();
+				attButton[i][j].setBounds(0,0,50,40);
+				attButton[i][j].setBackground(Color.WHITE);
 			}
 		}
 
+		calr(numSize);/*カレンダーのボタン作成用*/
+
+		for(int i=0;i<31;i++){
+			calPanel.add(dayButton[i]);
+		}
+		for(int i=0;i<numSize;i++){
+			for(int j=0;j<31;j++){
+				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
+			}
+		}
+
+		//calPanel.setPreferredSize(new Dimension(32*50, (numSize+1)*40));
+		scrollPane = new JScrollPane(calPanel);
+		scrollPane.setBounds(10,130,760,300);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
 		panelNum[0].add(labelNum[0]);
-		panelNum[0].add(calPanel);
+		//panelNum[0].add(calPanel);
+		panelNum[0].add(scrollPane);
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
 		panelNum[0].add(aMonthLabel);
-		panelNum[0].setPreferredSize(new Dimension(760, 1000));
-
-		scrollPane = new JScrollPane(panelNum[0]);
 	}
 
-	private void calr(int size){
+	private int calr(int size){
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
 
 		calendar.set(year[0], month[0], 1);
 		yearMonth = YearMonth.of(year[0], month[0]+1);
-		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+		//int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
 
-		for(int i=0;i<size;i++)
-		for (int j=maxDate;j<dayButton.length;j++)
-			dayButton[i][j].setText("");
+		for(int i=0;i<size;i++){
+			for (int j=0;j<maxDate;j++)
+				attButton[i][j].setText("欠");
+		}
+		if(maxDate == 30){
+			for (int i=0;i<numSize;i++){
+				attButton[i][30].setText("無");
+			}
+		}
+
+		return maxDate;
 	}
 
 	private void Report(){
@@ -223,10 +237,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pBackButton.setBounds(030,70,100,40);
 		pBackButton.setBackground(Color.WHITE);
 		for(int i=0;i<7;i++){
-			weekButton_clone[i] = new JButton(weekName[i]);
-			weekButton_clone[i].setFont(new Font(null, Font.PLAIN, 16));
-			weekButton_clone[i].setBackground(Color.ORANGE);
-			weekButton_clone[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekButton[i] = new JButton(weekName[i]);
+			weekButton[i].setFont(new Font(null, Font.PLAIN, 16));
+			weekButton[i].setBackground(Color.ORANGE);
+			weekButton[i].setBorder(new LineBorder(Color.BLACK,1,true));
 		}
 		for(int i=0;i<dayButton_clone.length;i++)
 			dayButton_clone[i] = new JButton();
@@ -234,7 +248,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		calr_clone();/*カレンダーの表示*/
 
 		for(int i=0;i<7;i++)
-			planPanel.add(weekButton_clone[i]);
+			planPanel.add(weekButton[i]);
 		for(int i=0;i<dayButton_clone.length;i++){
 			dayButton_clone[i].setBackground(Color.WHITE);
 			planPanel.add(dayButton_clone[i]);//カレンダーボタン追加
@@ -278,9 +292,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
 		cardPanel.setLayout(cLayout);
-
-		cardPanel.add(scrollPane, "Meth1");
-		for(int i=1;i<4;i++){//それぞれの機能名を入れる
+		for(int i=0;i<4;i++){//それぞれの機能名を入れる
 			String str = "Meth" + (i+1);
 			cardPanel.add(panelNum[i], str);
 		}
