@@ -26,6 +26,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private system.Controller controller; // 内部動作用
 	private display.Message message; //エラー呼び出し用
 	private JFrame mainFrame;
+	private JFrame accountFrame;
 	private Container contentPane;
 	private JPanel panelButton;
 	private JPanel cardPanel;
@@ -289,12 +290,11 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3].add(ChangeButton);
 	}
 	
-	public void OpenFrame(String name) {
-	    JFrame frame = new JFrame("アカウント情報の変更");
-		frame = new JFrame("変更");
-		frame.setBounds(0, 0, 800, 600);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setVisible(true);
+	public void accountFrame() {
+		accountFrame = new JFrame("アカウント情報の変更");
+		accountFrame.setBounds(650, 300, 600, 500);
+		accountFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		accountFrame.setVisible(true);
 	  }
 	
 	private void CardPanel(){
@@ -396,7 +396,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calr_clone();
 			panelNum[2].repaint();
 		}else if(e.getSource() == ChangeButton){
-			OpenFrame("Additional Frame");
+			accountFrame();
 		}
 		
 		for(int i=button;i < 42;i++){
