@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -83,6 +84,12 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		/* フレームにパネルを追加 */
 		contentPane.add(panelMaster, BorderLayout.CENTER);
 		loginFrame.setVisible(true);
+	
+		/*アイコンの設定*/
+		ImageIcon icon = new ImageIcon("file/icon5.png");
+		loginFrame.setIconImage(icon.getImage());
+		
+
 	}
 
 	public void actionPerformed(ActionEvent e){

@@ -14,6 +14,7 @@ import java.io.File;
 import java.time.YearMonth;
 import java.util.Calendar;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -33,6 +34,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
 	private JPanel planPanel;
+	private JPanel changePanel;
 	
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
@@ -57,6 +59,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel ID_Mine;
 	private JLabel UserName_Mine;
 	private JTextField pathTextField;
+	private JLabel change;
 
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
@@ -92,6 +95,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		contentPane.add(panelButton, BorderLayout.NORTH);
 		contentPane.add(cardPanel, BorderLayout.CENTER);
 		mainFrame.setVisible(true);
+		
+		/*アイコンの設定*/
+		ImageIcon icon = new ImageIcon("file/icon5.png");
+		mainFrame.setIconImage(icon.getImage());
 	}
 
 	private void PanelButton(){
@@ -295,6 +302,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		accountFrame.setBounds(650, 300, 600, 500);
 		accountFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		accountFrame.setVisible(true);
+		/*アイコンの設定*/
+		ImageIcon icon = new ImageIcon("file/icon5.png");
+		accountFrame.setIconImage(icon.getImage());
 	  }
 	
 	private void CardPanel(){
