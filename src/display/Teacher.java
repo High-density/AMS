@@ -294,11 +294,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
 		for(int i=0;i<dayOfWeek;i++)
-			dayButton_clone[i].setText(" ");
+			dayButton_clone[i].setText("");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
 			dayButton_clone[i].setText(""+(1+i-dayOfWeek));
 		for (int i=dayOfWeek+maxDate;i<dayButton_clone.length;i++)
-			dayButton_clone[i].setText(" ");
+			dayButton_clone[i].setText("");
 	}
 
 	private void Account(){
@@ -397,7 +397,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			for(int i=0;i<42;i++){
 				if(e.getSource() == dayButton_clone[i]){
 					String dayName = dayButton_clone[i].getText();
-					if(!dayName.equals(" "))
+					if(!dayName.equals(""))
 						System.out.println(year[1]+"年"+(month[1]+1)+"月"+dayName+"日");
 					else
 						System.out.println("日付なし");
@@ -448,7 +448,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				for(int i=0;i<42;i++){
 					if(e.getSource() == dayButton_clone[i]){
 						String dayName = dayButton_clone[i].getText();
-						if(!dayName.equals(" "))
+						if(!dayName.equals(""))
 							System.out.println(year[1]+"年"+(month[1]+1)+"月"+dayName+"日");
 						else
 							System.out.println("日付なし");
