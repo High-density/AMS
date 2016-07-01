@@ -30,7 +30,7 @@ public class Message extends KeyAdapter implements ActionListener{
 		panelMaster = new JPanel();
 		panelMaster.setLayout(null);
 		messageLabel = new JLabel();
-		messageLabel.setBounds(0,0,200,150);
+		messageLabel.setBounds(0,0,400,150);
 		messageLabel.setFont(new Font(null, Font.PLAIN, 16));
 		returnButton = new JButton("戻る");
 		returnButton.setBounds(50,160,100,35);

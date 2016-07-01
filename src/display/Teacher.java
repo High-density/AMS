@@ -10,20 +10,18 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
 import java.time.YearMonth;
 import java.util.Calendar;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
 import system.AttendanceBook;
+import system.Slave;
 
 class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
@@ -51,10 +49,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton pNextButton;
 	private JButton pBackButton;
 	private JLabel labelNum[] = new JLabel[4];
-	private JLabel testPathLabel;//ファイルパス取得テスト
 	private JLabel aMonthLabel;
 	private JLabel pMonthLabel;
-	private JTextField pathTextField;
 
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
@@ -110,7 +106,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Attendance(){
-		numSize = 3;//アカウントの数
+		numSize = Slave.getSlaves().size(); /*アカウント数*/
 
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
@@ -227,25 +223,19 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void Report(){
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
-		labelNum[1] = new JLabel("週報");
-		labelNum[1].setBounds(380,10,200,40);
+		labelNum[1] = new JLabel("報告書確認");
+		labelNum[1].setBounds(350,10,200,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
 		referButton  = new JButton("参照");
 		referButton.setBounds(500,100,100,30);
 		referButton.setBackground(Color.WHITE);
-		upButton = new JButton("アップロード");
-		upButton.setBounds(300,200,200,30);
+		upButton = new JButton("確認");
+		upButton.setBounds(100,200,600,90);
+		upButton.setFont(new Font(null, Font.PLAIN, 32));
 		upButton.setBackground(Color.WHITE);
-		pathTextField = new JTextField("ファイルを参照してください");
-		pathTextField.setBounds(200,100,300,31);
-		testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得
-		testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テ
 
 		panelNum[1].add(labelNum[1]);
-		panelNum[1].add(pathTextField);
-		panelNum[1].add(referButton);
 		panelNum[1].add(upButton);
-		panelNum[1].add(testPathLabel);
 	}
 
 	private void Plan(){
@@ -379,21 +369,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			cLayout.show(cardPanel, "Meth3");
 		}else if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
-		}else if(e.getSource() == referButton){/*ファイル参照用*/
-			JFileChooser filechooser = new JFileChooser();
-			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
-			if (selected == JFileChooser.APPROVE_OPTION){
-				File file = filechooser.getSelectedFile();
-				pathTextField.setText(file.getPath());//ファイルが選ばれたらパスを表示
-			}else if (selected == JFileChooser.CANCEL_OPTION){
-				pathTextField.setText("キャンセルされました");
-			}else if (selected == JFileChooser.ERROR_OPTION){
-				pathTextField.setText("エラー又は取消しがありました");
-			}
-		}else if(e.getSource() == upButton){/*アップロード*/
-			message("アップロードしてもよろしいですか?");
-			testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
-			controller.submitReport(pathTextField.getText());
+		}else if(e.getSource() == upButton){/*報告書確認*/
+			message("確認してもよろしいですか?");
 		}else if(e.getSource() == numButton[4]){/*ログアウト*/
 			controller.logout();
 			mainFrame.setVisible(false);
@@ -443,21 +420,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				cLayout.show(cardPanel, "Meth3");
 			}else if(e.getSource() == numButton[3]){/*機能4*/
 				cLayout.show(cardPanel, "Meth4");
-			}else if(e.getSource() == referButton){/*ファイル参照用*/
-				JFileChooser filechooser = new JFileChooser();
-				int selected = filechooser.showOpenDialog(null);//ダイアログ表示
-				if (selected == JFileChooser.APPROVE_OPTION){
-					File file = filechooser.getSelectedFile();
-					pathTextField.setText(file.getPath());//ファイルが選ばれたらパスを表示
-				}else if (selected == JFileChooser.CANCEL_OPTION){
-					pathTextField.setText("キャンセルされました");
-				}else if (selected == JFileChooser.ERROR_OPTION){
-					pathTextField.setText("エラー又は取消しがありました");
-				}
-			}else if(e.getSource() == upButton){/*アップロード*/
-				message("アップロードしてもよろしいですか?");
-				testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
-				controller.submitReport(pathTextField.getText());
+			}else if(e.getSource() == upButton){/*報告書確認*/
+				message("確認してもよろしいですか?");
 			}else if(e.getSource() == numButton[4]){/*ログアウト*/
 				controller.logout();
 				mainFrame.setVisible(false);
