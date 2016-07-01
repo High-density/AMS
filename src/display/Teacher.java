@@ -23,6 +23,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import system.AttendanceBook;
+
 class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	private system.Controller controller; // 内部動作用
 	private display.Message message; //エラー呼び出し用
@@ -36,7 +38,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JScrollPane scrollPane;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
-	private JButton dayButton[] = new JButton[31];
+	private JButton dayButton[] = new JButton[32];
+	private JButton idButton[] = new JButton[100];
 	private JButton attButton[][];
 	private JButton aNextButton;
 	private JButton aBackButton;
@@ -107,11 +110,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Attendance(){
-		numSize = 5;//アカウントの数
+		numSize = 3;//アカウントの数
 
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		calPanel = new JPanel(new GridLayout((numSize+1), 32));
+		calPanel = new JPanel(new GridLayout((numSize+1), 35));
 		calPanel.setBounds(0,130,32*50,(numSize+1)*40);
 		aNextButton = new JButton("next");
 		aNextButton.setBounds(550,60,200,40);
@@ -129,13 +132,16 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		attButton = new JButton[numSize][31];
 
-		for(int i=0;i<31;i++){/*日付表示*/
-			dayButton[i] = new JButton((String.format("%1$02d", i+1)));
+		for(int i=0;i<32;i++){/*日付表示*/
+			dayButton[i] = new JButton((String.format("%1$02d", i)));
 			dayButton[i].setBounds(0,0,50,40);
 			dayButton[i].setBackground(Color.YELLOW);
 		}
 
 		for(int i=0;i<numSize;i++){/*出欠席ボタン*/
+			idButton[i] = new JButton();
+			idButton[i].setBackground(Color.GRAY);
+			idButton[i].setForeground(Color.WHITE);
 			for(int j=0;j<31;j++){
 				attButton[i][j] = new JButton();
 				attButton[i][j].setBounds(0,0,50,40);
@@ -145,23 +151,22 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		calr(numSize);/*カレンダーのボタン作成用*/
 
-		for(int i=0;i<31;i++){
+		for(int i=0;i<32;i++){
 			calPanel.add(dayButton[i]);
 		}
 		for(int i=0;i<numSize;i++){
+			calPanel.add(idButton[i]);
 			for(int j=0;j<31;j++){
 				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
 			}
 		}
 
-		//calPanel.setPreferredSize(new Dimension(32*50, (numSize+1)*40));
 		scrollPane = new JScrollPane(calPanel);
 		scrollPane.setBounds(10,130,760,300);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		panelNum[0].add(labelNum[0]);
-		//panelNum[0].add(calPanel);
 		panelNum[0].add(scrollPane);
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
@@ -176,15 +181,43 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		calendar.set(year[0], month[0], 1);
 		yearMonth = YearMonth.of(year[0], month[0]+1);
 		//int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		int maxDate = yearMonth.lengthOfMonth();
+		int maxDate = yearMonth.lengthOfMonth() + 1;
+
+
+		AttendanceBook[] Book = controller.getAttendance(yearMonth);
+		int status[][] = new int [size][maxDate];
 
 		for(int i=0;i<size;i++){
-			for (int j=0;j<maxDate;j++)
-				attButton[i][j].setText("欠");
+			idButton[i].setText(Book[i].getId());
 		}
-		if(maxDate == 30){
+
+		for(int i=0;i<size;i++){
+			for(int j=0;j<maxDate;j++){
+				status[i][j] = Book[i].getStatus(j);
+			}
+
+		}
+
+		for(int i=0;i<size;i++){
+			for (int j=0;j<maxDate;j++){
+				dayButton[j].setText(""+(j));
+				if(status[i][j] == AttendanceBook.ATTENDED)
+					attButton[i][j].setText("出");
+				else if(status[i][j] == AttendanceBook.ABSENCE)
+					attButton[i][j].setText("欠");
+				else if(status[i][j] == 2)
+					attButton[i][j].setText("公");
+			}
+		}
+
+		dayButton[0].setText("ID");
+
+		if(maxDate < 32){
 			for (int i=0;i<numSize;i++){
-				attButton[i][30].setText("無");
+				for(int j=maxDate;j<32;j++){
+					dayButton[j].setText("/");
+					attButton[i][j-1].setText("/");
+				}
 			}
 		}
 
@@ -413,16 +446,18 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}else if(e.getSource() == referButton){/*ファイル参照用*/
 				JFileChooser filechooser = new JFileChooser();
 				int selected = filechooser.showOpenDialog(null);//ダイアログ表示
-				if(selected == JFileChooser.APPROVE_OPTION){
+				if (selected == JFileChooser.APPROVE_OPTION){
 					File file = filechooser.getSelectedFile();
-					pathTextField.setText(file.getPath());	//ファイルが選ばれたらパスを表示
+					pathTextField.setText(file.getPath());//ファイルが選ばれたらパスを表示
 				}else if (selected == JFileChooser.CANCEL_OPTION){
 					pathTextField.setText("キャンセルされました");
 				}else if (selected == JFileChooser.ERROR_OPTION){
 					pathTextField.setText("エラー又は取消しがありました");
 				}
 			}else if(e.getSource() == upButton){/*アップロード*/
+				message("アップロードしてもよろしいですか?");
 				testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
+				controller.submitReport(pathTextField.getText());
 			}else if(e.getSource() == numButton[4]){/*ログアウト*/
 				controller.logout();
 				mainFrame.setVisible(false);
