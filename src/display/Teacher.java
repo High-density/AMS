@@ -100,7 +100,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		numButton[4] = new JButton("ログアウト");
 		for(int i=0;i<5;i++)
 			numButton[i].setBackground(Color.WHITE);
-
 		panelButton.add(numButton[0]);
 		panelButton.add(numButton[1]);
 		panelButton.add(numButton[2]);
