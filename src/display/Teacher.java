@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -33,8 +34,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel cardPanel;
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
+	private JPanel repoPanel;
 	private JPanel planPanel;
 	private JScrollPane scrollPane;
+	private JScrollPane repoScrollPanel;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[32];
@@ -42,7 +45,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton attButton[][];
 	private JButton aNextButton;
 	private JButton aBackButton;
-	private JButton referButton;
+	private JButton stuButton[][] = new JButton[100][2];
 	private JButton upButton;
 	private JButton dayButton_clone[] = new JButton[42];
 	private JButton weekButton[] = new JButton[7];
@@ -93,8 +96,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	private void PanelButton(){
 		panelButton = new JPanel(new GridLayout(1,5));
+		panelButton.setPreferredSize(new Dimension(800, 40));
 		numButton[0] = new JButton("出席管理");
-		numButton[1] = new JButton("週報アップロード");
+		numButton[1] = new JButton("報告書管理");
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
 		numButton[4] = new JButton("ログアウト");
@@ -223,21 +227,42 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Report(){
+		numSize = Slave.getSlaves().size(); /*アカウント数*/
+		year[0] = calendar.get(Calendar.YEAR);
+		month[0] = calendar.get(Calendar.MONTH);
+		yearMonth = YearMonth.of(year[0], month[0]+1);
+		AttendanceBook[] Book = controller.getAttendance(yearMonth);
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
+		repoPanel = new JPanel(new GridLayout(numSize,2));
+		repoPanel.setPreferredSize(new Dimension(600, (numSize*30)));
+		repoScrollPanel = new JScrollPane();
+		repoScrollPanel.setBounds(80, 100, 650, 300);
+		repoScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		repoScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		labelNum[1] = new JLabel("報告書確認");
 		labelNum[1].setBounds(350,10,200,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
-		referButton  = new JButton("参照");
-		referButton.setBounds(500,100,100,30);
-		referButton.setBackground(Color.WHITE);
+		for(int i=0;i<numSize;i++){
+			for(int j=0;j<2;j++){
+				stuButton[i][j] = new JButton();
+				stuButton[i][j].setPreferredSize(new Dimension(300, 30));
+				stuButton[i][j].setBackground(Color.WHITE);
+				repoPanel.add(stuButton[i][j]);
+			}
+			stuButton[i][0].setText(Book[i].getId());
+		}
+
 		upButton = new JButton("確認");
 		upButton.setBounds(100,200,600,90);
 		upButton.setFont(new Font(null, Font.PLAIN, 32));
 		upButton.setBackground(Color.WHITE);
-
+		
+		repoScrollPanel.setViewportView(repoPanel);
+		
 		panelNum[1].add(labelNum[1]);
-		panelNum[1].add(upButton);
+		//panelNum[1].add(upButton);
+		panelNum[1].add(repoScrollPanel);
 	}
 
 	private void Plan(){
@@ -342,8 +367,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		numButton[3].addKeyListener(this);
 		numButton[4].addActionListener(this);
 		numButton[4].addKeyListener(this);
-		referButton.addActionListener(this);
-		referButton.addKeyListener(this);
 		upButton.addActionListener(this);
 		upButton.addKeyListener(this);
 		aNextButton.addActionListener(this);
