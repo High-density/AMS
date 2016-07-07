@@ -36,8 +36,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel calPanel;
 	private JPanel repoPanel;
 	private JPanel planPanel;
+	private JPanel accPanel;
 	private JScrollPane scrollPane;
 	private JScrollPane repoScrollPanel;
+	private JScrollPane accScrollPanel;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[32];
@@ -46,7 +48,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton aNextButton;
 	private JButton aBackButton;
 	private JButton stuButton[][] = new JButton[100][2];
-	private JButton upButton;
+	private JButton stuButton_clone[]= new JButton[100];
 	private JButton dayButton_clone[] = new JButton[42];
 	private JButton weekButton[] = new JButton[7];
 	private JButton addPlanButton;
@@ -253,15 +255,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			stuButton[i][0].setText(Book[i].getId());
 		}
 
-		upButton = new JButton("確認");
-		upButton.setBounds(100,200,600,90);
-		upButton.setFont(new Font(null, Font.PLAIN, 32));
-		upButton.setBackground(Color.WHITE);
-		
 		repoScrollPanel.setViewportView(repoPanel);
-		
+
 		panelNum[1].add(labelNum[1]);
-		//panelNum[1].add(upButton);
 		panelNum[1].add(repoScrollPanel);
 	}
 
@@ -333,13 +329,34 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Account(){
+		numSize = Slave.getSlaves().size(); /*アカウント数*/
+		year[0] = calendar.get(Calendar.YEAR);
+		month[0] = calendar.get(Calendar.MONTH);
+		yearMonth = YearMonth.of(year[0], month[0]+1);
+		AttendanceBook[] Book = controller.getAttendance(yearMonth);
+		accPanel = new JPanel(new GridLayout(numSize,2));
+		accPanel.setPreferredSize(new Dimension(300, (numSize*30)));
+		accScrollPanel = new JScrollPane();
+		accScrollPanel.setBounds(50, 100, 320, 400);
+		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
-		labelNum[3] = new JLabel("アカウント");
+		labelNum[3] = new JLabel("アカウント管理");
 		labelNum[3].setBounds(380,10,200,40);
 		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
+		for(int i=0;i<numSize;i++){
+			stuButton_clone[i] = new JButton();
+			stuButton_clone[i].setPreferredSize(new Dimension(300, 30));
+			stuButton_clone[i].setBackground(Color.WHITE);
+			accPanel.add(stuButton_clone[i]);
+			stuButton_clone[i].setText(Book[i].getId());
+		}
+
+		accScrollPanel.setViewportView(accPanel);
 
 		panelNum[3].add(labelNum[3]);
+		panelNum[3].add(accScrollPanel);
 	}
 
 	private void CardPanel(){
@@ -367,8 +384,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		numButton[3].addKeyListener(this);
 		numButton[4].addActionListener(this);
 		numButton[4].addKeyListener(this);
-		upButton.addActionListener(this);
-		upButton.addKeyListener(this);
 		aNextButton.addActionListener(this);
 		aNextButton.addKeyListener(this);
 		aBackButton.addActionListener(this);
@@ -398,8 +413,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			cLayout.show(cardPanel, "Meth3");
 		}else if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
-		}else if(e.getSource() == upButton){/*報告書確認*/
-			message("確認してもよろしいですか?");
+			//message("確認してもよろしいですか?");
 		}else if(e.getSource() == numButton[4]){/*ログアウト*/
 			controller.logout();
 			mainFrame.setVisible(false);
@@ -413,7 +427,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calr(numSize);
 			panelNum[0].repaint();
 		}else if(e.getSource() == addPlanButton){//ここに予定を追加機能を実装する
-			//writePlan(year[1], month[1], dayName, pTextArea.getText);
+			//writePlan(year[1], month[1]+1, dayName, pTextArea.getText);
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
 			calr_clone();
@@ -453,8 +467,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				cLayout.show(cardPanel, "Meth3");
 			}else if(e.getSource() == numButton[3]){		/*機能4*/
 				cLayout.show(cardPanel, "Meth4");
-			}else if(e.getSource() == upButton){			/*報告書確認*/
-				message("確認してもよろしいですか?");
+				//message("確認してもよろしいですか?");
 			}else if(e.getSource() == numButton[4]){		/*ログアウト*/
 				controller.logout();
 				mainFrame.setVisible(false);
@@ -468,7 +481,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calr(numSize);
 				panelNum[0].repaint();
 			}else if(e.getSource() == addPlanButton){		/*ここに予定を追加機能を実装する*/
-				//writePlan(year[1], month[1], dayName, pTextArea.getText);
+				//writePlan(year[1], month[1]+1, dayName, pTextArea.getText);
 			}else if(e.getSource() == pNextButton){
 				calendar.set(Calendar.MONTH, month[1] +1);	/*1ヶ月増やす*/
 				calr_clone();
