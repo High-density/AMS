@@ -20,6 +20,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
@@ -59,7 +60,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel ID_Mine;
 	private JLabel UserName_Mine;
 	private JTextField pathTextField;
-	private JLabel change;
+	private JLabel changeLabel;
+	private JTextArea pTextArea;
 
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
@@ -67,6 +69,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
 	private int button;
+	private int day = 0;
 
 	Method(system.Controller controller, display.Message message){
 		/* システム引き継ぎ */
@@ -213,8 +216,12 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		planDate = new JLabel("指定された日付け");
-		planDate.setBounds(550,20,200,40);
+		planDate.setBounds(520,40,200,40);
+		planDate.setFont(new Font(null, Font.PLAIN, 24));
 		planDate.setBackground(Color.WHITE);
+		pTextArea = new JTextArea(20,24);
+		pTextArea.setBounds(450, 100, 300, 400);
+		pTextArea.setLineWrap(true);
 		pNextButton = new JButton("next");
 		pNextButton.setBounds(300,70,100,40);
 		pNextButton.setBackground(Color.WHITE);
@@ -245,6 +252,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[2].add(pNextButton);
 		panelNum[2].add(pBackButton);
 		panelNum[2].add(planPanel);
+		panelNum[2].add(pTextArea);
 	}
 
 	private void calr_clone(){
@@ -300,12 +308,22 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	public void accountFrame() {
 		accountFrame = new JFrame("アカウント情報の変更");
 		accountFrame.setBounds(650, 300, 600, 500);
-		accountFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		accountFrame.setVisible(true);
+
+		changePanel = new JPanel();
+		changePanel.setLayout(null);
+		
+		changeLabel = new JLabel("アカウント情報の変更");
+		changeLabel.setFont(new Font(null, Font.PLAIN, 18));
+		changeLabel.setBounds(200,10,200,40);
+		
+		changePanel.add(changeLabel);
+		accountFrame.getContentPane().add(changePanel);
+		
 		/*アイコンの設定*/
 		ImageIcon icon = new ImageIcon("src/display/icon.png");
 		accountFrame.setIconImage(icon.getImage());
-	  }
+		accountFrame.setVisible(true);
+	}
 	
 	private void CardPanel(){
 		cardPanel = new JPanel();
@@ -409,11 +427,19 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			accountFrame();
 		}
 		
-		for(int i=button;i < 42;i++){
+		for(int i=0;i<42;i++){
 			if(e.getSource() == dayButton_clone[i]){
-			    String str = dayButton_clone[i].getText();
-			    planDate.setText(str);
-			    panelNum[2].repaint();
+				String dayName = dayButton_clone[i].getText();
+				if(!dayName.equals("")){
+					day = Integer.parseInt(dayName);
+					planDate.setText(year[1]+"年"+(month[1]+1)+"月"+day+"日");
+					planDate.setFont(new Font(null, Font.PLAIN, 24));
+				}
+				else{
+					day = 0;
+					planDate.setText("日付なし");
+				}
+
 			}
 		}
 	}
