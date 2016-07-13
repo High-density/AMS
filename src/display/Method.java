@@ -49,19 +49,21 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton weekButton_clone[] = new JButton[7];
 	private JButton pNextButton;
 	private JButton pBackButton;
-	private JButton ChangeButton;
+	private JButton ChangeButton[] = new JButton[2];
 	private JLabel labelNum[] = new JLabel[4];
 	private JLabel testPathLabel;//ファイルパス取得テスト
 	private JLabel aMonthLabel;
 	private JLabel pMonthLabel;
 	private JLabel planDate;
-	private JLabel ID;
-	private JLabel UserName;
-	private JLabel ID_Mine;
-	private JLabel UserName_Mine;
+	private JLabel ID[] = new JLabel[2];
+	private JLabel UserName[] = new JLabel[2];
+	private JLabel ID_Mine[] = new JLabel[2];
+	private JLabel UserName_Mine[] = new JLabel[2];
+	private JLabel password[] = new JLabel[2];
 	private JTextField pathTextField;
 	private JLabel changeLabel;
 	private JTextArea pTextArea;
+	private JTextField changeTextField[] = new JTextField[2];
 
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
@@ -279,44 +281,83 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		labelNum[3].setBounds(380,10,200,40);
 		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
 		//IDの表示
-		ID = new JLabel("ID");
-		ID.setBounds(280,130,200,40);
-		ID.setFont(new Font(null, Font.PLAIN, 24));
-		ID_Mine = new JLabel("ID_Mine");
-		ID_Mine.setBounds(380,130,200,40);
-		ID_Mine.setFont(new Font(null, Font.PLAIN, 24));
+		ID[0] = new JLabel("ID");
+		ID[0].setBounds(280,130,200,40);
+		ID[0].setFont(new Font(null, Font.PLAIN, 24));
+		ID_Mine[0] = new JLabel("ID_Mine");
+		ID_Mine[0].setBounds(380,130,200,40);
+		ID_Mine[0].setFont(new Font(null, Font.PLAIN, 24));
 		//ユーザ名の表示
-		UserName = new JLabel("ユーザ名");
-		UserName.setBounds(250,200,200,40);
-		UserName.setFont(new Font(null, Font.PLAIN, 24));
-		UserName_Mine = new JLabel("ユーザ名_Mine");
-		UserName_Mine.setBounds(380,200,200,40);
-		UserName_Mine.setFont(new Font(null, Font.PLAIN, 24));
+		UserName[0] = new JLabel("ユーザ名");
+		UserName[0].setBounds(250,200,200,40);
+		UserName[0].setFont(new Font(null, Font.PLAIN, 24));
+		UserName_Mine[0] = new JLabel("ユーザ名_Mine");
+		UserName_Mine[0].setBounds(380,200,200,40);
+		UserName_Mine[0].setFont(new Font(null, Font.PLAIN, 24));
 		//アカウント情報変更ボタン
-		ChangeButton = new JButton("アカウント情報の変更");
-		ChangeButton.setFont(new Font(null, Font.PLAIN, 24));
-		ChangeButton.setBounds(380,270,300,40);
+		ChangeButton[0] = new JButton("アカウント情報の変更");
+		ChangeButton[0].setFont(new Font(null, Font.PLAIN, 24));
+		ChangeButton[0].setBounds(380,270,300,40);
 		
 		panelNum[3].add(labelNum[3]);
-		panelNum[3].add(ID);
-		panelNum[3].add(UserName);
-		panelNum[3].add(ID_Mine);
-		panelNum[3].add(UserName_Mine);
-		panelNum[3].add(ChangeButton);
+		panelNum[3].add(ID[0]);
+		panelNum[3].add(UserName[0]);
+		panelNum[3].add(ID_Mine[0]);
+		panelNum[3].add(UserName_Mine[0]);
+		panelNum[3].add(ChangeButton[0]);
 	}
 	
 	public void accountFrame() {
 		accountFrame = new JFrame("アカウント情報の変更");
 		accountFrame.setBounds(650, 300, 600, 500);
-
 		changePanel = new JPanel();
 		changePanel.setLayout(null);
-		
 		changeLabel = new JLabel("アカウント情報の変更");
 		changeLabel.setFont(new Font(null, Font.PLAIN, 18));
 		changeLabel.setBounds(200,10,200,40);
+		//IDの表示
+		ID[1] = new JLabel("ID");
+		ID[1].setBounds(190,80,200,40);
+		ID[1].setFont(new Font(null, Font.PLAIN, 18));
+		ID_Mine[1] = new JLabel("ID_Mine");
+		ID_Mine[1].setBounds(170,120,200,40);
+		ID_Mine[1].setFont(new Font(null, Font.PLAIN, 24));
+		//ユーザ名の表示
+		UserName[1] = new JLabel("ユーザ名");
+		UserName[1].setBounds(320,80,200,40);
+		UserName[1].setFont(new Font(null, Font.PLAIN, 18));
+		UserName_Mine[1] = new JLabel("ユーザ名_Mine");
+		UserName_Mine[1].setBounds(300,120,200,40);
+		UserName_Mine[1].setFont(new Font(null, Font.PLAIN, 24));
+		//pwの表示
+		password[0] = new JLabel("現在のパスワード");
+		password[0].setBounds(15,190,200,40);
+		password[0].setFont(new Font(null, Font.PLAIN, 18));
+		password[1] = new JLabel("新しいパスワード");
+		password[1].setBounds(15,250,200,40);
+		password[1].setFont(new Font(null, Font.PLAIN, 18));
+		changeTextField[0] = new JTextField();
+		changeTextField[0].setColumns(100);
+		changeTextField[0].setBounds(170,190,200,40);
+		changeTextField[1] = new JTextField();
+		changeTextField[1].setColumns(100);
+		changeTextField[1].setBounds(170,250,200,40);
+		//変更
+		ChangeButton[1] = new JButton("変更");
+		ChangeButton[1].setBounds(170,350,200,40);
+		ChangeButton[1].setFont(new Font(null, Font.PLAIN, 18));
 		
+		changePanel.add(changeTextField[0]);
+		changePanel.add(changeTextField[1]);
+		changePanel.add(ChangeButton[1]);
+		changePanel.add(ID[1]);
+		changePanel.add(UserName[1]);
+		changePanel.add(ID_Mine[1]);
+		changePanel.add(UserName_Mine[1]);
 		changePanel.add(changeLabel);
+		changePanel.add(password[0]);
+		changePanel.add(password[1]);
+				
 		accountFrame.getContentPane().add(changePanel);
 		
 		/*アイコンの設定*/
@@ -363,8 +404,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pNextButton.addKeyListener(this);
 		pBackButton.addActionListener(this);
 		pBackButton.addKeyListener(this);
-		ChangeButton.addActionListener(this);
-		ChangeButton.addKeyListener(this);
+		ChangeButton[0].addActionListener(this);
+		ChangeButton[0].addKeyListener(this);
 		for(int i = button;i < 42;i++){
 			dayButton_clone[i].addActionListener(this);
 			dayButton_clone[i].addKeyListener(this);
@@ -423,7 +464,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calendar.set(Calendar.YEAR, year[1]-1);
 			calr_clone();
 			panelNum[2].repaint();
-		}else if(e.getSource() == ChangeButton){
+		}else if(e.getSource() == ChangeButton[0]){
 			accountFrame();
 		}
 		
@@ -491,7 +532,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
 				calr_clone();
 				panelNum[2].repaint();
-			}
+			}else if(e.getSource() == ChangeButton[0]){
+			 accountFrame();
+		}
 		}
 	}
 }
