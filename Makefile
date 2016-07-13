@@ -7,4 +7,4 @@ class:
 
 .PHONY: javadoc
 javadoc:
-	javadoc -private -d src/doc/ -windowtitle 研究管理支援システム src/*/*.java
+	javadoc -private -d doc/ -windowtitle 研究管理支援システム src/*/*.java
