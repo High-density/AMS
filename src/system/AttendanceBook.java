@@ -1,6 +1,5 @@
 package system;
 
-import java.lang.String;
 import java.time.LocalTime;
 import java.time.YearMonth;
 
@@ -37,7 +36,7 @@ public class AttendanceBook extends DataForAMonth<Integer> {
 	 * @param id SlaveのID
 	 * @param ym 取得したい年月
 	 */
-	public AttendanceBook(String id, YearMonth ym){
+	public AttendanceBook(String id, YearMonth ym) {
 		super(ym);
 		this.id = id;
 		attendedTime = new LocalTime[getMaxDate()];

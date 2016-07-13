@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 import java.nio.channels.FileChannel;
-import java.lang.String;
 import java.time.LocalDate;
 import java.time.YearMonth;
 
@@ -18,6 +17,8 @@ import java.time.YearMonth;
  */
 public class Controller {
 	private User user; // ログインしているユーザ
+	// 予定ファイルの置き場所
+	private final File agendaDir = new File("file/root/agenda/");
 
 	public Controller() {
 	}
@@ -36,6 +37,7 @@ public class Controller {
 			return false;
 		} else {
 			// ログイン成功したら出席チェック
+			getAgenda(YearMonth.now()); // test
 			attend();
 			return true;
 		}
@@ -107,6 +109,27 @@ public class Controller {
 	 */
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
 		return user.setAccount(oldAccount, newAccount);
+	}
+
+	/**
+	 * 予定の取得を行う
+	 * @param ym 予定を取得したい年月
+	 * @return 予定が入ったAgendaクラス
+	 */
+	public Agenda getAgenda(YearMonth ym) {
+		// 予定格納先
+		return new Agenda(ym, agendaDir);
+	}
+
+	/**
+	 * 予定の更新を行う
+	 * @param agenda 予定を更新したいAgendaクラス
+	 * @param date 予定を更新したい日付
+	 * @param content 予定内容
+	 */
+	public Agenda setAgenda(Agenda agenda, int date, String content) {
+		agenda.setData(date, content);
+		return agenda;
 	}
 
 	/**

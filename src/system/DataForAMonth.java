@@ -1,6 +1,5 @@
 package system;
 
-import java.lang.String;
 import java.time.YearMonth;
 import java.util.ArrayList;
 
@@ -60,7 +59,7 @@ abstract public class DataForAMonth<T> {
 	/**
 	 * データの書き込みを行う
 	 * @param day 日付-1
-	 * @param data 書き込みたいデータ
+	 * @param d 書き込みたいデータ
 	 */
 	public void setData(int day, T d) {
 		data.set(day, d);
