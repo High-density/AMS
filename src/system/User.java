@@ -5,9 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.NullPointerException;
-import java.lang.String;
-import java.lang.Throwable;
 import java.net.NetworkInterface;
 import java.time.LocalTime;
 import java.time.YearMonth;
@@ -176,17 +173,17 @@ public abstract class User {
 					int minute = Integer.parseInt(m.group(2));
 					LocalTime lt = LocalTime.of(hour, minute);
 					// 出席簿に記入
-					book.setBook(d, Integer.parseInt(m.group(3)), lt);
+					book.setData(d, Integer.parseInt(m.group(3)), lt);
 				}
 
 				br.close();
 			} catch (FileNotFoundException e) {
 				// 欠席のとき
-				book.setBook(d, AttendanceBook.ABSENCE);
+				book.setData(d, AttendanceBook.ABSENCE);
 			} catch (IOException e) {
-				book.setBook(d, AttendanceBook.ERROR);
+				book.setData(d, AttendanceBook.ERROR);
 			} catch (NullPointerException e) {
-				book.setBook(d, AttendanceBook.ERROR);
+				book.setData(d, AttendanceBook.ERROR);
 			}
 		}
 

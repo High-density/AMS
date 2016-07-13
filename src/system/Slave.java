@@ -36,9 +36,7 @@ public class Slave extends User {
 		try {
 			// 出席ディレクトリの作成
 			String dirName = "./file/" + getId() + "/attendance/";
-			if (!Controller.mkdirs(dirName)) {
-				return false;
-			}
+			if (!Controller.mkdirs(dirName)) return false;
 
 			File file = new File(dirName + ldt.format(formatter));
 			// 未出席時のみ記録

@@ -8,8 +8,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
-import java.lang.Throwable;
-import java.lang.String;
 import java.net.NetworkInterface;
 import java.time.YearMonth;
 import java.util.Enumeration;
