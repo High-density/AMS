@@ -185,7 +185,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		calendar.set(year[0], month[0], 1);
 		yearMonth = YearMonth.of(year[0], month[0]+1);
 		//int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		int maxDate = yearMonth.lengthOfMonth() + 1;
+		// int maxDate = yearMonth.lengthOfMonth() + 1;
+		int maxDate = yearMonth.lengthOfMonth();
 
 
 		AttendanceBook[] Book = controller.getAttendance(yearMonth);
@@ -197,7 +198,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		for(int i=0;i<size;i++){
 			for(int j=0;j<maxDate;j++){
-				status[i][j] = Book[i].getStatus(j);
+				status[i][j] = Book[i].getData(j);
 			}
 
 		}
@@ -209,7 +210,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 					attButton[i][j].setText("出");
 				else if(status[i][j] == AttendanceBook.ABSENCE)
 					attButton[i][j].setText("欠");
-				else if(status[i][j] == 2)
+				else if(status[i][j] == AttendanceBook.AUTHORIZED_ABSENCE)
 					attButton[i][j].setText("公");
 			}
 		}
