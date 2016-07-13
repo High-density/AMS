@@ -97,7 +97,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		mainFrame.setVisible(true);
 		
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("file/icon5.png");
+		ImageIcon icon = new ImageIcon("src/display/icon.png");
 		mainFrame.setIconImage(icon.getImage());
 	}
 
@@ -303,7 +303,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		accountFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		accountFrame.setVisible(true);
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("file/icon5.png");
+		ImageIcon icon = new ImageIcon("src/display/icon.png");
 		accountFrame.setIconImage(icon.getImage());
 	  }
 	
