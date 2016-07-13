@@ -1,15 +1,13 @@
 package system;
 
-import java.io.BufferedWriter;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.FileReader;
-import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.Runtime;
-import java.lang.String;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
@@ -23,7 +21,7 @@ import java.util.regex.Pattern;
  * @author Shinichi Yanagido
  * @version 1.0
  */
-class Slave extends User {
+public class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
 		attribute = this.getClass().getSimpleName();
