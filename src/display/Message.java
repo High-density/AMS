@@ -11,14 +11,14 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Message extends KeyAdapter implements ActionListener{
 	private JFrame messFrame;
 	private Container contentPane;
 	private JPanel panelMaster;
-	private JLabel messageLabel;
+	private JTextArea messageArea;
 	private JButton returnButton;
 
 	public Message(){
@@ -29,9 +29,12 @@ public class Message extends KeyAdapter implements ActionListener{
 		contentPane = messFrame.getContentPane();
 		panelMaster = new JPanel();
 		panelMaster.setLayout(null);
-		messageLabel = new JLabel();
-		messageLabel.setBounds(0,0,400,150);
-		messageLabel.setFont(new Font(null, Font.PLAIN, 16));
+		messageArea = new JTextArea(5, 26);
+		messageArea.setBounds(50,50,300,100);
+		messageArea.setFont(new Font(null, Font.PLAIN, 16));
+		messageArea.setLineWrap(true);
+		messageArea.setOpaque(false);
+		messageArea.setEditable(false);
 		returnButton = new JButton("戻る");
 		returnButton.setBounds(50,160,100,35);
 		returnButton.setBackground(Color.WHITE);
@@ -39,7 +42,7 @@ public class Message extends KeyAdapter implements ActionListener{
 		returnButton.addActionListener(this);
 		returnButton.addKeyListener(this);
 
-		panelMaster.add(messageLabel);
+		panelMaster.add(messageArea);
 		panelMaster.add(returnButton);
 
 		contentPane.add(panelMaster, BorderLayout.CENTER);
@@ -47,7 +50,7 @@ public class Message extends KeyAdapter implements ActionListener{
 	}
 
 	public void showMessage(String textMessage){
-		messageLabel.setText(textMessage);//ここでメッセージを入れるための関数を実行
+		messageArea.setText(textMessage);//ここでメッセージを入れるための関数を実行
 		messFrame.setVisible(true);
 	}
 
