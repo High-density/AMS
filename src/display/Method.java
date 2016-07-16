@@ -404,7 +404,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 	}
 
-
 	private void message(String mess){/*message()でメッセージを表示*/
 		message.showMessage(mess);
 	}
@@ -451,10 +450,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calendar.set(Calendar.YEAR, year[1]);
 			calendar.set(Calendar.MONTH, month[1]);
 			cLayout.show(cardPanel, "Meth3");
-			message("おおおおおおおお");
-
 		}else if(e.getSource() == numButton[3]){/*機能4*/
-
 			cLayout.show(cardPanel, "Meth4");
 		}else if(e.getSource() == referButton){/*ファイル参照用*/
 			JFileChooser filechooser = new JFileChooser();

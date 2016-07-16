@@ -37,7 +37,6 @@ public class Controller {
 			return false;
 		} else {
 			// ログイン成功したら出席チェック
-			getAgenda(YearMonth.now()); // test
 			attend();
 			return true;
 		}

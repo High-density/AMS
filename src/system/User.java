@@ -47,11 +47,18 @@ public abstract class User {
 			}
 
 			// 属性に合わせてユーザの作成
-			if (attribute.equals(Master.class.getSimpleName())) {
+			if (attribute == null) {
+				// 属性読み込みエラー
+				Log.error(new Throwable(), "属性読み込みエラー: attribute = null");
+				return null;
+			} else if (attribute.equals(Master.class.getSimpleName())) {
+				// 学生のIDで一致したとき
 				return new Master(id, passwd);
 			} else if (attribute.equals(Slave.class.getSimpleName())) {
+				// 教員のIDで一致したとき
 				return new Slave(id, passwd);
 			} else {
+				// 登録されていない属性が見つかったとき
 				Log.error(new Throwable(), "属性読み込みエラー: attribute = " + attribute);
 				return null;
 			}

@@ -1,71 +1,98 @@
 package system;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 import java.lang.Exception;
 import java.lang.StackTraceElement;
 import java.lang.String;
 import java.lang.Throwable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.time.LocalDateTime;
+import display.Message;
 
 class Log {
 	// 改行コード
 	public static final String br = System.getProperty("line.separator");
-	private static final String placePrefix = "	 at ";
-	// エラー時の接尾語
+	private static final Message dialog = new Message();
+	private static final Message writeLogDialog = new Message();
+
+	// ログファイル
+	private static final File logDir = new File("file/root/log/");
+	private static final File logFile = new File(logDir.toString() + "/log.txt");
+	private static final File errorFile = new File(logDir.toString() + "/error.txt");
+
+	// 出力時の接頭語・接尾語
+	private static final String placePrefix = "  at ";
 	private static final String suffix = "エラーが発生しました．この事象はシステム改善のために記録されます．";
 
 	// エラー処理（例外が投げられるとき）
 	public static void error(Exception e) {
 		// ログの書き出し処理
-		writeError(e.toString());
+		writeLog(errorFile, "[" + LocalDateTime.now() + "]");
+		writeLog(errorFile, e.toString());
+
 		// ライブラリ以外のエラーのみを出力
 		Pattern p = Pattern.compile("^([^j][^a][^v][^a].*)");
 		for (StackTraceElement ste : e.getStackTrace()) {
 			Matcher m = p.matcher(ste.toString());
 			if (m.find()) {
-				writeError(placePrefix + m.group(1));
+				writeLog(errorFile, placePrefix + m.group(1));
 			}
 		}
 
+		// 区切り
+		writeLog(errorFile, "");
+
 		// ポップアップによるエラー表示
-		String message = e.getClass().getName();
-		message += br + suffix;
-		showError(message);
+		String message = "(" + e.getClass().getName() + ")";
+		popup(suffix + br + message);
 	}
 
 	// エラー処理（内容を直接受け取る）
 	public static void error(Throwable t, String message) {
 		// ログの書き出し処理
 		StackTraceElement ste = t.getStackTrace()[0];
-		writeError(message);
 		String methodName = ste.getClassName() + "." + ste.getMethodName(); // クラスとメソッド名
 		String fileLine = ste.getFileName() + ":" + ste.getLineNumber(); // ファイル名と行番号
-		writeError(placePrefix + methodName + "(" + fileLine + ")");
+		writeLog(errorFile, message);
+		writeLog(errorFile, placePrefix + methodName + "(" + fileLine + ")");
 
 		// ポップアップによるエラー表示
-		showError(message + br + suffix);
+		popup(suffix + br + "(" + message + ")");
 	}
 
-	// TODO:ログの書き出し
-	public static void writeLog() {
+	// ログの書き出し
+	public static void writeLog(File file, String message) {
+		// ファイルが存在しないときに作成する
+		Controller.mkdirs(logDir.toString());
+		try {
+			file.createNewFile();
+		} catch(IOException e) {
+			popup("ファイル作成エラー: " + file.toString(), writeLogDialog);
+		}
+
+		// ファイルに書き込み
+		if (file.canWrite() == false) popup("ファイル書き込みエラー: file.canWrite() = false", writeLogDialog);
+		try {
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+			pw.println(message);
+			pw.close();
+		} catch(IOException e) {
+			popup("ファイル書き込みエラー: " + file.toString(), writeLogDialog);
+		}
 	}
 
-	// TODO:エラーの書き出し
-	private static void writeError(String message) {
-		System.out.println(message);
-	}
-
-	// TODO:ポップアップ表示
+	// ポップアップ表示
 	public static void popup(String message) {
-		System.out.println(message);
+		popup(message, dialog);
 	}
 
-	// TODO:不正の書き出し
-	public static void writeCorruption() {
-	}
-
-	// TODO:ポップアップによるエラー
-	private static void showError(String message) {
-		// System.out.println(message);
+	// ポップアップ表示（ダイアログ指定）
+	private static void popup(String message, Message pop) {
+		pop.showMessage(message);
 	}
 }
