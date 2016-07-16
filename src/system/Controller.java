@@ -18,9 +18,16 @@ import java.time.YearMonth;
 public class Controller {
 	private User user; // ログインしているユーザ
 	// 予定ファイルの置き場所
-	private final File agendaDir = new File("file/root/agenda/");
+	public static final String homeDirName = "file";
+	public static final File agendaDir = new File(homeDirName + "/root/agenda/");
+	public static final File logDir = new File(homeDirName + "/root/log/");
+	public static final File logFile = new File(logDir.toString() + "/log.txt");
+	public static final File errorFile = new File(logDir.toString() + "/error.txt");
 
 	public Controller() {
+		Log.logDir = logDir;
+		Log.logFile = logFile;
+		Log.errorFile = errorFile;
 	}
 
 	/**
@@ -37,7 +44,6 @@ public class Controller {
 			return false;
 		} else {
 			// ログイン成功したら出席チェック
-			getAgenda(YearMonth.now()); // test
 			attend();
 			return true;
 		}

@@ -15,6 +15,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.JButton;
@@ -27,13 +28,14 @@ import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 
 import system.AttendanceBook;
+import system.Controller;
 import system.Slave;
 
 class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	/*main*/
-	private system.Controller controller;	//内部動作用
-	private display.Message message;		//エラー呼び出し用
-	private display.NewAccount newAccount;
+	private Controller controller;	//内部動作用
+	private Message message;		//エラー呼び出し用
+	private NewAccount newAccount;
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -94,7 +96,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		/* システム引き継ぎ */
 		this.controller = controller;
 		this.message = message;
-		newAccount = new display.NewAccount(this.controller);
+		newAccount = new NewAccount(this.controller);
 
 		/* メインフレーム設定 */
 		mainFrame = new JFrame("機能選択");
@@ -239,7 +241,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 					attButton[i][j].setText("欠");
 					attButton[i][j].setBackground(Color.PINK);;
 					attButton[i][j].setForeground(Color.DARK_GRAY);
-				}else if(status[i][j] == 2){
+				}else if(status[i][j] == AttendanceBook.AUTHORIZED_ABSENCE){
 					attButton[i][j].setText("公");
 					attButton[i][j].setBackground(Color.GREEN);
 					attButton[i][j].setForeground(Color.DARK_GRAY);
@@ -393,7 +395,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		yearMonth = YearMonth.of(year[0], month[0]+1);
-		AttendanceBook[] Book = controller.getAttendance(yearMonth);
+		ArrayList<String> slaves = Slave.getSlaves();
 		accPanel = new JPanel(new GridLayout(numSize,2));
 		accPanel.setPreferredSize(new Dimension(300, (numSize*30)));
 		accScrollPanel = new JScrollPane();
@@ -407,7 +409,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			stuButton_clone[i].setPreferredSize(new Dimension(300, 30));
 			stuButton_clone[i].setBackground(Color.WHITE);
 			accPanel.add(stuButton_clone[i]);
-			stuButton_clone[i].setText(Book[i].getId());
+			stuButton_clone[i].setText(slaves.get(i));
 		}
 		int wid=100, hig=60;
 		addAccButton = new JButton("新規作成");
@@ -456,12 +458,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		message.showMessage(mess);
 	}
 
-	private void addmember(){
-		newAccount.showNewAccount();
-	}
-
-	private void chemember(){
-		newAccount.showCheAccount("s12500", "鈴木孝則", "aaaaa");
+	private void member(int i){
+		ArrayList<String> slaves = Slave.getSlaves();
+		String slave = slaves.get(i);
+		if(i == -1){
+			newAccount.showNewAccount();
+		}else{
+			newAccount.showCheAccount(slave, "", "");
+		}
 	}
 
 	private void actionButton(){
@@ -506,7 +510,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		delAccButton.addActionListener(this);
 		delAccButton.addKeyListener(this);
 	}
-
+	private int memNum = -1;
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == numButton[0]){//機能1
 			calendar.set(Calendar.YEAR, year[0]);
@@ -578,13 +582,16 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}else if(e.getActionCommand().matches("stuButton_clone" + ".*")){//account
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == stuButton_clone[i]){
+					memNum = i;
 					stuNumLabel.setText(stuButton_clone[i].getText() + "を");
 				}
 			}
 		}else if(e.getSource() == addAccButton){//新規作成
-			addmember();
+			member(-1);
 		}else if(e.getSource() == cheAccButton){//変更
-			chemember();
+			member(memNum);
+			stuNumLabel.setText("編集したいIDを選択");
+			memNum = -1;
 		}else if(e.getSource() == delAccButton){//削除
 
 		}

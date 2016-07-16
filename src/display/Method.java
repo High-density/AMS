@@ -36,8 +36,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
 	private JPanel planPanel;
+	private JPanel planPanel2;
 	private JPanel changePanel;
-
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[42];
@@ -46,6 +46,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton aBackButton;
 	private JButton referButton;
 	private JButton upButton;
+	private JButton nextButton2;
+	private JButton backButton2;
 	private JButton dayButton_clone[] = new JButton[42];
 	private JButton weekButton_clone[] = new JButton[7];
 	private JButton pNextButton;
@@ -53,6 +55,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton ChangeButton[] = new JButton[2];
 	private JLabel labelNum[] = new JLabel[4];
 	private JLabel testPathLabel;//ファイルパス取得テスト
+	private JLabel monthLabel;
+	private JLabel testLabel;
 	private JLabel aMonthLabel;
 	private JLabel pMonthLabel;
 	private JLabel planDate;
@@ -65,7 +69,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel changeLabel;
 	private JTextArea pTextArea;
 	private JTextField changeTextField[] = new JTextField[2];
-
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
@@ -251,7 +254,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pBackButton.setIcon(left);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		
+
 		for(int i=0;i<7;i++){
 			weekButton_clone[i] = new JButton(weekName[i]);
 			weekButton_clone[i].setFont(new Font(null, Font.PLAIN, 16));

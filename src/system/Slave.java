@@ -35,7 +35,7 @@ public class Slave extends User {
 		// 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
 		try {
 			// 出席ディレクトリの作成
-			String dirName = "./file/" + getId() + "/attendance/";
+			String dirName = Controller.homeDirName + "/" + getId() + "/" + attendanceDirName;
 			if (!Controller.mkdirs(dirName)) return false;
 
 			File file = new File(dirName + ldt.format(formatter));
@@ -63,7 +63,7 @@ public class Slave extends User {
 
 	// 報告書提出
 	public boolean submitReport(String file) {
-		String dirName = "file/" + getId() + "/report/"; // 報告書ディレクトリの名前
+		String dirName = Controller.homeDirName + "/" + getId() + "/" + reportDirName; // 報告書ディレクトリの名前
 		File dir = new File(dirName); // 報告書ディレクトリ
 		String today = LocalDate.now().toString(); // 今日の日付
 
@@ -123,17 +123,11 @@ public class Slave extends User {
 		// ファイルを更新する
 		// 更新対象はパスワードのみ
 		try {
-			File file = new File("file/" + id + "/passwd");
+			File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(newAccount.getPasswd());
 			pw.close();
-		} catch (FileNotFoundException e) {
-			Log.error(e);
-			return false;
-		} catch (IOException e) {
-			Log.error(e);
-			return false;
-		} catch (NullPointerException e) {
+		} catch (IOException | NullPointerException e) {
 			Log.error(e);
 			return false;
 		}
@@ -151,11 +145,6 @@ public class Slave extends User {
 		return false;
 	}
 
-	// Slaveは情報配信不可
-	public boolean setEvent() {
-		return false;
-	}
-
 	/**
 	 * Slaveの一覧を取得する
 	 * @return ユーザのIDをListで返す
@@ -164,21 +153,16 @@ public class Slave extends User {
 		// Slaveのid格納
 		ArrayList<String> slaves = new ArrayList<String>();
 
-		String fileDirName = "file/";
-		File fileDir = new File(fileDirName);
+		File fileDir = new File(Controller.homeDirName);
 		for (String userDirName: fileDir.list()) {
-			File file = new File(fileDirName + userDirName + "/attribute");
+			File file = new File(Controller.homeDirName + "/" + userDirName + "/" + attributeFileName);
 			if (file.exists()) {
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(file));
 					if (br.readLine().equals(Slave.class.getSimpleName())) {
 						slaves.add(userDirName);
 					}
-				} catch (FileNotFoundException e) {
-					Log.error(e);
-				} catch (IOException e) {
-					Log.error(e);
-				} catch (NullPointerException e) {
+				} catch (IOException | NullPointerException e) {
 					Log.error(e);
 				}
 			}
