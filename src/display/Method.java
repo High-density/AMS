@@ -36,7 +36,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel calPanel;
 	private JPanel planPanel;
 	private JPanel changePanel;
-	
+
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[42];
@@ -100,9 +100,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		contentPane.add(panelButton, BorderLayout.NORTH);
 		contentPane.add(cardPanel, BorderLayout.CENTER);
 		mainFrame.setVisible(true);
-		
+
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/display/icon.png");
+		ImageIcon icon = new ImageIcon("src/icon/icon.png");
 		mainFrame.setIconImage(icon.getImage());
 	}
 
@@ -298,7 +298,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		ChangeButton[0] = new JButton("アカウント情報の変更");
 		ChangeButton[0].setFont(new Font(null, Font.PLAIN, 24));
 		ChangeButton[0].setBounds(380,270,300,40);
-		
+
 		panelNum[3].add(labelNum[3]);
 		panelNum[3].add(ID[0]);
 		panelNum[3].add(UserName[0]);
@@ -306,7 +306,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3].add(UserName_Mine[0]);
 		panelNum[3].add(ChangeButton[0]);
 	}
-	
+
 	public void accountFrame() {
 		accountFrame = new JFrame("アカウント情報の変更");
 		accountFrame.setBounds(650, 300, 600, 500);
@@ -346,7 +346,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		ChangeButton[1] = new JButton("変更");
 		ChangeButton[1].setBounds(170,350,200,40);
 		ChangeButton[1].setFont(new Font(null, Font.PLAIN, 18));
-		
+
 		changePanel.add(changeTextField[0]);
 		changePanel.add(changeTextField[1]);
 		changePanel.add(ChangeButton[1]);
@@ -357,15 +357,15 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		changePanel.add(changeLabel);
 		changePanel.add(password[0]);
 		changePanel.add(password[1]);
-				
+
 		accountFrame.getContentPane().add(changePanel);
-		
+
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/display/icon.png");
+		ImageIcon icon = new ImageIcon("src/icon/icon.png");
 		accountFrame.setIconImage(icon.getImage());
 		accountFrame.setVisible(true);
 	}
-	
+
 	private void CardPanel(){
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
@@ -467,7 +467,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}else if(e.getSource() == ChangeButton[0]){
 			accountFrame();
 		}
-		
+
 		for(int i=0;i<42;i++){
 			if(e.getSource() == dayButton_clone[i]){
 				String dayName = dayButton_clone[i].getText();
