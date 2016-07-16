@@ -22,6 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
@@ -128,12 +129,21 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[0].setLayout(null);
 		calPanel = new JPanel(new GridLayout(7,7));
 		calPanel.setBounds(200,130,400,400);
-		aNextButton = new JButton("next");
-		aNextButton.setBounds(550,60,200,40);
-		aNextButton.setBackground(Color.WHITE);
-		aBackButton = new JButton("back");
-		aBackButton.setBounds(050,60,200,40);
-		aBackButton.setBackground(Color.WHITE);
+		aNextButton = new JButton();
+		aNextButton.setBounds(510,50,140,60);
+		aNextButton.setContentAreaFilled(false);
+		aNextButton.setBorderPainted(false);
+		aBackButton = new JButton();
+		aBackButton.setBounds(150,50,140,60);
+		aBackButton.setContentAreaFilled(false);
+		aBackButton.setBorderPainted(false);
+		//ボタンへのiconの設置
+		ImageIcon left = new ImageIcon("src/icon/left.png");
+		ImageIcon right = new ImageIcon("src/icon/right.png");
+		aBackButton.setIcon(left);
+		aNextButton.setIcon(right);
+		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelNum[0] = new JLabel("出席");
 		labelNum[0].setBounds(380,10,200,40);
 		labelNum[0].setFont(new Font(null, Font.PLAIN, 18));
@@ -191,8 +201,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		referButton.setBounds(500,100,100,30);
 		referButton.setBackground(Color.WHITE);
 		upButton = new JButton("アップロード");
-		upButton.setBounds(300,200,200,30);
+		upButton.setBounds(300,200,200,60);
 		upButton.setBackground(Color.WHITE);
+		ImageIcon upload = new ImageIcon("src/icon/upload.png");
+		upButton.setIcon(upload);
 		pathTextField = new JTextField("ファイルを参照してください");
 		pathTextField.setBounds(200,100,300,31);
 		testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得
@@ -224,12 +236,22 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pTextArea = new JTextArea(20,24);
 		pTextArea.setBounds(450, 100, 300, 400);
 		pTextArea.setLineWrap(true);
-		pNextButton = new JButton("next");
-		pNextButton.setBounds(300,70,100,40);
-		pNextButton.setBackground(Color.WHITE);
-		pBackButton = new JButton("back");
+		pNextButton = new JButton();
+		pNextButton.setBounds(290,70,100,40);
+		pNextButton.setContentAreaFilled(false);
+		pNextButton.setBorderPainted(false);
+		pBackButton = new JButton();
 		pBackButton.setBounds(030,70,100,40);
-		pBackButton.setBackground(Color.WHITE);
+		pBackButton.setContentAreaFilled(false);
+		pBackButton.setBorderPainted(false);
+		//ボタンへのiconの設置
+		ImageIcon left = new ImageIcon("src/icon/left_mini.png");
+		ImageIcon right = new ImageIcon("src/icon/right_mini.png");
+		pNextButton.setIcon(right);
+		pBackButton.setIcon(left);
+		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		
 		for(int i=0;i<7;i++){
 			weekButton_clone[i] = new JButton(weekName[i]);
 			weekButton_clone[i].setFont(new Font(null, Font.PLAIN, 16));
