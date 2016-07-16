@@ -1,23 +1,29 @@
 package system;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.io.IOException;
 import java.lang.Exception;
 import java.lang.StackTraceElement;
 import java.lang.String;
 import java.lang.Throwable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.time.LocalDateTime;
 import display.Message;
 
 class Log {
 	// 改行コード
 	public static final String br = System.getProperty("line.separator");
 	private static final Message dialog = new Message();
+	private static final Message writeLogDialog = new Message();
 
 	// ログファイル
 	private static final File logDir = new File("file/root/log/");
-	private static final File logFile = new File(logDir.toString() + "log.txt");
-	private static final File errorFile = new File(logDir.toString() + "error.txt");
+	private static final File logFile = new File(logDir.toString() + "/log.txt");
+	private static final File errorFile = new File(logDir.toString() + "/error.txt");
 
 	// 出力時の接頭語・接尾語
 	private static final String placePrefix = "  at ";
@@ -26,6 +32,7 @@ class Log {
 	// エラー処理（例外が投げられるとき）
 	public static void error(Exception e) {
 		// ログの書き出し処理
+		writeLog(errorFile, "[" + LocalDateTime.now() + "]");
 		writeLog(errorFile, e.toString());
 
 		// ライブラリ以外のエラーのみを出力
@@ -36,6 +43,9 @@ class Log {
 				writeLog(errorFile, placePrefix + m.group(1));
 			}
 		}
+
+		// 区切り
+		writeLog(errorFile, "");
 
 		// ポップアップによるエラー表示
 		String message = "(" + e.getClass().getName() + ")";
@@ -55,13 +65,34 @@ class Log {
 		popup(suffix + br + "(" + message + ")");
 	}
 
-	// TODO: ログの書き出し
+	// ログの書き出し
 	public static void writeLog(File file, String message) {
-		System.out.println(message);
+		// ファイルが存在しないときに作成する
+		Controller.mkdirs(logDir.toString());
+		try {
+			file.createNewFile();
+		} catch(IOException e) {
+			popup("ファイル作成エラー: " + file.toString(), writeLogDialog);
+		}
+
+		// ファイルに書き込み
+		if (file.canWrite() == false) popup("ファイル書き込みエラー: file.canWrite() = false", writeLogDialog);
+		try {
+			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+			pw.println(message);
+			pw.close();
+		} catch(IOException e) {
+			popup("ファイル書き込みエラー: " + file.toString(), writeLogDialog);
+		}
 	}
 
 	// ポップアップ表示
 	public static void popup(String message) {
-		dialog.showMessage(message);
+		popup(message, dialog);
+	}
+
+	// ポップアップ表示（ダイアログ指定）
+	private static void popup(String message, Message pop) {
+		pop.showMessage(message);
 	}
 }
