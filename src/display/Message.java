@@ -42,7 +42,7 @@ public class Message extends KeyAdapter implements ActionListener{
 
 		returnButton.addActionListener(this);
 		returnButton.addKeyListener(this);
-		
+
 		/*アイコンの設定*/
 		ImageIcon icon = new ImageIcon("file/icon5.png");
 		messFrame.setIconImage(icon.getImage());
@@ -59,9 +59,6 @@ public class Message extends KeyAdapter implements ActionListener{
 		messFrame.setVisible(true);
 	}
 
-
-
-
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == returnButton){
 			messFrame.setVisible(false);
@@ -69,11 +66,9 @@ public class Message extends KeyAdapter implements ActionListener{
 		}
 	}
 	public void keyPressed(KeyEvent e){
-		if(KeyEvent.VK_ENTER == e.getKeyCode()){
-			if(e.getSource() == returnButton){
-				messFrame.setVisible(false);
-				messFrame.dispose();
-			}
+		if(KeyEvent.VK_ENTER == e.getKeyCode()){/*actionevebtを呼び出し*/
+			ActionEvent actionEvents = new ActionEvent(e.getComponent(),ActionEvent.ACTION_PERFORMED,"");
+			actionPerformed(actionEvents);
 		}
 	}
 }

@@ -31,8 +31,9 @@ import system.Slave;
 
 class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	/*main*/
-	private system.Controller controller; // 内部動作用
-	private display.Message message; //エラー呼び出し用
+	private system.Controller controller;	//内部動作用
+	private display.Message message;		//エラー呼び出し用
+	private display.NewAccount newAccount;
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -76,10 +77,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton cheAccButton;/*変更*/
 	private JButton delAccButton;/*削除*/
 	private JLabel stuNumLabel;
+	private String memId;
+	private String memName;
+	private String memPass;
 
 	/*someOne*/
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
+	private Calendar Cal = Calendar.getInstance();
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
 	private int day = 0;//ボタンから取得した日
@@ -89,6 +94,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		/* システム引き継ぎ */
 		this.controller = controller;
 		this.message = message;
+		newAccount = new display.NewAccount(this.controller);
 
 		/* メインフレーム設定 */
 		mainFrame = new JFrame("機能選択");
@@ -98,19 +104,19 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		contentPane = mainFrame.getContentPane();
 
 		/* 各種設定*/
-		PanelButton();//機能選択ボタンの追加
-		Attendance();//機能1用パネル設定
-		Report();//機能2用パネル設定
-		Plan();
-		Account();
+		PanelButton();	//機能選択ボタンの追加
+		Attendance();	//出席管理パネル設定
+		Report();		//報告書管理パネル設定
+		Plan();			//予定管理パネルの設定
+		Account();		//アカウント管理
 		CardPanel();//機能パネル
 
 		/* ボタンのアクション用 */
 		actionButton();
 
 		/* フレームに追加 */
-		contentPane.add(panelButton, BorderLayout.NORTH);
-		contentPane.add(cardPanel, BorderLayout.CENTER);
+		contentPane.add(panelButton, BorderLayout.NORTH);	//機能選択ボタンの追加
+		contentPane.add(cardPanel, BorderLayout.CENTER);	//パネルの追加
 		mainFrame.setVisible(true);
 	}
 
@@ -122,7 +128,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
 		numButton[4] = new JButton("ログアウト");
-		for(int i=0;i<5;i++)
+		for(int i=0;i<5;i++)//ボタンの背景を白に
 			numButton[i].setBackground(Color.WHITE);
 		panelButton.add(numButton[0]);
 		panelButton.add(numButton[1]);
@@ -227,12 +233,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				dayLabel[j+1].setText(""+(j+1));
 				if(status[i][j] == AttendanceBook.ATTENDED){
 					attButton[i][j].setText("出");
-					attButton[i][j].setBackground(Color.BLUE);
-					attButton[i][j].setForeground(Color.WHITE);
+					attButton[i][j].setBackground(Color.CYAN);
+					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}else if(status[i][j] == AttendanceBook.ABSENCE){
 					attButton[i][j].setText("欠");
-					attButton[i][j].setBackground(Color.WHITE);
-					attButton[i][j].setForeground(Color.BLACK);
+					attButton[i][j].setBackground(Color.PINK);;
+					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}else if(status[i][j] == 2){
 					attButton[i][j].setText("公");
 					attButton[i][j].setBackground(Color.GREEN);
@@ -248,6 +254,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				for(int j=maxDate+1;j<32;j++){
 					dayLabel[j].setText("/");
 					attButton[i][j-1].setText("/");
+					attButton[i][j-1].setBackground(Color.WHITE);
 				}
 			}
 		}
@@ -322,9 +329,16 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekLabel[i] = new JLabel(weekName[i]);
 			weekLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			weekLabel[i].setFont(new Font(null, Font.PLAIN, 16));
-			weekLabel[i].setBackground(Color.ORANGE);
-			weekLabel[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekLabel[i].setBackground(Color.WHITE);
+			weekLabel[i].setBorder(new LineBorder(Color.DARK_GRAY,1,true));
 			weekLabel[i].setOpaque(true);
+			if(i==0){
+				weekLabel[i].setForeground(Color.RED);
+				weekLabel[i].setBorder(new LineBorder(Color.RED,1,true));
+			}else if(i==6){
+				weekLabel[i].setForeground(Color.BLUE);
+				weekLabel[i].setBorder(new LineBorder(Color.BLUE,1,true));
+			}
 		}
 		for(int i=0;i<dayButton_clone.length;i++)
 			dayButton_clone[i] = new JButton();
@@ -354,13 +368,24 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		calendar.set(year[1], month[1], 1);
 		yearMonth = YearMonth.of(year[1], month[1]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+		//System.out.println(dayOfWeek);
 		int maxDate = yearMonth.lengthOfMonth();
-		for(int i=0;i<dayOfWeek;i++)
+		for(int i=0;i<dayOfWeek;i++){
 			dayButton_clone[i].setText("");
-		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
+		}
+		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			dayButton_clone[i].setText(""+(1+i-dayOfWeek));
-		for (int i=dayOfWeek+maxDate;i<dayButton_clone.length;i++)
+			Cal.set(year[1], month[1], (i+1-dayOfWeek));
+			if(Cal.get(Calendar.DAY_OF_WEEK) == 7)
+				dayButton_clone[i].setForeground(Color.BLUE);
+			else if(Cal.get(Calendar.DAY_OF_WEEK) == 1)
+				dayButton_clone[i].setForeground(Color.RED);
+			else
+				dayButton_clone[i].setForeground(Color.BLACK);
+		}
+		for (int i=dayOfWeek+maxDate;i<dayButton_clone.length;i++){
 			dayButton_clone[i].setText("");
+		}
 	}
 
 	private void Account(){
@@ -429,6 +454,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	private void message(String mess){/*message("")でメッセージを表示*/
 		message.showMessage(mess);
+	}
+
+	private void addmember(){
+		newAccount.showNewAccount();
+	}
+
+	private void chemember(){
+		newAccount.showCheAccount("s12500", "鈴木孝則", "aaaaa");
 	}
 
 	private void actionButton(){
@@ -548,6 +581,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 					stuNumLabel.setText(stuButton_clone[i].getText() + "を");
 				}
 			}
+		}else if(e.getSource() == addAccButton){//新規作成
+			addmember();
+		}else if(e.getSource() == cheAccButton){//変更
+			chemember();
+		}else if(e.getSource() == delAccButton){//削除
+
 		}
 	}
 
