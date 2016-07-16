@@ -266,10 +266,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 	}
 
-	private void message(String mess){
-		message.showMessage("うううう");
-	}
-
 	private void actionButton(){
 		numButton[0].addActionListener(this);
 		numButton[0].addKeyListener(this);
@@ -302,7 +298,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		if(e.getSource() == numButton[2]){/*機能3*/
 			cLayout.show(cardPanel, "Meth3");
-			message("おおおおおおおお");
 		}
 
 		if(e.getSource() == numButton[3]){/*機能4*/
