@@ -37,6 +37,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel cardPanel;
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
+
 	private JPanel planPanel;
 	private JPanel planPanel2;
 	private JPanel changePanel;
@@ -108,7 +109,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		mainFrame.setVisible(true);
 
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/display/icon.png");
+		ImageIcon icon = new ImageIcon("src/icon/icon.png");
 		mainFrame.setIconImage(icon.getImage());
 	}
 
@@ -384,11 +385,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		changePanel.add(changeLabel);
 		changePanel.add(password[0]);
 		changePanel.add(password[1]);
-
 		accountFrame.getContentPane().add(changePanel);
 
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/display/icon.png");
+		ImageIcon icon = new ImageIcon("src/icon/icon.png");
 		accountFrame.setIconImage(icon.getImage());
 		accountFrame.setVisible(true);
 	}
