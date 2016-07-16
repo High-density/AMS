@@ -38,12 +38,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
 	private JPanel planPanel;
-
 	private JPanel planPanel2;
-
 	private JPanel changePanel;
-
-
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
 	private JButton dayButton[] = new JButton[42];
@@ -52,24 +48,17 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton aBackButton;
 	private JButton referButton;
 	private JButton upButton;
-
-
 	private JButton nextButton2;
-
 	private JButton backButton2;
-
 	private JButton dayButton_clone[] = new JButton[42];
 	private JButton weekButton_clone[] = new JButton[7];
 	private JButton pNextButton;
 	private JButton pBackButton;
 	private JButton ChangeButton[] = new JButton[2];
-
 	private JLabel labelNum[] = new JLabel[4];
 	private JLabel testPathLabel;//ファイルパス取得テスト
-
 	private JLabel monthLabel;
 	private JLabel testLabel;
-
 	private JLabel aMonthLabel;
 	private JLabel pMonthLabel;
 	private JLabel planDate;
@@ -78,12 +67,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel ID_Mine[] = new JLabel[2];
 	private JLabel UserName_Mine[] = new JLabel[2];
 	private JLabel password[] = new JLabel[2];
-
 	private JTextField pathTextField;
 	private JLabel changeLabel;
 	private JTextArea pTextArea;
 	private JTextField changeTextField[] = new JTextField[2];
-
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
@@ -286,18 +273,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[2].add(backButton2);
 		panelNum[2].add(monthLabel);
 		panelNum[2].add(testLabel);
-
-
 		panelNum[2].add(planDate);
-
 		panelNum[2].add(labelNum[2]);
 		panelNum[2].add(pMonthLabel);
 		panelNum[2].add(pNextButton);
 		panelNum[2].add(pBackButton);
 		panelNum[2].add(planPanel);
-
 		panelNum[2].add(planPanel2);
-
 		panelNum[2].add(pTextArea);
 	}
 
