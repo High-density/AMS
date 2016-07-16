@@ -357,7 +357,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		changePanel.add(changeLabel);
 		changePanel.add(password[0]);
 		changePanel.add(password[1]);
-
 		accountFrame.getContentPane().add(changePanel);
 
 		/*アイコンの設定*/
