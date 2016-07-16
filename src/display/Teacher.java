@@ -18,6 +18,7 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -25,8 +26,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import system.Agenda;
 import system.AttendanceBook;
 import system.Controller;
 import system.Slave;
@@ -63,6 +66,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	/*plan*/
 	private JPanel planPanel;
+	private JLabel ymd;//year month day
 	private JLabel weekLabel[] = new JLabel[7];
 	private JButton dayButton_clone[] = new JButton[42];
 	private JButton addPlanButton;
@@ -79,9 +83,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton cheAccButton;/*変更*/
 	private JButton delAccButton;/*削除*/
 	private JLabel stuNumLabel;
-	private String memId;
-	private String memName;
-	private String memPass;
 
 	/*someOne*/
 	private YearMonth yearMonth;
@@ -104,6 +105,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
 		contentPane = mainFrame.getContentPane();
+
+		/*アイコンの設定*/
+		ImageIcon icon = new ImageIcon("src/icon/icon.png");
+		mainFrame.setIconImage(icon.getImage());
 
 		/* 各種設定*/
 		PanelButton();	//機能選択ボタンの追加
@@ -146,15 +151,25 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[0].setLayout(null);
 		calPanel = new JPanel(new GridLayout((numSize+1), 32));
 		calPanel.setBounds(0,130,32*45,(numSize+1)*30);
-		aNextButton = new JButton("next");
+		aNextButton = new JButton();
 		aNextButton.setBounds(550,60,200,40);
-		aNextButton.setBackground(Color.WHITE);
-		aBackButton = new JButton("back");
+		aNextButton.setContentAreaFilled(false);
+		aNextButton.setBorderPainted(false);
+		aBackButton = new JButton();
 		aBackButton.setBounds(050,60,200,40);
-		aBackButton.setBackground(Color.WHITE);
+		aBackButton.setContentAreaFilled(false);
+		aBackButton.setBorderPainted(false);
+		//ボタンへのiconの設置
+		ImageIcon left = new ImageIcon("src/icon/left.png");
+		ImageIcon right = new ImageIcon("src/icon/right.png");
+		aBackButton.setIcon(left);
+		aNextButton.setIcon(right);
+		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelNum[0] = new JLabel("出席");
-		labelNum[0].setBounds(380,10,200,40);
+		labelNum[0].setBounds(0,10,800,40);
 		labelNum[0].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -264,10 +279,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	private void Report(){
 		numSize = Slave.getSlaves().size(); /*アカウント数*/
-		year[0] = calendar.get(Calendar.YEAR);
-		month[0] = calendar.get(Calendar.MONTH);
-		yearMonth = YearMonth.of(year[0], month[0]+1);
-		AttendanceBook[] Book = controller.getAttendance(yearMonth);
+		ArrayList<String> slaves = Slave.getSlaves();
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
 		repoPanel = new JPanel(new GridLayout(numSize,2));
@@ -277,8 +289,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		repoScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		repoScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		labelNum[1] = new JLabel("報告書確認");
-		labelNum[1].setBounds(350,10,200,40);
+		labelNum[1].setBounds(0,10,800,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
 
 		for(int i=0;i<numSize;i++){
 			updateLabel[i] = new JLabel("");/*更新日をここに入れる*/
@@ -292,7 +305,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			stuButton[i] = new JButton();
 			stuButton[i].setPreferredSize(new Dimension(300, 30));
 			stuButton[i].setBackground(Color.WHITE);
-			stuButton[i].setText(Book[i].getId());
+			stuButton[i].setText(slaves.get(i));
 			repoPanel.add(stuButton[i]);
 			repoPanel.add(updateLabel[i]);
 		}
@@ -310,23 +323,37 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 120, 400, 400);
 		labelNum[2] = new JLabel("予定");
-		labelNum[2].setBounds(180,10,200,40);
+		labelNum[2].setBounds(0,10,400,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
+		ymd = new JLabel("日付を選択");
+		ymd.setBounds(500,10,200,40);
+		ymd.setFont(new Font(null, Font.PLAIN, 18));
+		ymd.setHorizontalAlignment(JLabel.CENTER);
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		pTextArea = new JTextArea(20,24);
-		pTextArea.setBounds(450, 100, 300, 400);
+		pTextArea.setBounds(450, 50, 300, 400);
 		pTextArea.setLineWrap(true);
 		addPlanButton = new JButton("予定追加");
-		addPlanButton.setBounds(550,20,200,40);
+		addPlanButton.setBounds(500,470,200,40);
 		addPlanButton.setBackground(Color.WHITE);
-		pNextButton = new JButton("next");
+		pNextButton = new JButton();
 		pNextButton.setBounds(300,70,100,40);
-		pNextButton.setBackground(Color.WHITE);
-		pBackButton = new JButton("back");
+		pNextButton.setContentAreaFilled(false);
+		pNextButton.setBorderPainted(false);
+		pBackButton = new JButton();
 		pBackButton.setBounds(030,70,100,40);
-		pBackButton.setBackground(Color.WHITE);
+		pBackButton.setContentAreaFilled(false);
+		pBackButton.setBorderPainted(false);
+		//ボタンへのiconの設置
+		ImageIcon left = new ImageIcon("src/icon/left_mini.png");
+		ImageIcon right = new ImageIcon("src/icon/right_mini.png");
+		pNextButton.setIcon(right);
+		pBackButton.setIcon(left);
+		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		for(int i=0;i<7;i++){
 			weekLabel[i] = new JLabel(weekName[i]);
 			weekLabel[i].setHorizontalAlignment(JLabel.CENTER);
@@ -356,6 +383,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		panelNum[2].add(labelNum[2]);
 		panelNum[2].add(addPlanButton);
+		panelNum[2].add(ymd);
 		panelNum[2].add(pMonthLabel);
 		panelNum[2].add(pNextButton);
 		panelNum[2].add(pBackButton);
@@ -426,8 +454,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		delAccButton.setBackground(Color.WHITE);
 
 		labelNum[3] = new JLabel("アカウント管理");
-		labelNum[3].setBounds(380,10,200,40);
+		labelNum[3].setBounds(0,10,800,40);
 		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 		stuNumLabel = new JLabel("編集したいIDを選択");
 		stuNumLabel.setBounds(500,180,200,60);
 		stuNumLabel.setFont(new Font(null, Font.PLAIN, 18));
@@ -459,12 +488,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void member(int i){
-		ArrayList<String> slaves = Slave.getSlaves();
-		String slave = slaves.get(i);
 		if(i == -1){
 			newAccount.showNewAccount();
 		}else{
-			newAccount.showCheAccount(slave, "", "");
+			ArrayList<String> slaves = Slave.getSlaves();
+			String slave = slaves.get(i);
+			newAccount.showCheAccount(slave, "サレジオ太郎", "");
 		}
 	}
 
@@ -516,7 +545,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calendar.set(Calendar.YEAR, year[0]);
 			calendar.set(Calendar.MONTH, month[0]);
 			cLayout.show(cardPanel, "Meth1");
-			message("テストテストテストテストテストテストテストテストテストテスト");
+			//message("テストテストテストテストテストテストテストテストテストテスト");
 		}else if(e.getSource() == numButton[1]){//機能2
 			cLayout.show(cardPanel, "Meth2");
 		}else if(e.getSource() == numButton[2]){//機能3
@@ -555,8 +584,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				}catch(IOException e1){}
 			}
 		}else if(e.getSource() == addPlanButton){//ここに予定を追加機能を実装する
-			//plan[day].plan.setText();
-			//writePlan(year[1], month[1]+1, dayName, pTextArea.getText);
+			//controller(agenda, day, plan);
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//planで1ヶ月増やす
 			calr_clone();
@@ -566,16 +594,21 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calr_clone();
 			panelNum[2].repaint();
 		}else if(e.getActionCommand().matches("dayButton_clone" + ".*")){/*planで日付を取得するとき*/
+			YearMonth ym = YearMonth.now();
+			Agenda agenda = controller.getAgenda(ym);
 			for(int i=0;i<dayButton_clone.length;i++){
 				if(e.getSource() == dayButton_clone[i]){
 					String dayName = dayButton_clone[i].getText();
 					if(!dayName.equals("")){
 						day = Integer.parseInt(dayName);
-						pTextArea.setText(year[1]+"年"+(month[1]+1)+"月"+day+"日");
+						String plan = agenda.getData(day);
+						ymd.setText(year[1]+"年"+(month[1]+1)+"月"+day+"日");
+						pTextArea.setText(plan);
 					}
 					else{
 						day = 0;
-						pTextArea.setText("日付なし");
+						ymd.setText("日付を選択");
+						pTextArea.setText("");
 					}
 				}
 			}
