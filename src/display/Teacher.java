@@ -82,8 +82,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private Calendar calendar = Calendar.getInstance();
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
-	private int day = 0;/*ボタンから取得した日*/
-	private int numSize;/*アカウント数*/
+	private int day = 0;//ボタンから取得した日
+	private int numSize;//アカウント数
 
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
@@ -475,20 +475,20 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == numButton[0]){/*機能1*/
+		if(e.getSource() == numButton[0]){//機能1
 			calendar.set(Calendar.YEAR, year[0]);
 			calendar.set(Calendar.MONTH, month[0]);
 			cLayout.show(cardPanel, "Meth1");
 			message("テストテストテストテストテストテストテストテストテストテスト");
-		}else if(e.getSource() == numButton[1]){/*機能2*/
+		}else if(e.getSource() == numButton[1]){//機能2
 			cLayout.show(cardPanel, "Meth2");
-		}else if(e.getSource() == numButton[2]){/*機能3*/
+		}else if(e.getSource() == numButton[2]){//機能3
 			calendar.set(Calendar.YEAR, year[1]);
 			calendar.set(Calendar.MONTH, month[1]);
 			cLayout.show(cardPanel, "Meth3");
-		}else if(e.getSource() == numButton[3]){/*機能4*/
+		}else if(e.getSource() == numButton[3]){//機能4
 			cLayout.show(cardPanel, "Meth4");
-		}else if(e.getSource() == numButton[4]){/*ログアウト*/
+		}else if(e.getSource() == numButton[4]){//ログアウト
 			controller.logout();
 			mainFrame.setVisible(false);
 			Login.loginFrame.setVisible(true);
@@ -500,7 +500,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calendar.set(Calendar.MONTH, month[0] -1);	//attendで1ヶ月減らす
 			calr(numSize);
 			panelNum[0].repaint();
-		}else if(e.getActionCommand().matches("stuButton_real" + ".*")){
+		}else if(e.getActionCommand().matches("stuButton_real" + ".*")){//報告書管理
 			String path = null;
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == stuButton[i])
@@ -542,7 +542,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 					}
 				}
 			}
-		}else if(e.getActionCommand().matches("stuButton_clone" + ".*")){/*account*/
+		}else if(e.getActionCommand().matches("stuButton_clone" + ".*")){//account
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == stuButton_clone[i]){
 					stuNumLabel.setText(stuButton_clone[i].getText() + "を");
