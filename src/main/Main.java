@@ -3,6 +3,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 
+
 class Main{ /* スタータークラス */
 	public static void main(String args[]){
 		try {

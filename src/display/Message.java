@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,12 +48,20 @@ public class Message extends KeyAdapter implements ActionListener{
 
 		contentPane.add(panelMaster, BorderLayout.CENTER);
 		messFrame.setVisible(false);
+
 	}
 
 	public void showMessage(String textMessage){
 		messageArea.setText(textMessage);//ここでメッセージを入れるための関数を実行
 		messFrame.setVisible(true);
+
+		/*アイコンの設定*/
+		ImageIcon icon = new ImageIcon("file/icon5.png");
+		messFrame.setIconImage(icon.getImage());
 	}
+
+
+
 
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == returnButton){

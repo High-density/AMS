@@ -1,3 +1,4 @@
+
 package display;
 
 import java.awt.BorderLayout;
@@ -8,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -82,6 +84,12 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		/* フレームにパネルを追加 */
 		contentPane.add(panelMaster, BorderLayout.CENTER);
 		loginFrame.setVisible(true);
+
+		/*アイコンの設定*/
+		ImageIcon icon = new ImageIcon("src/display/icon.png");
+		loginFrame.setIconImage(icon.getImage());
+
+
 	}
 
 	public void actionPerformed(ActionEvent e){
@@ -104,7 +112,9 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		if(controller.login(ID, PA)){//IDとPassがそれぞれ一致したら
 			loginFrame.setVisible(false);
 			if(ID.equals("root"))
+
 				new Teacher(controller, message);
+
 			else
 				new Method(controller, message);
 		}else
