@@ -42,22 +42,21 @@ public class Message extends KeyAdapter implements ActionListener{
 
 		returnButton.addActionListener(this);
 		returnButton.addKeyListener(this);
+		
+		/*アイコンの設定*/
+		ImageIcon icon = new ImageIcon("file/icon5.png");
+		messFrame.setIconImage(icon.getImage());
 
 		panelMaster.add(messageArea);
 		panelMaster.add(returnButton);
 
 		contentPane.add(panelMaster, BorderLayout.CENTER);
 		messFrame.setVisible(false);
-
 	}
 
 	public void showMessage(String textMessage){
 		messageArea.setText(textMessage);//ここでメッセージを入れるための関数を実行
 		messFrame.setVisible(true);
-
-		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("file/icon5.png");
-		messFrame.setIconImage(icon.getImage());
 	}
 
 
