@@ -39,12 +39,11 @@ public class Message extends KeyAdapter implements ActionListener{
 		returnButton = new JButton("戻る");
 		returnButton.setBounds(50,160,100,35);
 		returnButton.setBackground(Color.WHITE);
-
 		returnButton.addActionListener(this);
 		returnButton.addKeyListener(this);
 
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("file/icon5.png");
+		ImageIcon icon = new ImageIcon("src/icon/icon.png");
 		messFrame.setIconImage(icon.getImage());
 
 		panelMaster.add(messageArea);
