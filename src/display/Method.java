@@ -273,7 +273,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[2].add(nextButton2);
 		panelNum[2].add(backButton2);
 		panelNum[2].add(monthLabel);
-		panelNum[2].add(testLabel);
+		// panelNum[2].add(testLabel);
 		panelNum[2].add(planDate);
 		panelNum[2].add(labelNum[2]);
 		panelNum[2].add(pMonthLabel);

@@ -13,6 +13,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public abstract class User {
+	// ファイルの場所管理
+	public static final String attributeFileName = "attribute";
+	public static final String nameFileName = "name";
+	public static final String nicFileName = "nics";
+	public static final String passwdFileName = "passwd";
+	public static final String attendanceDirName = "attendance/";
+	public static final String reportDirName = "report/";
+
 	protected String id = null; // ID
 	private String passwd = null; // パスワード
 	protected String attribute = null; // 属性
@@ -30,18 +38,12 @@ public abstract class User {
 		if (isCorrectPasswd(id, passwd) /*&& hasCertifiedMacAddress(id)*/) {
 			// ファイルから属性の読み込み
 			try {
-				File file = new File("./file/" + id + "/attribute");
+				File file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				attribute = br.readLine(); // Fileから読み取った行
 
 				br.close();
-			} catch (FileNotFoundException e) {
-				Log.error(e);
-				return null;
-			} catch (IOException e) {
-				Log.error(e);
-				return null;
-			} catch (NullPointerException e) {
+			} catch (IOException | NullPointerException e) {
 				Log.error(e);
 				return null;
 			}
@@ -75,17 +77,14 @@ public abstract class User {
 
 		// ファイルからパスワードの読み込み
 		try {
-			File file = new File("./file/" + id + "/passwd");
+			File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			pw = br.readLine();
 			br.close();
 		} catch (FileNotFoundException e) {
 			// 入力されたidを持つユーザがいない
 			return false;
-		} catch (IOException e) {
-			Log.error(e);
-			return false;
-		} catch (NullPointerException e) {
+		} catch (IOException | NullPointerException e) {
 			Log.error(e);
 			return false;
 		}
@@ -102,7 +101,7 @@ public abstract class User {
 
 		// ファイルからMACアドレスNIC表示名の読み込み
 		try {
-			File file = new File("./file/" + id + "/nics");
+			File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
 			BufferedReader br = new BufferedReader(new FileReader(file));
 			String line = br.readLine();
 			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
@@ -116,10 +115,7 @@ public abstract class User {
 		} catch (FileNotFoundException e) {
 			// ID未登録時
 			return false;
-		} catch (IOException e) {
-			Log.error(e);
-			return false;
-		} catch (NullPointerException e) {
+		} catch (IOException | NullPointerException e) {
 			Log.error(e);
 			return false;
 		}
@@ -169,7 +165,8 @@ public abstract class User {
 			String fileName = year + "-" + month + "-" + day;
 			try {
 				// 出席のとき
-				File file = new File("./file/" + id + "/attendance/" + fileName);
+				String dirName = Controller.homeDirName + "/" + id + "/" + attendanceDirName;
+				File file = new File(dirName + fileName);
 				BufferedReader br = new BufferedReader(new FileReader(file));
 				String line = br.readLine();
 				Pattern p = Pattern.compile("([0-9]{2})([0-9]{2}):([0-9]+)$");
@@ -187,9 +184,7 @@ public abstract class User {
 			} catch (FileNotFoundException e) {
 				// 欠席のとき
 				book.setData(d, AttendanceBook.ABSENCE);
-			} catch (IOException e) {
-				book.setData(d, AttendanceBook.ERROR);
-			} catch (NullPointerException e) {
+			} catch (IOException | NullPointerException e) {
 				book.setData(d, AttendanceBook.ERROR);
 			}
 		}
@@ -203,7 +198,7 @@ public abstract class User {
 
 	// 報告書閲覧（ID指定）
 	public boolean showReport(String id){
-		String dirName = "file/" + getId() + "/report/"; // 報告書ディレクトリ
+		String dirName = Controller.homeDirName + "/" + getId() + reportDirName; // 報告書ディレクトリ
 
 		// ディレクトリ作成
 		if (!Controller.mkdirs(dirName)) {
@@ -242,8 +237,6 @@ public abstract class User {
 	public abstract boolean createUser(AccountInformation account); // ユーザの作成
 
 	public abstract boolean deleteUser(String id); // ユーザの削除
-
-	public abstract boolean setEvent(); // 情報配信
 
 	// setter
 	public void setId(String id) {

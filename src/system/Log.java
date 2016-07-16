@@ -21,9 +21,9 @@ class Log {
 	private static final Message writeLogDialog = new Message();
 
 	// ログファイル
-	private static final File logDir = new File("file/root/log/");
-	private static final File logFile = new File(logDir.toString() + "/log.txt");
-	private static final File errorFile = new File(logDir.toString() + "/error.txt");
+	static File logDir;
+	static File logFile;
+	static File errorFile;
 
 	// 出力時の接頭語・接尾語
 	private static final String placePrefix = "  at ";

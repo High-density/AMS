@@ -2,7 +2,6 @@ package system;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -66,28 +65,22 @@ class Master extends User {
 		// ユーザ情報を更新する
 		try {
 			// 名前の更新
-			File file = new File("file/" + target + "/name");
+			File file = new File(Controller.homeDirName + "/" + target + "/" + nameFileName);
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(newAccount.getName());
 			pw.close();
 
 			// パスワードの更新
-			file = new File("file/" + target + "/passwd");
+			file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(newAccount.getPasswd());
 			pw.close();
 
 			// ディレクトリの変更
-			File oldFile = new File("file/" + target);
-			File newFile = new File("file/" + newAccount.getId());
+			File oldFile = new File(Controller.homeDirName + "/" + target);
+			File newFile = new File(Controller.homeDirName + "/" + newAccount.getId());
 			oldFile.renameTo(newFile);
-		} catch (FileNotFoundException e) {
-			Log.error(e);
-			return false;
-		} catch (IOException e) {
-			Log.error(e);
-			return false;
-		} catch (NullPointerException e) {
+		} catch (NullPointerException | IOException e) {
 			Log.error(e);
 			return false;
 		}
@@ -109,25 +102,25 @@ class Master extends User {
 		}
 
 		// ディレクトリ作成
-		String userDirName = "file/" + account.getId() + "/";
-		(new File(userDirName + "attendance")).mkdirs();
-		(new File(userDirName + "report")).mkdirs();
+		String userDirName = Controller.homeDirName + "/" + account.getId() + "/";
+		Controller.mkdirs(userDirName + attendanceDirName);
+		Controller.mkdirs(userDirName + reportDirName);
 
 		try {
 			// 属性ファイル作成
-			file = new File(userDirName + "/attribute");
+			file = new File(userDirName + "/" + attributeFileName);
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(Slave.class.getSimpleName());
 			pw.close();
 
 			// 名前ファイル作成
-			file = new File(userDirName + "/name");
+			file = new File(userDirName + "/" + nameFileName);
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(account.getName());
 			pw.close();
 
 			// パスワードファイル作成
-			file = new File(userDirName + "/passwd");
+			file = new File(userDirName + "/" + passwdFileName);
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(account.getPasswd());
 			pw.close();
@@ -150,7 +143,7 @@ class Master extends User {
 				gotNicName = gotNic.getName();
 			} while("lo".equals(gotNicName));
 			// ファイルへの書き込み
-			file = new File(userDirName + "/nics");
+			file = new File(userDirName + "/" + nicFileName);
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(gotNicName + ":[" + gotMacAddress + "]");
 			pw.close();
@@ -165,12 +158,7 @@ class Master extends User {
 
 	// ユーザの削除
 	public boolean deleteUser(String id) {
-		Controller.deleteFile(new File("file/" + id));
+		Controller.deleteFile(new File(Controller.homeDirName + "/" + id));
 		return true;
-	}
-
-	// TODO:マスターからの情報発信
-	public boolean setEvent() {
-		return false;
 	}
 }
