@@ -11,7 +11,7 @@ import java.net.NetworkInterface;
 import java.time.YearMonth;
 import java.util.Enumeration;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.NoSuchElementException;
 
 class Master extends User {
 	public Master(String id, String passwd) {
@@ -130,25 +130,25 @@ class Master extends User {
 			String gotMacAddress = "";
 			// 全NICを取得
 			Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
-			// 登録MACアドレスと同じものを探す
-			do {
-				NetworkInterface gotNic = gotNics.nextElement();
-				byte[] hardwareAddress = gotNic.getHardwareAddress();
-				if (hardwareAddress != null) {
-					for (byte b : hardwareAddress) {
-						gotMacAddress += String.format("%02X:", b);
-					}
-					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
+
+			// 一番最初に取得したNICを登録する
+			NetworkInterface gotNic = gotNics.nextElement();
+			byte[] hardwareAddress = gotNic.getHardwareAddress();
+			if (hardwareAddress != null) {
+				for (byte b : hardwareAddress) {
+					gotMacAddress += String.format("%02X:", b);
 				}
-				gotNicName = gotNic.getName();
-			} while("lo".equals(gotNicName));
+				gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
+			}
+			gotNicName = gotNic.getName();
+
 			// ファイルへの書き込み
 			file = new File(userDirName + "/" + nicFileName);
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(gotNicName + ":[" + gotMacAddress + "]");
 			pw.close();
 
-		} catch(IOException e) {
+        } catch(IOException | NoSuchElementException e) {
 			Log.error(e);
 			return false;
 		}
