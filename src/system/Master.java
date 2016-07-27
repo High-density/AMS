@@ -11,7 +11,6 @@ import java.net.NetworkInterface;
 import java.time.YearMonth;
 import java.util.Enumeration;
 import java.util.ArrayList;
-import java.util.Enumeration;
 
 class Master extends User {
 	public Master(String id, String passwd) {
