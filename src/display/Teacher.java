@@ -498,6 +498,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void actionButton(){
+		numSize = Slave.getSlaves().size(); /*アカウント数*/
 		/*main*/
 		for(int i=0;i<5;i++){
 			numButton[i].addActionListener(this);
@@ -508,6 +509,13 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aNextButton.addKeyListener(this);
 		aBackButton.addActionListener(this);
 		aBackButton.addKeyListener(this);
+		for(int i=0;i<numSize;i++){
+			for(int j=0;j<31;j++){
+				attButton[i][j].addActionListener(this);
+				attButton[i][j].addKeyListener(this);
+				attButton[i][j].setActionCommand("attButton"+i+j);
+			}
+		}
 		/*repo*/
 		for(int i=0;i<numSize;i++){
 			stuButton[i].addActionListener(this);
@@ -539,6 +547,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		delAccButton.addActionListener(this);
 		delAccButton.addKeyListener(this);
 	}
+
 	private int memNum = -1;
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == numButton[0]){//機能1
@@ -566,13 +575,20 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calendar.set(Calendar.MONTH, month[0] -1);	//attendで1ヶ月減らす
 			calr(numSize);
 			panelNum[0].repaint();
+		}else if(e.getActionCommand().matches("attButton" + ".*")){	//出欠情報の変更機能
+			for(int i=0;i<numSize;i++){	//ID用の i
+				for(int j=0;j<31;j++){	//日付ようの j
+					if(e.getSource()==attButton[i][j])
+						System.out.println("i="+ (i+1) +" j="+ (j+1));
+				}
+			}
 		}else if(e.getActionCommand().matches("stuButton_real" + ".*")){//報告書管理
 			String path = null;
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == stuButton[i])
 					path = stuButton[i].getText();
 			}
-			File dir = new File("./file/" + path);// + "/report");
+			File dir = new File("./file/" + path + "/report");
 			JFileChooser filechooser = new JFileChooser(dir);
 			int selected = filechooser.showOpenDialog(contentPane);
 			if (selected == JFileChooser.APPROVE_OPTION){
