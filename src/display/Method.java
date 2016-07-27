@@ -450,7 +450,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}else if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
 		}else if(e.getSource() == referButton){/*ファイル参照用*/
-			JFileChooser filechooser = new JFileChooser();
+			File dir = new File("ライブラリ/ドキュメント");
+			JFileChooser filechooser = new JFileChooser(dir);
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 			if (selected == JFileChooser.APPROVE_OPTION){
 				File file = filechooser.getSelectedFile();

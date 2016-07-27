@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -12,15 +11,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -567,12 +563,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calr(numSize);
 			panelNum[0].repaint();
 		}else if(e.getActionCommand().matches("stuButton_real" + ".*")){//報告書管理
-			String path = null;
+			String user = null;
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == stuButton[i])
-					path = stuButton[i].getText();
+					user= stuButton[i].getText();
 			}
-			File dir = new File("./file/" + path);// + "/report");
+			controller.showReport(user);
+			/*
+			File dir = new File("./file/" + path + "/report");
 			JFileChooser filechooser = new JFileChooser(dir);
 			int selected = filechooser.showOpenDialog(contentPane);
 			if (selected == JFileChooser.APPROVE_OPTION){
@@ -582,7 +580,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				try{
 					desktop.open(openFile);
 				}catch(IOException e1){}
+
 			}
+			*/
 		}else if(e.getSource() == addPlanButton){//ここに予定を追加機能を実装する
 			//controller(agenda, day, plan);
 		}else if(e.getSource() == pNextButton){
