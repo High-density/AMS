@@ -198,12 +198,10 @@ public abstract class User {
 
 	// 報告書閲覧（ID指定）
 	public boolean showReport(String id){
-		String dirName = Controller.homeDirName + "/" + getId() + reportDirName; // 報告書ディレクトリ
+		String dirName = Controller.homeDirName + "/" + id + "/" + reportDirName; // 報告書ディレクトリ
 
 		// ディレクトリ作成
-		if (!Controller.mkdirs(dirName)) {
-			return false;
-		}
+		if (!Controller.mkdirs(dirName)) return false;
 
 		try {
 			// コマンドとして実行して，ファイルを開く
@@ -222,7 +220,6 @@ public abstract class User {
 				return false;
 			}
 			cmd += " " + dirName;
-			Log.popup(cmd);
 			r.exec(cmd);
 		} catch (IOException e) {
 			Log.error(e);

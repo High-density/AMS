@@ -13,7 +13,7 @@ import java.time.YearMonth;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.0
+ * @version 1.1
  */
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -115,6 +115,14 @@ public class Controller {
 	 */
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
 		return user.setAccount(oldAccount, newAccount);
+	}
+
+	public boolean createUser(AccountInformation account) {
+		return user.createUser(account);
+	}
+
+	public boolean deleteUser(String id) {
+		return user.deleteUser(id);
 	}
 
 	/**
