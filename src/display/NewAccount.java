@@ -138,7 +138,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 				String newName = nameField.getText();
 				String newPass = passField.getText();
 				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newPass);
-				//controller.
+				controller.createUser(newAccount);
 			}
 				newAccFrame.setVisible(false);
 				newAccFrame.dispose();

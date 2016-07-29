@@ -45,6 +45,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	/*attend*/
 	private JPanel calPanel;
+	private JPanel IDPanel;
 	private JScrollPane scrollPane;
 	private JLabel idLabel[] = new JLabel[100];
 	private JLabel dayLabel[] = new JLabel[32];
@@ -145,7 +146,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		calPanel = new JPanel(new GridLayout((numSize+1), 32));
+		IDPanel = new JPanel(new GridLayout((numSize+1), 31));
+		calPanel = new JPanel(new GridLayout((numSize+1), 31));
 		calPanel.setBounds(0,130,32*45,(numSize+1)*30);
 		aNextButton = new JButton();
 		aNextButton.setBounds(550,60,200,40);
@@ -545,12 +547,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private int memNum = -1;
+	private String stuid = "";
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == numButton[0]){//機能1
 			calendar.set(Calendar.YEAR, year[0]);
 			calendar.set(Calendar.MONTH, month[0]);
 			cLayout.show(cardPanel, "Meth1");
-			//message("テストテストテストテストテストテストテストテストテストテスト");
 		}else if(e.getSource() == numButton[1]){//機能2
 			cLayout.show(cardPanel, "Meth2");
 		}else if(e.getSource() == numButton[2]){//機能3
@@ -637,12 +639,19 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}
 		}else if(e.getSource() == addAccButton){//新規作成
 			member(-1);
+			stuNumLabel.setText("編集したいIDを選択");
+			memNum = -1;
 		}else if(e.getSource() == cheAccButton){//変更
 			member(memNum);
 			stuNumLabel.setText("編集したいIDを選択");
 			memNum = -1;
 		}else if(e.getSource() == delAccButton){//削除
-
+			stuid = stuButton_clone[memNum].getText();
+			message(stuid + "を削除します");
+			controller.deleteUser(stuid);
+			stuNumLabel.setText("編集したいIDを選択");
+			memNum = -1;
+			//panelNum[3].repaint();
 		}
 	}
 
