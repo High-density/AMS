@@ -48,7 +48,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel IDPanel;
 	private JScrollPane scrollPane;
 	private JLabel idLabel[] = new JLabel[100];
-	private JLabel dayLabel[] = new JLabel[32];
+	private JLabel dayLabel[] = new JLabel[31];
 	private JButton attButton[][];
 	private JButton aNextButton;
 	private JButton aBackButton;
@@ -146,9 +146,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		IDPanel = new JPanel(new GridLayout((numSize+1), 31));
+		IDPanel = new JPanel(new GridLayout((numSize+1), 1));
+		IDPanel.setBounds(20,130,45,285);
 		calPanel = new JPanel(new GridLayout((numSize+1), 31));
-		calPanel.setBounds(0,130,32*45,(numSize+1)*30);
+		calPanel.setBounds(0,140,31*45,(numSize+1)*30);
 		aNextButton = new JButton();
 		aNextButton.setBounds(550,60,200,40);
 		aNextButton.setContentAreaFilled(false);
@@ -184,6 +185,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		for(int i=0;i<numSize;i++){/*出欠席ボタン*/
 			idLabel[i] = new JLabel();
+			idLabel[i].setBounds(0,0,50,40);
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
@@ -198,22 +200,32 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		calr(numSize);/*カレンダーのボタン作成用*/
 
+		JLabel ID = new JLabel("ID");
+		ID.setBounds(0,0,50,40);
+		ID.setHorizontalAlignment(JLabel.CENTER);
+		ID.setOpaque(true);
+		ID.setBackground(Color.YELLOW);
+		ID.setBorder(new LineBorder(Color.GRAY, 1, true));
+		IDPanel.add(ID);
+		for(int i=0;i<numSize;i++){
+			IDPanel.add(idLabel[i]);
+		}
 		for(int i=0;i<dayLabel.length;i++){
 			calPanel.add(dayLabel[i]);
 		}
 		for(int i=0;i<numSize;i++){
-			calPanel.add(idLabel[i]);
 			for(int j=0;j<31;j++){
 				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
 			}
 		}
 
 		scrollPane = new JScrollPane(calPanel);
-		scrollPane.setBounds(10,130,760,300);
+		scrollPane.setBounds(65,130,700,300);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		panelNum[0].add(labelNum[0]);
+		panelNum[0].add(IDPanel);
 		panelNum[0].add(scrollPane);
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
@@ -245,7 +257,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		for(int i=0;i<size;i++){
 			for(int j=0;j<maxDate;j++){
-				dayLabel[j+1].setText(""+(j+1));
+				dayLabel[j].setText(""+(j+1));
 				if(status[i][j] == AttendanceBook.ATTENDED){
 					attButton[i][j].setText("出");
 					attButton[i][j].setBackground(Color.CYAN);
@@ -262,14 +274,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}
 		}
 
-		dayLabel[0].setText("ID");
-
 		if(maxDate < 31){
 			for (int i=0;i<numSize;i++){
-				for(int j=maxDate+1;j<32;j++){
+				for(int j=maxDate;j<31;j++){
 					dayLabel[j].setText("/");
-					attButton[i][j-1].setText("/");
-					attButton[i][j-1].setBackground(Color.WHITE);
+					attButton[i][j].setText("/");
+					attButton[i][j].setBackground(Color.WHITE);
 				}
 			}
 		}
@@ -647,11 +657,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			memNum = -1;
 		}else if(e.getSource() == delAccButton){//削除
 			stuid = stuButton_clone[memNum].getText();
-			message(stuid + "を削除します");
+			//message(stuid + "を削除します");
 			controller.deleteUser(stuid);
 			stuNumLabel.setText("編集したいIDを選択");
-			memNum = -1;
-			//panelNum[3].repaint();
 		}
 	}
 
