@@ -229,7 +229,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
-		planDate = new JLabel("指定された日付け");
+		planDate = new JLabel("指定された日付");
 		planDate.setBounds(520,40,200,40);
 		planDate.setFont(new Font(null, Font.PLAIN, 24));
 		planDate.setBackground(Color.WHITE);
@@ -251,7 +251,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pBackButton.setIcon(left);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		
+
 		for(int i=0;i<7;i++){
 			weekButton_clone[i] = new JButton(weekName[i]);
 			weekButton_clone[i].setFont(new Font(null, Font.PLAIN, 16));
@@ -319,6 +319,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		//アカウント情報変更ボタン
 		ChangeButton[0] = new JButton("アカウント情報の変更");
 		ChangeButton[0].setFont(new Font(null, Font.PLAIN, 24));
+		ChangeButton[0].setBackground(Color.WHITE);
 		ChangeButton[0].setBounds(380,270,300,40);
 
 		panelNum[3].add(labelNum[3]);
@@ -368,6 +369,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		ChangeButton[1] = new JButton("変更");
 		ChangeButton[1].setBounds(170,350,200,40);
 		ChangeButton[1].setFont(new Font(null, Font.PLAIN, 18));
+		ChangeButton[1].setBackground(Color.WHITE);
 
 		changePanel.add(changeTextField[0]);
 		changePanel.add(changeTextField[1]);
