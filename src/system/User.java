@@ -149,6 +149,22 @@ public abstract class User {
 		}
 	}
 
+	// idから名前を取得する
+	public static String getName(String id) {
+		String name;
+		File file = new File(Controller.homeDirName + "/" + id + "/" + nameFileName);
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			name = br.readLine(); // Fileから読み取った行
+			br.close();
+		} catch (IOException | NullPointerException e) {
+			Log.error(e);
+			return null;
+		}
+
+		return name;
+	}
+
 	public abstract boolean setAttendance(); // 出席
 
 	public abstract AttendanceBook[] getAttendance(YearMonth ym); // 出席表示(idから取得すべき情報を自動判断)

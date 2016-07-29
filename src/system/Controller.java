@@ -13,7 +13,7 @@ import java.time.YearMonth;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.1
+ * @version 1.2
  */
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -144,6 +144,15 @@ public class Controller {
 	public Agenda setAgenda(Agenda agenda, int date, String content) {
 		agenda.setData(date, content);
 		return agenda;
+	}
+
+	/**
+	 * idからユーザの名前を取得する
+	 * @param id 名前を取得したいID
+	 * @return idに対応する名前
+	 */
+	public String getName(String id) {
+		return User.getName(id);
 	}
 
 	/**
