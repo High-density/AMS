@@ -30,6 +30,8 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 	private JButton returnButton;
 	private String oldId;
 
+	private int na=0;//新規作成か変更かのやつ
+
 	public NewAccount(Controller controller){
 		Container contentPane;
 		JPanel panelMaster;
@@ -104,6 +106,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 	}
 
 	public void showNewAccount(){
+		na = 0;
 		subLabel.setText("新規作成");
 		idField.setText("");
 		nameField.setText("");
@@ -112,6 +115,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 	}
 
 	public void showCheAccount(String Id, String Name, String Pass){
+		na = 1;
 		oldId = Id;
 		subLabel.setText("変更");
 		idField.setText(Id);
@@ -122,14 +126,22 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == saveButton){
-			AccountInformation oldAccount = AccountInformation.ofId(oldId);
-			String newId = idField.getText();
-			String newName = nameField.getText();
-			String newPass = passField.getText();
-			AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newPass);
-			controller.setAccount(oldAccount, newAccount);
-			newAccFrame.setVisible(false);
-			newAccFrame.dispose();
+			if(na == 1){
+				AccountInformation oldAccount = AccountInformation.ofId(oldId);
+				String newId = idField.getText();
+				String newName = nameField.getText();
+				String newPass = passField.getText();
+				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newPass);
+				controller.setAccount(oldAccount, newAccount);
+			}else if(na == 0){
+				String newId = idField.getText();
+				String newName = nameField.getText();
+				String newPass = passField.getText();
+				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newPass);
+				//controller.
+			}
+				newAccFrame.setVisible(false);
+				newAccFrame.dispose();
 		}else if(e.getSource() == returnButton){
 			newAccFrame.setVisible(false);
 			newAccFrame.dispose();
