@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.NetworkInterface;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
@@ -207,6 +208,8 @@ public abstract class User {
 
 		return book;
 	}
+
+	public abstract boolean changeAttendance(LocalDate ld, String id, int status); // 出席の手動変更
 
 	public abstract boolean submitReport(String file); // 報告書提出
 

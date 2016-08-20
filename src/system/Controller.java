@@ -14,7 +14,7 @@ import java.time.YearMonth;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.2
+ * @version 1.3
  */
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -104,6 +104,13 @@ public class Controller {
 			return user.setAttendance();
 		}
 		return false;
+	}
+
+	/**
+	 * 出席の手動変更を行う
+	 */
+	public boolean changeAttendance(LocalDate ld, String id, int status) {
+		return user.changeAttendance(ld, id, status);
 	}
 
 	/**
