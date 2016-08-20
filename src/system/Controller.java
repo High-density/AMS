@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -83,6 +84,14 @@ public class Controller {
 	 */
 	public boolean showReport(String id) {
 		return user.showReport(id);
+	}
+
+	// 最終更新日の取得
+	public LocalDate getLastUploadDate(String id) {
+		File fileDir = new File(homeDirName + "/" + id + "/" + User.reportDirName);
+		String reports[] = fileDir.list();
+		if (reports == null) return null;
+		return LocalDate.parse(getFileNameWithoutSuffix(reports[reports.length - 1]));
 	}
 
 	/**
@@ -182,6 +191,16 @@ public class Controller {
 			return fileName.substring(point);
 		}
 		return null;
+	}
+
+	// 拡張子とディレクトリ名を削除する
+	public static String getFileNameWithoutSuffix(String fileName) {
+		if (fileName == null) return null;
+		int point = fileName.lastIndexOf(".");
+		if (point != -1) {
+			return fileName.substring(fileName.lastIndexOf("/") + 1, point);
+		}
+		return fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length() - 1);
 	}
 
 	/**

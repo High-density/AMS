@@ -99,7 +99,7 @@ public class Slave extends User {
 			Log.error(e);
 		}
 
-		return false;
+		return true;
 	}
 
 	// 報告書閲覧
