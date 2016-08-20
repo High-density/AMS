@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 /**
  * 学生用クラス
  * @author Shinichi Yanagido
- * @version 1.0
+ * @version 1.1
  */
 public class Slave extends User {
 	public Slave(String id, String passwd) {
@@ -53,6 +53,12 @@ public class Slave extends User {
 		}
 		return true;
 	}
+
+	// 学生は出席変更不可
+	public boolean changeAttendance(LocalDate ld, String id, int status) {
+		return false;
+	}
+
 
 	// 出席取得
 	public AttendanceBook[] getAttendance(YearMonth ym) {
