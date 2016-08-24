@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -36,7 +37,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JPanel panelNum[] = new JPanel[4];
 	private JPanel calPanel;
 	private JPanel planPanel;
-	private JPanel planPanel2;
+	//private JPanel planPanel2;
 	private JPanel changePanel;
 	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
@@ -46,17 +47,17 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton aBackButton;
 	private JButton referButton;
 	private JButton upButton;
-	private JButton nextButton2;
-	private JButton backButton2;
+	//private JButton nextButton2;
+	//private JButton backButton2;
 	private JButton dayButton_clone[] = new JButton[42];
 	private JButton weekButton_clone[] = new JButton[7];
 	private JButton pNextButton;
 	private JButton pBackButton;
 	private JButton ChangeButton[] = new JButton[2];
 	private JLabel labelNum[] = new JLabel[4];
-	private JLabel testPathLabel;//ファイルパス取得テスト
-	private JLabel monthLabel;
-	private JLabel testLabel;
+	//private JLabel testPathLabel;//ファイルパス取得テスト
+	//private JLabel monthLabel;
+	//private JLabel testLabel;
 	private JLabel aMonthLabel;
 	private JLabel pMonthLabel;
 	private JLabel planDate;
@@ -112,6 +113,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	private void PanelButton(){
 		panelButton = new JPanel(new GridLayout(1,5));
+		panelButton.setPreferredSize(new Dimension(800, 40));
 		numButton[0] = new JButton("出席管理");
 		numButton[1] = new JButton("週報アップロード");
 		numButton[2] = new JButton("予定確認");
@@ -210,14 +212,14 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		upButton.setIcon(upload);
 		pathTextField = new JTextField("ファイルを参照してください");
 		pathTextField.setBounds(200,100,300,31);
-		testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得
-		testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テ
+		//testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得
+		//testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テ
 
 		panelNum[1].add(labelNum[1]);
 		panelNum[1].add(pathTextField);
 		panelNum[1].add(referButton);
 		panelNum[1].add(upButton);
-		panelNum[1].add(testPathLabel);
+		//panelNum[1].add(testPathLabel);
 	}
 
 	private void Plan(){
@@ -462,8 +464,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				pathTextField.setText("エラー又は取消しがありました");
 			}
 		}else if(e.getSource() == upButton){/*アップロード*/
-			message("アップロードしてもよろしいですか?");
-			testPathLabel.setText(pathTextField.getText());//ファイルパス取得テスト
+			message("アップロードしました");
 			controller.submitReport(pathTextField.getText());
 		}else if(e.getSource() == numButton[4]){/*ログアウト*/
 			controller.logout();

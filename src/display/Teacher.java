@@ -11,10 +11,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.time.LocalDate;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import javax.print.attribute.standard.MediaSize.ISO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -88,7 +91,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
 	private int day = 0;//ボタンから取得した日
-	private int numSize;//アカウント数
+	private int numSize = Slave.getSlaves().size();//アカウント数
+	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
 
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
@@ -142,14 +146,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Attendance(){
-		numSize = Slave.getSlaves().size(); /*アカウント数*/
-
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
 		IDPanel = new JPanel(new GridLayout((numSize+1), 1));
-		IDPanel.setBounds(20,130,45,285);
+		IDPanel.setBounds(10,130,60,285);
 		calPanel = new JPanel(new GridLayout((numSize+1), 31));
-		calPanel.setBounds(0,140,31*45,(numSize+1)*30);
+		calPanel.setBounds(0,0,31*45,(numSize+1)*30);
 		aNextButton = new JButton();
 		aNextButton.setBounds(550,60,200,40);
 		aNextButton.setContentAreaFilled(false);
@@ -198,7 +200,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}
 		}
 
-		calr(numSize);/*カレンダーのボタン作成用*/
+		calr();/*カレンダーのボタン作成用*/
 
 		JLabel ID = new JLabel("ID");
 		ID.setBounds(0,0,50,40);
@@ -220,7 +222,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 
 		scrollPane = new JScrollPane(calPanel);
-		scrollPane.setBounds(65,130,700,300);
+		scrollPane.setBounds(70,130,720,300);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -232,7 +234,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[0].add(aMonthLabel);
 	}
 
-	private void calr(int size){
+	private void calr(){
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
@@ -243,19 +245,19 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		int maxDate = yearMonth.lengthOfMonth();
 
 		AttendanceBook[] Book = controller.getAttendance(yearMonth);
-		int status[][] = new int [size][maxDate];
+		int status[][] = new int [numSize][maxDate];
 
-		for(int i=0;i<size;i++){/*IDを取得からの表示*/
+		for(int i=0;i<numSize;i++){/*IDを取得からの表示*/
 			idLabel[i].setText(Book[i].getId());
 		}
 
-		for(int i=0;i<size;i++){
+		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				status[i][j] = Book[i].getData(j);
 			}
 		}
 
-		for(int i=0;i<size;i++){
+		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				dayLabel[j].setText(""+(j+1));
 				if(status[i][j] == AttendanceBook.ATTENDED){
@@ -286,8 +288,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Report(){
-		numSize = Slave.getSlaves().size(); /*アカウント数*/
-		ArrayList<String> slaves = Slave.getSlaves();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
 		repoPanel = new JPanel(new GridLayout(numSize,2));
@@ -300,9 +301,15 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		labelNum[1].setBounds(0,10,800,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
 		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
-
+		
 		for(int i=0;i<numSize;i++){
-			updateLabel[i] = new JLabel("");/*更新日をここに入れる*/
+			LocalDate LastUpdate;
+			String update = "ファイルが存在しません";
+			if(controller.getLastUploadDate(slaves.get(i)) != null){
+				LastUpdate = controller.getLastUploadDate(slaves.get(i));
+				update = LastUpdate.format(formatter);
+			}
+			updateLabel[i] = new JLabel(update);
 			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			updateLabel[i].setFont(new Font(null, Font.PLAIN, 16));
 			updateLabel[i].setBackground(Color.WHITE);
@@ -427,11 +434,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Account(){
-		numSize = Slave.getSlaves().size(); /*アカウント数*/
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		yearMonth = YearMonth.of(year[0], month[0]+1);
-		ArrayList<String> slaves = Slave.getSlaves();
 		accPanel = new JPanel(new GridLayout(numSize,2));
 		accPanel.setPreferredSize(new Dimension(300, (numSize*30)));
 		accScrollPanel = new JScrollPane();
@@ -499,14 +504,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		if(i == -1){
 			newAccount.showNewAccount();
 		}else{
-			ArrayList<String> slaves = Slave.getSlaves();
 			String slave = slaves.get(i);
 			newAccount.showCheAccount(slave, "サレジオ太郎", "");
 		}
 	}
 
 	private void actionButton(){
-		numSize = Slave.getSlaves().size(); /*アカウント数*/
 		/*main*/
 		for(int i=0;i<5;i++){
 			numButton[i].addActionListener(this);
@@ -577,17 +580,33 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			Login.loginFrame.setVisible(true);
 		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//attendで1ヶ月増やす
-			calr(numSize);
+			calr();
 			panelNum[0].repaint();
 		}else if(e.getSource() == aBackButton){
 			calendar.set(Calendar.MONTH, month[0] -1);	//attendで1ヶ月減らす
-			calr(numSize);
+			calr();
 			panelNum[0].repaint();
 		}else if(e.getActionCommand().matches("attButton" + ".*")){	//出欠情報の変更機能
 			for(int i=0;i<numSize;i++){	//ID用の i
-				for(int j=0;j<31;j++){	//日付ようの j
-					if(e.getSource()==attButton[i][j])
-						System.out.println("i="+ (i+1) +" j="+ (j+1));
+				for(int j=0;j<31;j++){	//日付用の j
+					if(e.getSource()==attButton[i][j]){
+						String mon = String.format("%1$02d", month[0]+1);
+						String day = String.format("%1$02d", j+1);
+						String chengeDay = year[0]+"-" +mon+"-"+day;
+						//System.out.println(slaves.get(i) + " | " + chengeDay);//IDと日付の取得テスト
+						if(attButton[i][j].getText().equals("出")){
+							controller.changeAttendance(LocalDate.parse(chengeDay)
+									, slaves.get(i), AttendanceBook.ABSENCE);
+						}else if(attButton[i][j].getText().equals("欠")){
+							controller.changeAttendance(LocalDate.parse(chengeDay)
+									, slaves.get(i), AttendanceBook.AUTHORIZED_ABSENCE);
+						}else if(attButton[i][j].getText().equals("公")){
+							controller.changeAttendance(LocalDate.parse(chengeDay)
+									, slaves.get(i), AttendanceBook.ATTENDED);
+						}
+						calr();
+						panelNum[0].repaint();
+					}
 				}
 			}
 		}else if(e.getActionCommand().matches("stuButton_real" + ".*")){//報告書管理
