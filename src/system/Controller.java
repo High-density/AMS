@@ -14,7 +14,7 @@ import java.time.YearMonth;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.3
+ * @version 1.4
  */
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -90,7 +90,7 @@ public class Controller {
 	public LocalDate getLastUploadDate(String id) {
 		File fileDir = new File(homeDirName + "/" + id + "/" + User.reportDirName);
 		String reports[] = fileDir.list();
-		if (reports == null) return null;
+		if (reports == null || reports.length == 0) return null;
 		return LocalDate.parse(getFileNameWithoutSuffix(reports[reports.length - 1]));
 	}
 
