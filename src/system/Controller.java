@@ -1,10 +1,14 @@
 package system;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
@@ -20,6 +24,7 @@ public class Controller {
 	private User user; // ログインしているユーザ
 	// 予定ファイルの置き場所
 	public static final String homeDirName = "file";
+	public static final String notificationDirName = "notification/";
 	public static final File agendaDir = new File(homeDirName + "/root/agenda/");
 	public static final File logDir = new File(homeDirName + "/root/log/");
 	public static final File logFile = new File(logDir.toString() + "/log.txt");
@@ -46,6 +51,8 @@ public class Controller {
 		} else {
 			// ログイン成功したら出席チェック
 			attend();
+			Agenda agenda = getAgenda(YearMonth.now());
+			setAgenda(agenda, 10, "temp");
 			return true;
 		}
 	}
@@ -158,7 +165,27 @@ public class Controller {
 	 * @param content 予定内容
 	 */
 	public Agenda setAgenda(Agenda agenda, int date, String content) {
+		// 予定の設定
 		agenda.setData(date, content);
+
+		// 各学生について，更新情報の通知を残す
+		ArrayList<String> slaves =  Slave.getSlaves();
+		for (String slave : slaves) {
+			File dir = new File(homeDirName + "/" + slave + "/" + notificationDirName);
+			if (!mkdirs(dir.toString())) return null;
+			LocalDate ld = LocalDate.of(agenda.getYear(), agenda.getMonth(), date + 1);
+			File file = new File(dir.toString() + "/" + ld.toString());
+			try {
+				file.createNewFile();
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println(content);
+				pw.close();
+			} catch(IOException e) {
+				Log.error(e);
+				return null;
+			}
+		}
+
 		return agenda;
 	}
 

@@ -59,7 +59,7 @@ public class Agenda extends DataForAMonth<String> {
 		super.setData(day, d);
 
 		try {
-			String fileName = dir + yearMonth.toString() + "-" + String.format("%02d", day);
+			String fileName = dir + "/" + yearMonth.toString() + "-" + String.format("%02d", day);
 			File file = new File(fileName);
 			if (!file.exists()) file.createNewFile();
 
