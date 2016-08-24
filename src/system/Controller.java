@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -13,7 +14,7 @@ import java.time.YearMonth;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.1
+ * @version 1.3
  */
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -85,6 +86,14 @@ public class Controller {
 		return user.showReport(id);
 	}
 
+	// 最終更新日の取得
+	public LocalDate getLastUploadDate(String id) {
+		File fileDir = new File(homeDirName + "/" + id + "/" + User.reportDirName);
+		String reports[] = fileDir.list();
+		if (reports == null) return null;
+		return LocalDate.parse(getFileNameWithoutSuffix(reports[reports.length - 1]));
+	}
+
 	/**
 	 * 出席の登録を行う
 	 * @return 登録が完了したらtrue，できなかったらfalse
@@ -95,6 +104,13 @@ public class Controller {
 			return user.setAttendance();
 		}
 		return false;
+	}
+
+	/**
+	 * 出席の手動変更を行う
+	 */
+	public boolean changeAttendance(LocalDate ld, String id, int status) {
+		return user.changeAttendance(ld, id, status);
 	}
 
 	/**
@@ -147,6 +163,15 @@ public class Controller {
 	}
 
 	/**
+	 * idからユーザの名前を取得する
+	 * @param id 名前を取得したいID
+	 * @return idに対応する名前
+	 */
+	public String getName(String id) {
+		return User.getName(id);
+	}
+
+	/**
 	 * ディレクトリの作成を行う
 	 * @param dir 作成したいディレクトリのパス
 	 * @return 作成成功時true，失敗時false
@@ -173,6 +198,16 @@ public class Controller {
 			return fileName.substring(point);
 		}
 		return null;
+	}
+
+	// 拡張子とディレクトリ名を削除する
+	public static String getFileNameWithoutSuffix(String fileName) {
+		if (fileName == null) return null;
+		int point = fileName.lastIndexOf(".");
+		if (point != -1) {
+			return fileName.substring(fileName.lastIndexOf("/") + 1, point);
+		}
+		return fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length() - 1);
 	}
 
 	/**

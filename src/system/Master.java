@@ -8,10 +8,13 @@ import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.net.NetworkInterface;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Enumeration;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 class Master extends User {
 	public Master(String id, String passwd) {
@@ -22,6 +25,49 @@ class Master extends User {
 	// Masterは出席不可
 	public boolean setAttendance() {
 		return false;
+	}
+
+	// 出席状況の手動変更
+	public boolean changeAttendance(LocalDate ld, String id, int status) {
+		String temporaryTime = "0000";
+
+		File dir = new File(Controller.homeDirName + "/" + id + "/" + attendanceDirName);
+		File file = new File(dir.toString() + "/" + ld.toString());
+		if (file.exists()) {
+			// ファイルがあるときは中のデータのみを更新
+			try {
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				String line = br.readLine();
+				Pattern p = Pattern.compile("^([0-9]{4}:)");
+				Matcher m = p.matcher(line);
+				if (m.find()) {
+					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+					pw.println(m.group(1) + String.valueOf(status));
+					pw.close();
+				} else {
+					Log.error(new Throwable(), file.toString() + "の内容が不正です");
+					return false;
+				}
+			} catch (IOException e) {
+				Log.error(e);
+				return false;
+			}
+
+		} else {
+			// ファイルがないときは新たに作成する
+			try {
+				Controller.mkdirs(dir.toString());
+				file.createNewFile();
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println(temporaryTime + ":" + String.valueOf(status));
+				pw.close();
+			} catch (IOException e) {
+				Log.error(e);
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	// 全Slaveから出席取得

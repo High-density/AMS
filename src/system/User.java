@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.NetworkInterface;
 import java.time.LocalTime;
+import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
@@ -149,6 +150,22 @@ public abstract class User {
 		}
 	}
 
+	// idから名前を取得する
+	public static String getName(String id) {
+		String name;
+		File file = new File(Controller.homeDirName + "/" + id + "/" + nameFileName);
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			name = br.readLine(); // Fileから読み取った行
+			br.close();
+		} catch (IOException | NullPointerException e) {
+			Log.error(e);
+			return null;
+		}
+
+		return name;
+	}
+
 	public abstract boolean setAttendance(); // 出席
 
 	public abstract AttendanceBook[] getAttendance(YearMonth ym); // 出席表示(idから取得すべき情報を自動判断)
@@ -191,6 +208,8 @@ public abstract class User {
 
 		return book;
 	}
+
+	public abstract boolean changeAttendance(LocalDate ld, String id, int status); // 出席の手動変更
 
 	public abstract boolean submitReport(String file); // 報告書提出
 
