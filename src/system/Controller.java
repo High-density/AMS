@@ -50,10 +50,6 @@ public class Controller {
 		} else {
 			// ログイン成功したら出席チェック
 			attend();
-			Agenda agenda = getAgenda(YearMonth.now());
-			setAgenda(agenda, 10, "11111");
-			setAgenda(agenda, 9, "22222");
-			setAgenda(agenda, 23, "33333");
 			return true;
 		}
 	}
