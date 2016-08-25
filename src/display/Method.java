@@ -245,7 +245,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
-		planDate = new JLabel("指定された日付け");
+		planDate = new JLabel("指定された日付");
 		planDate.setBounds(520,40,200,40);
 		planDate.setFont(new Font(null, Font.PLAIN, 24));
 		planDate.setBackground(Color.WHITE);
@@ -268,6 +268,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pBackButton.setIcon(left);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
+
 
 		for(int i=0;i<7;i++){
 			weekLabel_plan[i] = new JLabel(weekName[i]);
@@ -348,8 +349,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3].add(usr_Mine);
 		panelNum[3].add(ChangeButton);
 	}
-
-
 
 	private void CardPanel(){
 		cardPanel = new JPanel();
