@@ -1,5 +1,7 @@
 bin/
 *.class
-file/s125*/attendance/*
-file/s125*/report/*
+file/s*/attendance/*
+file/s*/report/*
+file/s*/notification/*
 file/root/log
+file/root/agenda/*

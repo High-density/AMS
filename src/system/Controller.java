@@ -1,10 +1,14 @@
 package system;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.BufferedWriter;
+import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
@@ -158,8 +162,9 @@ public class Controller {
 	 * @param content 予定内容
 	 */
 	public Agenda setAgenda(Agenda agenda, int date, String content) {
-		agenda.setData(date, content);
-		return agenda;
+		// 予定の設定
+		Agenda newAgenda = user.setAgenda(agenda, date, content);
+		return newAgenda;
 	}
 
 	/**

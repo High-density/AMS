@@ -207,4 +207,30 @@ class Master extends User {
 		Controller.deleteFile(new File(Controller.homeDirName + "/" + id));
 		return true;
 	}
+
+	// 予定の更新
+	public Agenda setAgenda(Agenda agenda, int date, String content) {
+		// 予定の設定
+		agenda.setData(date, content);
+
+		// 各学生について，更新情報の通知を残す
+		ArrayList<String> slaves =  Slave.getSlaves();
+		for (String slave : slaves) {
+			File dir = new File(Controller.homeDirName + "/" + slave + "/" + notificationDirName);
+			if (!Controller.mkdirs(dir.toString())) return null;
+			LocalDate ld = LocalDate.of(agenda.getYear(), agenda.getMonth(), date + 1);
+			File file = new File(dir.toString() + "/" + ld.toString());
+			try {
+				file.createNewFile();
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println(content);
+				pw.close();
+			} catch(IOException e) {
+				Log.error(e);
+				return null;
+			}
+		}
+
+		return agenda;
+	}
 }

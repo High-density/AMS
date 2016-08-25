@@ -21,6 +21,7 @@ public abstract class User {
 	public static final String passwdFileName = "passwd";
 	public static final String attendanceDirName = "attendance/";
 	public static final String reportDirName = "report/";
+	public static final String notificationDirName = "notification/";
 
 	protected String id = null; // ID
 	private String passwd = null; // パスワード
@@ -253,6 +254,9 @@ public abstract class User {
 	public abstract boolean createUser(AccountInformation account); // ユーザの作成
 
 	public abstract boolean deleteUser(String id); // ユーザの削除
+
+	// 予定の更新
+	public abstract Agenda setAgenda(Agenda agenda, int date, String content);
 
 	// setter
 	public void setId(String id) {
