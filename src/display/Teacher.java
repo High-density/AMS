@@ -17,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import javax.print.attribute.standard.MediaSize.ISO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -85,14 +84,16 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel stuNumLabel;
 
 	/*someOne*/
-	private YearMonth yearMonth;
+	private YearMonth[] yearMonth = new YearMonth[2];
 	private Calendar calendar = Calendar.getInstance();
 	private Calendar Cal = Calendar.getInstance();
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
-	private int day = 0;//ボタンから取得した日
+	private int planday = 0; // ボタンから取得した日
+	private Agenda agenda; // 予定
 	private int numSize = Slave.getSlaves().size();//アカウント数
 	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
+	
 
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
@@ -240,11 +241,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
 
 		calendar.set(year[0], month[0], 1);
-		yearMonth = YearMonth.of(year[0], month[0]+1);
+		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		//int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		int maxDate = yearMonth.lengthOfMonth();
+		int maxDate = yearMonth[0].lengthOfMonth();
 
-		AttendanceBook[] Book = controller.getAttendance(yearMonth);
+		AttendanceBook[] Book = controller.getAttendance(yearMonth[0]);
 		int status[][] = new int [numSize][maxDate];
 
 		for(int i=0;i<numSize;i++){/*IDを取得からの表示*/
@@ -411,10 +412,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		month[1] = calendar.get(Calendar.MONTH);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
-		yearMonth = YearMonth.of(year[1], month[1]+1);
+		yearMonth[1] = YearMonth.of(year[1], month[1]+1);
+		agenda  = controller.getAgenda(yearMonth[1]);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		//System.out.println(dayOfWeek);
-		int maxDate = yearMonth.lengthOfMonth();
+		int maxDate = yearMonth[1].lengthOfMonth();
 		for(int i=0;i<dayOfWeek;i++){
 			dayButton_clone[i].setText("");
 		}
@@ -434,9 +436,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void Account(){
-		year[0] = calendar.get(Calendar.YEAR);
-		month[0] = calendar.get(Calendar.MONTH);
-		yearMonth = YearMonth.of(year[0], month[0]+1);
 		accPanel = new JPanel(new GridLayout(numSize,2));
 		accPanel.setPreferredSize(new Dimension(300, (numSize*30)));
 		accScrollPanel = new JScrollPane();
@@ -496,16 +495,13 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 	}
 
-	private void message(String mess){/*message("")でメッセージを表示*/
-		message.showMessage(mess);
-	}
-
 	private void member(int i){
 		if(i == -1){
 			newAccount.showNewAccount();
 		}else{
-			String slave = slaves.get(i);
-			newAccount.showCheAccount(slave, "サレジオ太郎", "");
+			String slaveID = slaves.get(i);
+			String slaveName = controller.getName(slaveID);
+			newAccount.showCheAccount(slaveID, slaveName, "");
 		}
 	}
 
@@ -616,22 +612,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 					user= stuButton[i].getText();
 			}
 			controller.showReport(user);
-			/*
-			File dir = new File("./file/" + path + "/report");
-			JFileChooser filechooser = new JFileChooser(dir);
-			int selected = filechooser.showOpenDialog(contentPane);
-			if (selected == JFileChooser.APPROVE_OPTION){
-				File file = filechooser.getSelectedFile();
-				File openFile = new File("./file/" + path + "/" + filechooser.getName(file));
-				Desktop desktop = Desktop.getDesktop();
-				try{
-					desktop.open(openFile);
-				}catch(IOException e1){}
-
-			}
-			*/
-		}else if(e.getSource() == addPlanButton){//ここに予定を追加機能を実装する
-			//controller(agenda, day, plan);
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//planで1ヶ月増やす
 			calr_clone();
@@ -641,24 +621,25 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			calr_clone();
 			panelNum[2].repaint();
 		}else if(e.getActionCommand().matches("dayButton_clone" + ".*")){/*planで日付を取得するとき*/
-			YearMonth ym = YearMonth.now();
-			Agenda agenda = controller.getAgenda(ym);
 			for(int i=0;i<dayButton_clone.length;i++){
 				if(e.getSource() == dayButton_clone[i]){
 					String dayName = dayButton_clone[i].getText();
 					if(!dayName.equals("")){
-						day = Integer.parseInt(dayName);
-						String plan = agenda.getData(day);
-						ymd.setText(year[1]+"年"+(month[1]+1)+"月"+day+"日");
+						planday = Integer.parseInt(dayName);
+						String plan = agenda.getData(planday);
+						ymd.setText(year[1]+"年"+(month[1]+1)+"月"+planday+"日");
 						pTextArea.setText(plan);
 					}
 					else{
-						day = 0;
+						planday = 0;
 						ymd.setText("日付を選択");
 						pTextArea.setText("");
 					}
 				}
 			}
+		}else if(e.getSource() == addPlanButton){//ここに予定を追加機能を実装する
+			String plan = pTextArea.getText();
+			controller.setAgenda(agenda, planday, plan);
 		}else if(e.getActionCommand().matches("stuButton_clone" + ".*")){//account
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == stuButton_clone[i]){

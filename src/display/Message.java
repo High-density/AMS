@@ -52,9 +52,14 @@ public class Message extends KeyAdapter implements ActionListener{
 		contentPane.add(panelMaster, BorderLayout.CENTER);
 		messFrame.setVisible(false);
 	}
-
+	
+	/**
+	 * ユーザに向けてメッセージを表示
+	 * @param メッセージ内容
+	 */
 	public void showMessage(String textMessage){
 		messageArea.setText(textMessage);//ここでメッセージを入れるための関数を実行
+		messFrame.toFront();
 		messFrame.setVisible(true);
 	}
 

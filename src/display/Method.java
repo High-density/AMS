@@ -26,62 +26,71 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import system.Agenda;
+import system.Controller;
+import display.ChangePassword;
+import display.Message;
+
 class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
-	private system.Controller controller; // 内部動作用
-	private display.Message message; //エラー呼び出し用
-	private JFrame mainFrame;
-	private JFrame accountFrame;
+	// main
+	private Controller controller; // 内部動作用
+	private Message message; //エラー呼び出し用
+	private ChangePassword changePassword;
+	static JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
-	private JPanel cardPanel;
-	private JPanel panelNum[] = new JPanel[4];
-	private JPanel calPanel;
-	private JPanel planPanel;
-	//private JPanel planPanel2;
-	private JPanel changePanel;
-	private CardLayout cLayout;
 	private JButton numButton[] = new JButton[5];
-	private JButton dayButton[] = new JButton[42];
-	private JButton weekButton[] = new JButton[7];
+	private JPanel cardPanel;
+	private CardLayout cLayout;
+	private JPanel panelNum[] = new JPanel[4];
+	private JLabel labelNum[] = new JLabel[4];
+	
+	// attend
+	private JPanel calPanel;
 	private JButton aNextButton;
 	private JButton aBackButton;
+	private JLabel aMonthLabel;
+	private JLabel[] weekLabel_att = new JLabel[7];
+	private JButton[] dayButton_att = new JButton[42];
+	
+	// report
 	private JButton referButton;
 	private JButton upButton;
-	//private JButton nextButton2;
-	//private JButton backButton2;
-	private JButton dayButton_clone[] = new JButton[42];
-	private JButton weekButton_clone[] = new JButton[7];
+	private JTextField pathTextField;
+	
+	// plan
+	private JPanel planPanel;
+	private JLabel pMonthLabel;
 	private JButton pNextButton;
 	private JButton pBackButton;
-	private JButton ChangeButton[] = new JButton[2];
-	private JLabel labelNum[] = new JLabel[4];
-	//private JLabel testPathLabel;//ファイルパス取得テスト
-	//private JLabel monthLabel;
-	//private JLabel testLabel;
-	private JLabel aMonthLabel;
-	private JLabel pMonthLabel;
-	private JLabel planDate;
-	private JLabel ID[] = new JLabel[2];
-	private JLabel UserName[] = new JLabel[2];
-	private JLabel ID_Mine[] = new JLabel[2];
-	private JLabel UserName_Mine[] = new JLabel[2];
-	private JLabel password[] = new JLabel[2];
-	private JTextField pathTextField;
-	private JLabel changeLabel;
-	private JTextArea pTextArea;
-	private JTextField changeTextField[] = new JTextField[2];
+	private JLabel weekLabel_plan[] = new JLabel[7];
+	private JButton dayButton_plan[] = new JButton[42];
+	private JLabel planDate; // 予定取得日
+	private JTextArea pTextArea; // 予定表示
+	
+	// account
+	private JLabel IDLabel;
+	private JLabel ID_Mine;
+	private JLabel usrLabel;
+	private JLabel usr_Mine;
+	private JButton ChangeButton;
+	
+	// some
+	private final String weekName[] = {"日","月","火","水","木","金","土"};
 	private YearMonth yearMonth;
 	private Calendar calendar = Calendar.getInstance();
-	private final String weekName[] = {"日","月","火","水","木","金","土"};
-	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
-	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
-	private int button;
-	private int day = 0;
+	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)}; // 年
+	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
+	private int day = 0; // ボタンを押した時の数字から日付
+	private Agenda agenda;
+	private String myID; // ログインしたIDを引き継ぎ
 
-	Method(system.Controller controller, display.Message message){
+	Method(system.Controller controller, display.Message message, String myID){
 		/* システム引き継ぎ */
 		this.controller = controller;
 		this.message = message;
+		this.myID = myID;
+		changePassword = new display.ChangePassword(controller);
 
 		/* メインフレーム設定 */
 		mainFrame = new JFrame("機能選択");
@@ -157,20 +166,22 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aMonthLabel.setBounds(340,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		for(int i=0;i<7;i++){
-			weekButton[i] = new JButton(weekName[i]);
-			weekButton[i].setFont(new Font(null, Font.PLAIN, 16));
-			weekButton[i].setBackground(Color.YELLOW);
-			weekButton[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekLabel_att[i] = new JLabel(weekName[i]);
+			weekLabel_att[i].setFont(new Font(null, Font.PLAIN, 16));
+			weekLabel_att[i].setHorizontalAlignment(JLabel.CENTER);
+			weekLabel_att[i].setBackground(Color.YELLOW);
+			weekLabel_att[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekLabel_att[i].setOpaque(true);
 		}
 
 		for(int i=0;i<42;i++)
-			dayButton[i] = new JButton();
+			dayButton_att[i] = new JButton();
 		calr();
 		for(int i=0;i<7;i++)
-			calPanel.add(weekButton[i]);
+			calPanel.add(weekLabel_att[i]);
 		for(int i=0;i<42;i++){
-			dayButton[i].setBackground(Color.WHITE);
-			calPanel.add(dayButton[i]);//カレンダーボタン追加
+			dayButton_att[i].setBackground(Color.WHITE);
+			calPanel.add(dayButton_att[i]);//カレンダーボタン追加
 		}
 
 		panelNum[0].add(labelNum[0]);
@@ -189,11 +200,11 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
 		for(int i=0;i<dayOfWeek;i++)
-			dayButton[i].setText("");
+			dayButton_att[i].setText("");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
-			dayButton[i].setText(""+(1+i-dayOfWeek));
+			dayButton_att[i].setText(""+(1+i-dayOfWeek));
 		for (int i=dayOfWeek+maxDate;i<42;i++)
-			dayButton[i].setText("");
+			dayButton_att[i].setText("");
 	}
 
 	private void Report(){
@@ -241,6 +252,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pTextArea = new JTextArea(20,24);
 		pTextArea.setBounds(450, 100, 300, 400);
 		pTextArea.setLineWrap(true);
+		pTextArea.setEditable(false);
 		pNextButton = new JButton();
 		pNextButton.setBounds(290,70,100,40);
 		pNextButton.setContentAreaFilled(false);
@@ -255,24 +267,26 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pNextButton.setIcon(right);
 		pBackButton.setIcon(left);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
 		for(int i=0;i<7;i++){
-			weekButton_clone[i] = new JButton(weekName[i]);
-			weekButton_clone[i].setFont(new Font(null, Font.PLAIN, 16));
-			weekButton_clone[i].setBackground(Color.ORANGE);
-			weekButton_clone[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekLabel_plan[i] = new JLabel(weekName[i]);
+			weekLabel_plan[i].setFont(new Font(null, Font.PLAIN, 16));
+			weekLabel_plan[i].setHorizontalAlignment(JLabel.CENTER);
+			weekLabel_plan[i].setBackground(Color.ORANGE);
+			weekLabel_plan[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekLabel_plan[i].setOpaque(true);
 		}
 		for(int i=0;i<42;i++)
-			dayButton_clone[i] = new JButton();
+			dayButton_plan[i] = new JButton();
 
 		calr_clone();/*カレンダーの表示*/
 
 		for(int i=0;i<7;i++)
-			planPanel.add(weekButton_clone[i]);
+			planPanel.add(weekLabel_plan[i]);
 		for(int i=0;i<42;i++){
-			dayButton_clone[i].setBackground(Color.WHITE);
-			planPanel.add(dayButton_clone[i]);//カレンダーボタン追加
+			dayButton_plan[i].setBackground(Color.WHITE);
+			planPanel.add(dayButton_plan[i]);//カレンダーボタン追加
 		}
 
 		panelNum[2].add(planDate);
@@ -290,15 +304,15 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
 		yearMonth = YearMonth.of(year[1], month[1]+1);
+		agenda  = controller.getAgenda(yearMonth);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
-		button = dayOfWeek;
 		for(int i=0;i<dayOfWeek;i++)
-			dayButton_clone[i].setText("");
+			dayButton_plan[i].setText("");
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
-			dayButton_clone[i].setText(""+(1+i-dayOfWeek));
+			dayButton_plan[i].setText(""+(1+i-dayOfWeek));
 		for (int i=dayOfWeek+maxDate;i<42;i++)
-			dayButton_clone[i].setText("");
+			dayButton_plan[i].setText("");
 	}
 
 	private void Account(){
@@ -308,89 +322,34 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		labelNum[3].setBounds(380,10,200,40);
 		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
 		//IDの表示
-		ID[0] = new JLabel("ID");
-		ID[0].setBounds(280,130,200,40);
-		ID[0].setFont(new Font(null, Font.PLAIN, 24));
-		ID_Mine[0] = new JLabel("ID_Mine");
-		ID_Mine[0].setBounds(380,130,200,40);
-		ID_Mine[0].setFont(new Font(null, Font.PLAIN, 24));
+		IDLabel = new JLabel("ID");
+		IDLabel.setBounds(280,130,200,40);
+		IDLabel.setFont(new Font(null, Font.PLAIN, 24));
+		ID_Mine = new JLabel(myID);
+		ID_Mine.setBounds(380,130,200,40);
+		ID_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//ユーザ名の表示
-		UserName[0] = new JLabel("ユーザ名");
-		UserName[0].setBounds(250,200,200,40);
-		UserName[0].setFont(new Font(null, Font.PLAIN, 24));
-		UserName_Mine[0] = new JLabel("ユーザ名_Mine");
-		UserName_Mine[0].setBounds(380,200,200,40);
-		UserName_Mine[0].setFont(new Font(null, Font.PLAIN, 24));
+		usrLabel = new JLabel("ユーザ名");
+		usrLabel.setBounds(250,200,200,40);
+		usrLabel.setFont(new Font(null, Font.PLAIN, 24));
+		usr_Mine = new JLabel(controller.getName(myID));
+		usr_Mine.setBounds(380,200,200,40);
+		usr_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//アカウント情報変更ボタン
-		ChangeButton[0] = new JButton("アカウント情報の変更");
-		ChangeButton[0].setFont(new Font(null, Font.PLAIN, 24));
-		ChangeButton[0].setBounds(380,270,300,40);
+		ChangeButton = new JButton("アカウント情報の変更");
+		ChangeButton.setFont(new Font(null, Font.PLAIN, 24));
+		ChangeButton.setBounds(380,270,300,40);
+		ChangeButton.setBackground(Color.WHITE);
 
 		panelNum[3].add(labelNum[3]);
-		panelNum[3].add(ID[0]);
-		panelNum[3].add(UserName[0]);
-		panelNum[3].add(ID_Mine[0]);
-		panelNum[3].add(UserName_Mine[0]);
-		panelNum[3].add(ChangeButton[0]);
+		panelNum[3].add(IDLabel);
+		panelNum[3].add(ID_Mine);
+		panelNum[3].add(usrLabel);
+		panelNum[3].add(usr_Mine);
+		panelNum[3].add(ChangeButton);
 	}
 
-	public void accountFrame() {
-		accountFrame = new JFrame("アカウント情報の変更");
-		accountFrame.setBounds(650, 300, 600, 500);
-		changePanel = new JPanel();
-		changePanel.setLayout(null);
-		changeLabel = new JLabel("アカウント情報の変更");
-		changeLabel.setFont(new Font(null, Font.PLAIN, 18));
-		changeLabel.setBounds(200,10,200,40);
-		//IDの表示
-		ID[1] = new JLabel("ID");
-		ID[1].setBounds(190,80,200,40);
-		ID[1].setFont(new Font(null, Font.PLAIN, 18));
-		ID_Mine[1] = new JLabel("ID_Mine");
-		ID_Mine[1].setBounds(170,120,200,40);
-		ID_Mine[1].setFont(new Font(null, Font.PLAIN, 24));
-		//ユーザ名の表示
-		UserName[1] = new JLabel("ユーザ名");
-		UserName[1].setBounds(320,80,200,40);
-		UserName[1].setFont(new Font(null, Font.PLAIN, 18));
-		UserName_Mine[1] = new JLabel("ユーザ名_Mine");
-		UserName_Mine[1].setBounds(300,120,200,40);
-		UserName_Mine[1].setFont(new Font(null, Font.PLAIN, 24));
-		//pwの表示
-		password[0] = new JLabel("現在のパスワード");
-		password[0].setBounds(15,190,200,40);
-		password[0].setFont(new Font(null, Font.PLAIN, 18));
-		password[1] = new JLabel("新しいパスワード");
-		password[1].setBounds(15,250,200,40);
-		password[1].setFont(new Font(null, Font.PLAIN, 18));
-		changeTextField[0] = new JTextField();
-		changeTextField[0].setColumns(100);
-		changeTextField[0].setBounds(170,190,200,40);
-		changeTextField[1] = new JTextField();
-		changeTextField[1].setColumns(100);
-		changeTextField[1].setBounds(170,250,200,40);
-		//変更
-		ChangeButton[1] = new JButton("変更");
-		ChangeButton[1].setBounds(170,350,200,40);
-		ChangeButton[1].setFont(new Font(null, Font.PLAIN, 18));
 
-		changePanel.add(changeTextField[0]);
-		changePanel.add(changeTextField[1]);
-		changePanel.add(ChangeButton[1]);
-		changePanel.add(ID[1]);
-		changePanel.add(UserName[1]);
-		changePanel.add(ID_Mine[1]);
-		changePanel.add(UserName_Mine[1]);
-		changePanel.add(changeLabel);
-		changePanel.add(password[0]);
-		changePanel.add(password[1]);
-		accountFrame.getContentPane().add(changePanel);
-
-		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/icon/icon.png");
-		accountFrame.setIconImage(icon.getImage());
-		accountFrame.setVisible(true);
-	}
 
 	private void CardPanel(){
 		cardPanel = new JPanel();
@@ -430,11 +389,12 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		pNextButton.addKeyListener(this);
 		pBackButton.addActionListener(this);
 		pBackButton.addKeyListener(this);
-		ChangeButton[0].addActionListener(this);
-		ChangeButton[0].addKeyListener(this);
-		for(int i = button;i < 42;i++){
-			dayButton_clone[i].addActionListener(this);
-			dayButton_clone[i].addKeyListener(this);
+		ChangeButton.addActionListener(this);
+		ChangeButton.addKeyListener(this);
+		for(int i = 0;i < 42;i++){
+			dayButton_plan[i].addActionListener(this);
+			dayButton_plan[i].addKeyListener(this);
+			dayButton_plan[i].setActionCommand("dayButton_plan"+i);
 		}
 	}
 
@@ -490,24 +450,26 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				calendar.set(Calendar.YEAR, year[1]-1);
 			calr_clone();
 			panelNum[2].repaint();
-		}else if(e.getSource() == ChangeButton[0]){
-			accountFrame();
-		}
-
-		for(int i=0;i<42;i++){
-			if(e.getSource() == dayButton_clone[i]){
-				String dayName = dayButton_clone[i].getText();
-				if(!dayName.equals("")){
-					day = Integer.parseInt(dayName);
-					planDate.setText(year[1]+"年"+(month[1]+1)+"月"+day+"日");
-					planDate.setFont(new Font(null, Font.PLAIN, 24));
+		}else if(e.getActionCommand().matches("dayButton_plan" + ".*")){ // 予定の取得
+			for(int i=0;i<42;i++){
+				if(e.getSource() == dayButton_plan[i]){
+					String dayName = dayButton_plan[i].getText();
+					if(!dayName.equals("")){
+						day = Integer.parseInt(dayName);
+						planDate.setText(year[1]+"年"+(month[1]+1)+"月"+day+"日");
+						planDate.setFont(new Font(null, Font.PLAIN, 24));
+						pTextArea.setEditable(true);
+						String plan = agenda.getData(day);
+						pTextArea.setText(plan);
+						pTextArea.setEditable(false);
+					}else{
+						day = 0;
+						planDate.setText("日付なし");
+					}
 				}
-				else{
-					day = 0;
-					planDate.setText("日付なし");
-				}
-
 			}
+		}else if(e.getSource() == ChangeButton){ // アカウント情報の変更
+			changePassword.showChangePassword(myID);
 		}
 	}
 

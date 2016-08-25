@@ -91,6 +91,24 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 
 
 	}
+	
+	/**
+	 * 入力とファイルの中身を比較してログイン可能か判定	
+	 */
+	public void ToF(){
+		String ID = new String(idField.getText());//ID
+		String PA = new String(passField.getPassword());//パスワード
+		if(controller.login(ID, PA)){//IDとPassがそれぞれ一致したら
+			loginFrame.setVisible(false);
+			if(ID.equals("root"))
+
+				new Teacher(controller, message);
+
+			else
+				new Method(controller, message, idField.getText());
+		}else
+			annouceLabel.setText("ログインできません\n");
+	}
 
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == loginButton)/*ログインボタン*/
@@ -105,19 +123,5 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 			if(e.getSource() == endButton)/*終了ボタン*/
 				System.exit(0);
 		}
-	}
-	public void ToF(){
-		String ID = new String(idField.getText());//ID
-		String PA = new String(passField.getPassword());//パスワード
-		if(controller.login(ID, PA)){//IDとPassがそれぞれ一致したら
-			loginFrame.setVisible(false);
-			if(ID.equals("root"))
-
-				new Teacher(controller, message);
-
-			else
-				new Method(controller, message);
-		}else
-			annouceLabel.setText("ログインできません\n");
 	}
 }
