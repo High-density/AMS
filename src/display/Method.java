@@ -28,14 +28,12 @@ import javax.swing.border.LineBorder;
 
 import system.Agenda;
 import system.Controller;
-import display.ChangePassword;
-import display.Message;
 
 class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	// main
 	private Controller controller; // 内部動作用
 	private Message message; //エラー呼び出し用
-	private ChangePassword changePassword;
+	private ChangePassword changePassword; // パスワード変更用
 	static JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -44,7 +42,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private CardLayout cLayout;
 	private JPanel panelNum[] = new JPanel[4];
 	private JLabel labelNum[] = new JLabel[4];
-	
+
 	// attend
 	private JPanel calPanel;
 	private JButton aNextButton;
@@ -52,12 +50,12 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel aMonthLabel;
 	private JLabel[] weekLabel_att = new JLabel[7];
 	private JButton[] dayButton_att = new JButton[42];
-	
+
 	// report
 	private JButton referButton;
 	private JButton upButton;
 	private JTextField pathTextField;
-	
+
 	// plan
 	private JPanel planPanel;
 	private JLabel pMonthLabel;
@@ -67,14 +65,14 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton dayButton_plan[] = new JButton[42];
 	private JLabel planDate; // 予定取得日
 	private JTextArea pTextArea; // 予定表示
-	
+
 	// account
 	private JLabel IDLabel;
 	private JLabel ID_Mine;
 	private JLabel usrLabel;
 	private JLabel usr_Mine;
 	private JButton ChangeButton;
-	
+
 	// some
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
 	private YearMonth yearMonth;
@@ -142,7 +140,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
 		calPanel = new JPanel(new GridLayout(7,7));
-		calPanel.setBounds(200,130,400,400);
+		calPanel.setBounds(200,110,400,400);
 		aNextButton = new JButton();
 		aNextButton.setBounds(510,50,140,60);
 		aNextButton.setContentAreaFilled(false);
