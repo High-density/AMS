@@ -118,11 +118,6 @@ public class Slave extends User {
 
 	// アカウント管理
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
-		// パスワード認証
-		if (!isCorrectPasswd(oldAccount.getId(), oldAccount.getPasswd())) {
-			return false;
-		}
-
 		// 必要な要素が抜けてたらエラー
 		if (newAccount.getPasswd() == null) {
 			Log.error(new Throwable(), "要素がnull");
