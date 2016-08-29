@@ -50,6 +50,11 @@ public class AccountInformation {
 		return new AccountInformation(id, null, passwd);
 	}
 
+	// IDと名前が登録されたAccountInformationのインスタンス
+	public static AccountInformation ofIdName(String id, String name) {
+		return new AccountInformation(id, name, null);
+	}
+
 	/**
 	 * IDと名前とパスワードが登録されたAccountInformationのインスタンスを取得する
 	 * @param id 対象者のID

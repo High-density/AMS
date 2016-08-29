@@ -102,8 +102,7 @@ class Master extends User {
 
 		// 必要な要素が抜けてたらエラー
 		if (newAccount.getId() == null ||
-			newAccount.getName() == null ||
-			newAccount.getPasswd() == null) {
+			newAccount.getName() == null) {
 			Log.error(new Throwable(), "要素がnull");
 			return false;
 		}
@@ -117,10 +116,12 @@ class Master extends User {
 			pw.close();
 
 			// パスワードの更新
-			file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
-			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-			pw.println(newAccount.getPasswd());
-			pw.close();
+			if (newAccount.getPasswd() != null) {
+				file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
+				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println(newAccount.getPasswd());
+				pw.close();
+			}
 
 			// ディレクトリの変更
 			File oldFile = new File(Controller.homeDirName + "/" + target);
