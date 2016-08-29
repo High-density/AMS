@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +29,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 	private JButton saveButton;
 	private JButton returnButton;
 	private String oldId;
+	private JCheckBox checkPass;
 
 	private int na=0;//新規作成か変更かのやつ
 
@@ -41,7 +43,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 
 		/* 各種設定 */
 		newAccFrame = new JFrame("アカウント管理");
-		newAccFrame.setBounds(0, 0, 400, 280);
+		newAccFrame.setBounds(0, 0, 400, 320);
 		newAccFrame.setLocationRelativeTo(null);
 		contentPane = newAccFrame.getContentPane();
 		panelMaster = new JPanel();
@@ -67,13 +69,17 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		nameField = new JTextField();
 		nameField.setBounds(180,115,wid,30);
 
+		checkPass = new JCheckBox("パスワードのリセット");
+		checkPass.setBounds(120, 160, 200, 40);
+		checkPass.setOpaque(false);
+		checkPass.setMnemonic(KeyEvent.VK_P);
+
 		saveButton = new JButton("保存");
-		saveButton.setBounds(50,170,150,35);
+		saveButton.setBounds(50,200,150,35);
 		saveButton.setBackground(Color.WHITE);
 		returnButton = new JButton("戻る");
-		returnButton.setBounds(210,170,150,35);
+		returnButton.setBounds(210,200,150,35);
 		returnButton.setBackground(Color.WHITE);
-
 		saveButton.addActionListener(this);
 		saveButton.addKeyListener(this);
 		returnButton.addActionListener(this);
@@ -88,6 +94,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		panelMaster.add(idField);
 		panelMaster.add(nameLabel);
 		panelMaster.add(nameField);
+		panelMaster.add(checkPass);
 		panelMaster.add(saveButton);
 		panelMaster.add(returnButton);
 
@@ -100,6 +107,8 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		subLabel.setText("新規作成");
 		idField.setText("");
 		nameField.setText("");
+		checkPass.setSelected(true);
+		checkPass.setEnabled(false);
 		newAccFrame.setVisible(true);
 	}
 
@@ -109,6 +118,8 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		subLabel.setText("変更");
 		idField.setText(Id);
 		nameField.setText(Name);
+		checkPass.setSelected(false);
+		checkPass.setEnabled(true);
 		newAccFrame.setVisible(true);
 	}
 
@@ -118,7 +129,14 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 				AccountInformation oldAccount = AccountInformation.ofId(oldId);
 				String newId = idField.getText();
 				String newName = nameField.getText();
-				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newId);
+				AccountInformation newAccount;
+				if(checkPass.isSelected()){
+					newAccount = AccountInformation.ofAll(newId, newName, newId);
+					//System.out.println("チェック有り");
+				}else{
+					newAccount = AccountInformation.ofIdName(newId, newName);
+					//System.out.println("チェック無し");
+				}
 				controller.setAccount(oldAccount, newAccount);
 			}else if(na == 0){
 				String newId = idField.getText();
