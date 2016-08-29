@@ -93,7 +93,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private Agenda agenda; // 予定
 	private int numSize = Slave.getSlaves().size();//アカウント数
 	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
-	
+
 
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
@@ -126,6 +126,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		/* フレームに追加 */
 		contentPane.add(panelButton, BorderLayout.NORTH);	//機能選択ボタンの追加
 		contentPane.add(cardPanel, BorderLayout.CENTER);	//パネルの追加
+
 		mainFrame.setVisible(true);
 	}
 
@@ -223,7 +224,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 
 		scrollPane = new JScrollPane(calPanel);
-		scrollPane.setBounds(70,130,720,300);
+		scrollPane.setBounds(70,130,700,300);
 		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
@@ -302,7 +303,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		labelNum[1].setBounds(0,10,800,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
 		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
-		
+
 		for(int i=0;i<numSize;i++){
 			LocalDate LastUpdate;
 			String update = "ファイルが存在しません";

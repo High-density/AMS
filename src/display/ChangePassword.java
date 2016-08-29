@@ -18,7 +18,7 @@ import system.AccountInformation;
 
 public class ChangePassword extends KeyAdapter implements ActionListener{
 	private system.Controller controller;
-	
+
 	private JFrame accountFrame;
 	private JPanel changePanel;
 	private JLabel changeLabel;
@@ -29,14 +29,14 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 	private JLabel newPassLabel;
 	private JTextField newTextField;
 	private JButton changeButton;
-	
+
 	private String oldID;
 	private String oldName;
-	
+
 	public ChangePassword(system.Controller controller){
 		// システム引き継ぎ
 		this.controller = controller;
-		
+
 		accountFrame = new JFrame("アカウント情報の変更");
 		accountFrame.setBounds(650, 300, 600, 500);
 		changePanel = new JPanel();
@@ -64,10 +64,10 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 		newPassLabel.setFont(new Font(null, Font.PLAIN, 18));
 		newTextField = new JTextField();
 		newTextField.setColumns(100);
-		newTextField.setBounds(170,200,200,40);
+		newTextField.setBounds(200,200,200,40);
 		//変更
 		changeButton = new JButton("変更");
-		changeButton.setBounds(170,250,200,40);
+		changeButton.setBounds(200,250,200,40);
 		changeButton.setFont(new Font(null, Font.PLAIN, 18));
 		changeButton.setBackground(Color.WHITE);
 
@@ -80,18 +80,18 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 		changePanel.add(newTextField);
 		changePanel.add(changeButton);
 		accountFrame.getContentPane().add(changePanel);
-		
+
 		accountFrame.setVisible(false);
-		
+
 		/*イベントの追加*/
 		changeButton.addActionListener(this);
 		changeButton.addKeyListener(this);
-		
+
 		/*アイコンの設定*/
 		ImageIcon icon = new ImageIcon("src/icon/icon.png");
 		accountFrame.setIconImage(icon.getImage());
 	}
-	
+
 	/**
 	 * 学生自身がパスワードを変更したい場合に使用
 	 * @param id 対象者のID
@@ -116,7 +116,7 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 			Login.loginFrame.setVisible(true);
 		}
 	}
-	
+
 	public void keyPressed(KeyEvent e){
 		if(KeyEvent.VK_ENTER == e.getKeyCode()){/*actionevebtを呼び出し*/
 			ActionEvent actionEvents = new ActionEvent(e.getComponent(),ActionEvent.ACTION_PERFORMED,"");
