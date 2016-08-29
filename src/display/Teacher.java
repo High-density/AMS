@@ -501,7 +501,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}else{
 			String slaveID = slaves.get(i);
 			String slaveName = controller.getName(slaveID);
-			newAccount.showCheAccount(slaveID, slaveName, "");
+			newAccount.showCheAccount(slaveID, slaveName);
 		}
 	}
 

@@ -25,7 +25,6 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 	private JLabel subLabel;
 	private JTextField idField;
 	private JTextField nameField;
-	private JTextField passField;
 	private JButton saveButton;
 	private JButton returnButton;
 	private String oldId;
@@ -37,13 +36,12 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		JPanel panelMaster;
 		JLabel idLabel;
 		JLabel nameLabel;
-		JLabel passLabel;
 
 		this.controller = controller;
 
 		/* 各種設定 */
 		newAccFrame = new JFrame("アカウント管理");
-		newAccFrame.setBounds(0, 0, 400, 320);
+		newAccFrame.setBounds(0, 0, 400, 280);
 		newAccFrame.setLocationRelativeTo(null);
 		contentPane = newAccFrame.getContentPane();
 		panelMaster = new JPanel();
@@ -63,23 +61,17 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		nameLabel.setBounds(50,110,wid,hei);
 		nameLabel.setFont(new Font(null, Font.PLAIN, 12));
 		nameLabel.setHorizontalAlignment(JLabel.RIGHT);
-		passLabel = new JLabel("新しいパスワード");
-		passLabel.setBounds(50,160,wid,hei);
-		passLabel.setFont(new Font(null, Font.PLAIN, 12));
-		passLabel.setHorizontalAlignment(JLabel.RIGHT);
 
 		idField = new JTextField();
 		idField.setBounds(180,65,wid,30);
 		nameField = new JTextField();
 		nameField.setBounds(180,115,wid,30);
-		passField = new JTextField();
-		passField.setBounds(180,165,wid,30);
 
 		saveButton = new JButton("保存");
-		saveButton.setBounds(20,220,150,35);
+		saveButton.setBounds(50,170,150,35);
 		saveButton.setBackground(Color.WHITE);
 		returnButton = new JButton("戻る");
-		returnButton.setBounds(220,220,150,35);
+		returnButton.setBounds(210,170,150,35);
 		returnButton.setBackground(Color.WHITE);
 
 		saveButton.addActionListener(this);
@@ -96,8 +88,6 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		panelMaster.add(idField);
 		panelMaster.add(nameLabel);
 		panelMaster.add(nameField);
-		panelMaster.add(passLabel);
-		panelMaster.add(passField);
 		panelMaster.add(saveButton);
 		panelMaster.add(returnButton);
 
@@ -110,17 +100,15 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		subLabel.setText("新規作成");
 		idField.setText("");
 		nameField.setText("");
-		passField.setText("");
 		newAccFrame.setVisible(true);
 	}
 
-	public void showCheAccount(String Id, String Name, String Pass){
+	public void showCheAccount(String Id, String Name){
 		na = 1;
 		oldId = Id;
 		subLabel.setText("変更");
 		idField.setText(Id);
 		nameField.setText(Name);
-		passField.setText(Pass);
 		newAccFrame.setVisible(true);
 	}
 
@@ -130,14 +118,12 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 				AccountInformation oldAccount = AccountInformation.ofId(oldId);
 				String newId = idField.getText();
 				String newName = nameField.getText();
-				String newPass = passField.getText();
-				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newPass);
+				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newId);
 				controller.setAccount(oldAccount, newAccount);
 			}else if(na == 0){
 				String newId = idField.getText();
 				String newName = nameField.getText();
-				String newPass = passField.getText();
-				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newPass);
+				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newId);
 				controller.createUser(newAccount);
 			}
 				newAccFrame.setVisible(false);
