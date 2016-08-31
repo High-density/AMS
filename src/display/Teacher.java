@@ -92,7 +92,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton cheAccButton;/*変更*/
 	private JButton delAccButton;/*削除*/
 	private JLabel stuNumLabel;
-	private int oldNumSize;
 
 	/*someOne*/
 	private YearMonth[] yearMonth = new YearMonth[2];
@@ -191,24 +190,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		attButton = new JButton[numSize][31];
 
-		gbc[1].gridx = 0;
-		gbc[1].gridy = 0;
-		gbc[1].ipadx = 31;	//+41ピクセル これで最小のXをでかくできる
-		gbc[1].ipady = 12;	//+08ピクセル これで最小のYをでかくできる
-		for(int i=0;i<dayLabel.length;i++){/*日付表示*/
-			dayLabel[i] = new JLabel();
-			dayLabel[i].setBounds(0,0,50,40);
-			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
-			dayLabel[i].setOpaque(true);
-			dayLabel[i].setBackground(Color.YELLOW);
-			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
-			gbc[1].gridx = i;
-			gbc[1].gridy = 0;
-			gLayout[1].setConstraints(dayLabel[i], gbc[1]);
-		}
-
 		JLabel ID = new JLabel("ID");
-		ID.setBounds(0,0,50,4000);
 		ID.setHorizontalAlignment(JLabel.CENTER);
 		ID.setOpaque(true);
 		ID.setBackground(Color.YELLOW);
@@ -219,9 +201,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		gbc[0].ipady = 12;	//+08ピクセル これで最小のYをでかくできる
 		gLayout[0].setConstraints(ID, gbc[0]);
 		for(int i=0;i<numSize;i++){/*s12500*/
-			idLabel[i] = new JLabel();
-			idLabel[i].setBounds(0,0,50,4000);
-			idLabel[i].isMinimumSizeSet();
+			idLabel[i] = new JLabel(slaves.get(i));
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
@@ -237,6 +217,22 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				attButton[i][j].setBounds(0,0,50,40);
 				attButton[i][j].setBackground(Color.WHITE);
 			}
+		}
+		
+		gbc[1].gridx = 0;
+		gbc[1].gridy = 0;
+		gbc[1].ipadx = 31;	//+31ピクセル これで最小のXをでかくできる
+		gbc[1].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
+		for(int i=0;i<dayLabel.length;i++){/*日付表示*/
+			dayLabel[i] = new JLabel("00");
+			dayLabel[i].setBounds(0,0,50,40);
+			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
+			dayLabel[i].setOpaque(true);
+			dayLabel[i].setBackground(Color.YELLOW);
+			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
+			gbc[1].gridx = i;
+			gbc[1].gridy = 0;
+			gLayout[1].setConstraints(dayLabel[i], gbc[1]);
 		}
 
 		attendCalendar();/*カレンダー作成用*/
@@ -275,7 +271,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
-
 		calendar.set(year[0], month[0], 1);
 		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		//int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -283,17 +278,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		AttendanceBook[] Book = controller.getAttendance(yearMonth[0]);
 		int status[][] = new int [numSize][maxDate];
-
-		for(int i=0;i<numSize;i++){/*IDを取得からの表示*/
-			idLabel[i].setText(Book[i].getId());
-		}
-
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				status[i][j] = Book[i].getData(j);
 			}
 		}
-
+		
+		gbc[1].ipadx = 0;	//+41ピクセル これで最小のXをでかくできる
+		gbc[1].ipady = 6;	//+08ピクセル これで最小のYをでかくできる
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				dayLabel[j].setText(String.format("%1$02d", j+1));
@@ -312,8 +304,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				}
 				gbc[1].gridx = j;
 				gbc[1].gridy = i+1;
-				gbc[1].ipadx = 0;	//+41ピクセル これで最小のXをでかくできる
-				gbc[1].ipady = 6;	//+08ピクセル これで最小のYをでかくできる
 				gLayout[1].setConstraints(attButton[i][j], gbc[1]);
 			}
 		}
@@ -323,7 +313,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				for(int j=maxDate;j<31;j++){
 					dayLabel[j].setText("/");
 					attButton[i][j].setText("/");
+					attButton[i][j].setForeground(Color.DARK_GRAY);
 					attButton[i][j].setBackground(Color.WHITE);
+					gbc[1].gridx = j;
+					gbc[1].gridy = i+1;
+					gLayout[1].setConstraints(attButton[i][j], gbc[1]);
 				}
 			}
 		}
@@ -382,7 +376,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}
 			updateLabel[i].setText(update);
 		}
-
 	}
 
 	private void Plan(){
@@ -491,8 +484,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void Account(){
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
-		accPanel = new JPanel(new GridLayout(numSize,2));
-		//accPanel.setPreferredSize(new Dimension(300, (numSize*30)));
+		accPanel = new JPanel(new GridLayout(numSize,1));
 		accScrollPanel = new JScrollPane();
 		accScrollPanel.setBounds(100,  80, 320, 400);
 		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -553,14 +545,15 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		accPanel.removeAll();
 		accPanel.setLayout(new GridLayout(numSize, 1));
 		for(int i=0;i<numSize;i++){
-			aStudentsButton[i] = new JButton();
+			aStudentsButton[i] = new JButton(slaves.get(i));
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			aStudentsButton[i].setBackground(Color.WHITE);
 			aStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
-			aStudentsButton[i].setText(slaves.get(i));
+			
 			aStudentsButton[i].addActionListener(this);
 			aStudentsButton[i].addKeyListener(this);
 			aStudentsButton[i].setActionCommand("aStudentsButton"+i);
+			
 			accPanel.add(aStudentsButton[i]);
 		}
 	}
@@ -689,8 +682,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			cLayout.show(cardPanel, "Meth3");
 		}else if(e.getSource() == numButton[3]){//アカウント管理
 			cLayout.show(cardPanel, "Meth4");
-			//accUpdate();
-			panelNum[3].repaint();
 		}else if(e.getSource() == numButton[4]){//ログアウト
 			controller.logout();
 			mainFrame.setVisible(false);
@@ -780,11 +771,12 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			stuNumLabel.setText("編集したいIDを選択");
 			memNum = -1;
 		}else if(e.getSource() == delAccButton){//削除
-			oldNumSize = numSize;
 			stuid = stuNumLabel.getText();
 			controller.deleteUser(stuid);
 			message.showMessage(stuid + "を削除しました");
 			stuNumLabel.setText("編集したいIDを選択");
+			//accUpdate();
+			//panelNum[3].repaint();
 		}
 	}
 

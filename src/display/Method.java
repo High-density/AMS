@@ -296,8 +296,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekLabel_plan[i].setBorder(new LineBorder(Color.BLACK,1,true));
 			weekLabel_plan[i].setOpaque(true);
 		}
-		for(int i=0;i<42;i++)
+		for(int i=0;i<42;i++){
 			dayButton_plan[i] = new JButton();
+		}
 
 		planCalendar();/*カレンダーの表示*/
 
@@ -318,6 +319,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void planCalendar(){
+		final String NewLine = System.getProperty("line.separator");
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
@@ -326,12 +328,24 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		agenda  = controller.getAgenda(yearMonth);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		int maxDate = yearMonth.lengthOfMonth();
-		for(int i=0;i<dayOfWeek;i++)
+		for(int i=0;i<dayOfWeek;i++){
 			dayButton_plan[i].setText("");
-		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
-			dayButton_plan[i].setText(""+(1+i-dayOfWeek));
-		for (int i=dayOfWeek+maxDate;i<42;i++)
+			dayButton_plan[i].setBackground(Color.WHITE);
+		}
+		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
+			int day = 1 + i - dayOfWeek;
+			//String plan = agenda.getData(day);
+			dayButton_plan[i].setText(""+day);
+			/*if(!("\n".equals(plan))){
+				dayButton_plan[i].setBackground(Color.WHITE);
+			}else{*/
+			dayButton_plan[i].setBackground(Color.CYAN);
+			//}*/
+		}
+		for (int i=dayOfWeek+maxDate;i<42;i++){
 			dayButton_plan[i].setText("");
+			dayButton_plan[i].setBackground(Color.WHITE);
+		}
 	}
 
 	private void Account(){
