@@ -91,6 +91,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton cheAccButton;/*変更*/
 	private JButton delAccButton;/*削除*/
 	private JLabel stuNumLabel;
+	private int oldNumSize;
 
 	/*someOne*/
 	private YearMonth[] yearMonth = new YearMonth[2];
@@ -207,8 +208,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		ID.setBorder(new LineBorder(Color.GRAY, 1, true));
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		gbc.ipadx = 41;
-		gbc.ipady = 8;
+		gbc.ipadx = 41;	//+41ピクセル これで最小のXをでかくできる
+		gbc.ipady = 8;	//+08ピクセル これで最小のYをでかくできる
 		gLayout.setConstraints(ID, gbc);
 		for(int i=0;i<numSize;i++){/*s12500*/
 			idLabel[i] = new JLabel();
@@ -491,14 +492,19 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		rootButton.setBounds(500,350,200,80);
 		rootButton.setBackground(Color.WHITE);
 		rootButton.setFont(new Font(null, Font.PLAIN, 14));
+		
 		for(int i=0;i<numSize;i++){
 			aStudentsButton[i] = new JButton();
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			aStudentsButton[i].setBackground(Color.WHITE);
 			aStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
-			accPanel.add(aStudentsButton[i]);
 			aStudentsButton[i].setText(slaves.get(i));
 		}
+		
+		for(int i=0;i<numSize;i++){
+			accPanel.add(aStudentsButton[i]);
+		}
+		
 		int wid=100, hig=60;
 		addAccButton = new JButton("新規作成");
 		addAccButton.setBounds(500, 80,200,60);
@@ -528,6 +534,18 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3].add(addAccButton);
 		panelNum[3].add(cheAccButton);
 		panelNum[3].add(delAccButton);
+	}
+	
+	private void accUpdate(){
+		slaves = Slave.getSlaves();
+		numSize = Slave.getSlaves().size();
+		for(int i = 0;i<oldNumSize;i++){
+			accPanel.remove(aStudentsButton[i]);
+		}
+		for(int i=0;i<numSize;i++){
+			aStudentsButton[i].setText(slaves.get(i));
+			accPanel.add(aStudentsButton[i]);
+		}
 	}
 
 	private void CardPanel(){
@@ -654,6 +672,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			cLayout.show(cardPanel, "Meth3");
 		}else if(e.getSource() == numButton[3]){//アカウント管理
 			cLayout.show(cardPanel, "Meth4");
+			accUpdate();
+			panelNum[3].repaint();
 		}else if(e.getSource() == numButton[4]){//ログアウト
 			controller.logout();
 			mainFrame.setVisible(false);
@@ -743,6 +763,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			stuNumLabel.setText("編集したいIDを選択");
 			memNum = -1;
 		}else if(e.getSource() == delAccButton){//削除
+			oldNumSize = numSize;
 			stuid = aStudentsButton[memNum].getText();
 			//message(stuid + "を削除します");
 			controller.deleteUser(stuid);
