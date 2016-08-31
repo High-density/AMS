@@ -6,7 +6,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -24,8 +28,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JViewport;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import system.Agenda;
 import system.AttendanceBook;
@@ -46,9 +53,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JLabel labelNum[] = new JLabel[4];
 
 	/*attend*/
-	private JPanel calPanel;
 	private JPanel IDPanel;
-	private JScrollPane scrollPane;
+	private JPanel calPanel;
+	private JScrollPane IDScrollPanel;
+	private JScrollPane dayScrollPanel;
 	private JLabel idLabel[] = new JLabel[100];
 	private JLabel dayLabel[] = new JLabel[31];
 	private JButton attButton[][];
@@ -151,8 +159,11 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void Attendance(){
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		IDPanel = new JPanel(new GridLayout((numSize+1), 1));
-		IDPanel.setBounds(10,130,60,285);
+		GridBagLayout gLayout = new GridBagLayout();
+		IDPanel = new JPanel();
+		IDPanel.setLayout(gLayout);
+		GridBagConstraints gbc = new GridBagConstraints();
+		//IDPanel.setBounds(0,0,45,(numSize+1)*40);
 		calPanel = new JPanel(new GridLayout((numSize+1), 31));
 		calPanel.setBounds(0,0,31*45,(numSize+1)*30);
 		aNextButton = new JButton();
@@ -188,14 +199,30 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
 		}
 
-		for(int i=0;i<numSize;i++){/*出欠席ボタン*/
+		JLabel ID = new JLabel("ID");
+		ID.setBounds(0,0,50,4000);
+		ID.setHorizontalAlignment(JLabel.CENTER);
+		ID.setOpaque(true);
+		ID.setBackground(Color.YELLOW);
+		ID.setBorder(new LineBorder(Color.GRAY, 1, true));
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.ipadx = 41;
+		gbc.ipady = 8;
+		gLayout.setConstraints(ID, gbc);
+		for(int i=0;i<numSize;i++){/*s12500*/
 			idLabel[i] = new JLabel();
-			idLabel[i].setBounds(0,0,50,40);
+			idLabel[i].setBounds(0,0,50,4000);
+			idLabel[i].isMinimumSizeSet();
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
 			idLabel[i].setBackground(Color.GRAY);
 			idLabel[i].setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
+			gbc.gridx = 0;
+			gbc.gridy = i+1;
+			gbc.ipadx = 3;
+			gLayout.setConstraints(idLabel[i], gbc);
 			for(int j=0;j<31;j++){
 				attButton[i][j] = new JButton();
 				attButton[i][j].setBounds(0,0,50,40);
@@ -205,12 +232,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		attendCalendar();/*カレンダー作成用*/
 
-		JLabel ID = new JLabel("ID");
-		ID.setBounds(0,0,50,40);
-		ID.setHorizontalAlignment(JLabel.CENTER);
-		ID.setOpaque(true);
-		ID.setBackground(Color.YELLOW);
-		ID.setBorder(new LineBorder(Color.GRAY, 1, true));
 		IDPanel.add(ID);
 		for(int i=0;i<numSize;i++){
 			IDPanel.add(idLabel[i]);
@@ -224,14 +245,18 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}
 		}
 
-		scrollPane = new JScrollPane(calPanel);
-		scrollPane.setBounds(70,130,700,300);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		IDScrollPanel = new JScrollPane(IDPanel);
+		IDScrollPanel.setBounds(10,130,60,285);
+		IDScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		dayScrollPanel = new JScrollPane(calPanel);
+		dayScrollPanel.setBounds(70,130,710,300);
+		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 		panelNum[0].add(labelNum[0]);
-		panelNum[0].add(IDPanel);
-		panelNum[0].add(scrollPane);
+		panelNum[0].add(IDScrollPanel);
+		panelNum[0].add(dayScrollPanel);
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
 		panelNum[0].add(aMonthLabel);
@@ -310,7 +335,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			rStudentsButton[i].setBackground(Color.WHITE);
 			rStudentsButton[i].setText(slaves.get(i));
 		}
-		
+
 		for(int i=0;i<numSize;i++){
 			updateLabel[i] = new JLabel();
 			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
@@ -319,9 +344,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			updateLabel[i].setBorder(new LineBorder(Color.LIGHT_GRAY,1,true));
 			updateLabel[i].setOpaque(true);
 		}
-		
+
 		reportUpdate();
-		
+
 		for(int i=0;i<numSize;i++){
 			repoPanel.add(rStudentsButton[i]);
 			repoPanel.add(updateLabel[i]);
@@ -343,7 +368,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}
 			updateLabel[i].setText(update);
 		}
-		
+
 	}
 
 	private void Plan(){
@@ -462,8 +487,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
-		rootButton = new JButton("教員用アカウント");
-		rootButton.setBounds(500,300,200,80);
+		rootButton = new JButton("教員用アカウントの編集");
+		rootButton.setBounds(500,350,200,80);
 		rootButton.setBackground(Color.WHITE);
 		rootButton.setFont(new Font(null, Font.PLAIN, 14));
 		for(int i=0;i<numSize;i++){
@@ -573,7 +598,44 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		cheAccButton.addKeyListener(this);
 		delAccButton.addActionListener(this);
 		delAccButton.addKeyListener(this);
+		
+		IDScrollPanel.getViewport().addChangeListener(cl);
+		dayScrollPanel.getViewport().addChangeListener(cl);
 	}
+
+	private ChangeListener cl = new ChangeListener() {
+		private boolean adjflg;
+		public void stateChanged(ChangeEvent e) {
+			JViewport src = null;
+			JViewport tgt = null;
+			if (e.getSource() == dayScrollPanel.getViewport()) {
+				src = dayScrollPanel.getViewport();
+				tgt = IDScrollPanel.getViewport();
+			} else if (e.getSource() == IDScrollPanel.getViewport()) {
+				src = IDScrollPanel.getViewport();
+				tgt = dayScrollPanel.getViewport();
+			}
+			if (adjflg || tgt == null || src == null) {
+				return;
+			}
+			adjflg = true;
+			Dimension dim1 = src.getViewSize();
+			Dimension siz1 = src.getSize();
+			Point pnt1 = src.getViewPosition();
+			Dimension dim2 = tgt.getViewSize();
+			Dimension siz2 = tgt.getSize();
+			//Point pnt2 = tgt.getViewPosition();
+			double d;
+			d = pnt1.getY() / (dim1.getHeight() - siz1.getHeight())
+					* (dim2.getHeight() - siz2.getHeight());
+			pnt1.y = (int) d;
+			d = pnt1.getX() / (dim1.getWidth() - siz1.getWidth())
+					* (dim2.getWidth() - siz2.getWidth());
+			pnt1.x = (int) d;
+			tgt.setViewPosition(pnt1);
+			adjflg = false;
+		}
+	};
 
 	private int memNum = -1;
 	private String stuid = "";
