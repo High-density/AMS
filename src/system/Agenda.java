@@ -30,7 +30,7 @@ public class Agenda extends DataForAMonth<String> {
 		if (!Controller.mkdirs(dir.toString())) return;
 
 		// 格納してある予定データの取得
-		String fileName = dir + ym.toString() + "-";
+		String fileName = dir + "/" + ym.toString() + "-";
 		for (int day = 0; day < ym.lengthOfMonth(); day++) {
 			File file = new File(fileName + String.format("%02d", day));
 			if (file.exists()) {
