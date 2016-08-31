@@ -66,6 +66,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton dayButton_plan[] = new JButton[42];
 	private JLabel planDate; // 予定取得日
 	private JTextArea pTextArea; // 予定表示
+	private Agenda agenda;
+	private int pday = -1; // ボタンを押した時の数字から日付
 
 	// account
 	private JLabel IDLabel;
@@ -76,12 +78,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	// some
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
-	private YearMonth yearMonth;
+	private YearMonth[] yearMonth = new YearMonth[2];
 	private Calendar calendar = Calendar.getInstance();
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)}; // 年
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
-	private int day = -1; // ボタンを押した時の数字から日付
-	private Agenda agenda;
 	private String myID; // ログインしたIDを引き継ぎ
 
 	Method(system.Controller controller, display.Message message, String myID){
@@ -175,7 +175,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 		for(int i=0;i<42;i++)
 			dayButton_att[i] = new JButton();
-		
+
 		attendCalendar();
 		for(int i=0;i<7;i++)
 			calPanel.add(weekLabel_att[i]);
@@ -191,14 +191,14 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void attendCalendar(){
+		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
-
 		calendar.set(year[0], month[0], 1);
-		yearMonth = YearMonth.of(year[0], month[0]+1);
+		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		int maxDate = yearMonth.lengthOfMonth();
-		AttendanceBook[] Book = controller.getAttendance(yearMonth);
+		int maxDate = yearMonth[0].lengthOfMonth();
+		AttendanceBook[] Book = controller.getAttendance(yearMonth[0]);
 		int status[] = new int [maxDate];
 		for(int i=0;i<maxDate;i++){
 			status[i] = Book[0].getData(i);
@@ -324,10 +324,11 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		month[1] = calendar.get(Calendar.MONTH);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
-		yearMonth = YearMonth.of(year[1], month[1]+1);
-		agenda  = controller.getAgenda(yearMonth);
+		yearMonth[1] = YearMonth.of(year[1], month[1]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		int maxDate = yearMonth.lengthOfMonth();
+		int maxDate = yearMonth[0].lengthOfMonth();
+
+		agenda  = controller.getAgenda(yearMonth[1]);
 		for(int i=0;i<dayOfWeek;i++){
 			dayButton_plan[i].setText("");
 			dayButton_plan[i].setBackground(Color.WHITE);
@@ -336,10 +337,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			int day = 1 + i - dayOfWeek;
 			//String plan = agenda.getData(day);
 			dayButton_plan[i].setText(""+day);
-			/*if(!("\n".equals(plan))){
-				dayButton_plan[i].setBackground(Color.WHITE);
-			}else{*/
-			dayButton_plan[i].setBackground(Color.CYAN);
+			//if(!("\n".equals(plan))){
+			dayButton_plan[i].setBackground(Color.WHITE);
+			//}else{
+			//dayButton_plan[i].setBackground(Color.CYAN);
 			//}*/
 		}
 		for (int i=dayOfWeek+maxDate;i<42;i++){
@@ -471,14 +472,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			panelNum[0].repaint();
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
-			if(month[1]+1 == 13)
-				calendar.set(Calendar.YEAR, year[1]+1);
 			planCalendar();
 			panelNum[2].repaint();
 		}else if(e.getSource() == pBackButton){
 			calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
-			if(month[1]-1 == -1)
-				calendar.set(Calendar.YEAR, year[1]-1);
 			planCalendar();
 			panelNum[2].repaint();
 		}else if(e.getActionCommand().matches("dayButton_plan" + ".*")){ // 予定の取得
@@ -486,15 +483,15 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				if(e.getSource() == dayButton_plan[i]){
 					String dayName = dayButton_plan[i].getText();
 					if(!dayName.equals("")){
-						day = Integer.parseInt(dayName) -1;
-						planDate.setText(year[1]+"年"+(month[1]+1)+"月"+(day+1)+"日");
+						pday = Integer.parseInt(dayName) -1;
+						planDate.setText(year[1]+"年"+(month[1]+1)+"月"+(pday+1)+"日");
 						planDate.setFont(new Font(null, Font.PLAIN, 24));
 						pTextArea.setEditable(true);
-						String plan = agenda.getData(day);
+						String plan = agenda.getData(pday);
 						pTextArea.setText(plan);
 						pTextArea.setEditable(false);
 					}else{
-						day = -1;
+						pday = -1;
 						planDate.setText("日付なし");
 					}
 				}

@@ -81,6 +81,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton pNextButton;
 	private JButton pBackButton;
 	private JTextArea pTextArea;
+	private Agenda agenda; // 予定
+	private int planday = -1; // ボタンから取得した日
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
 
 	/*account*/
@@ -96,11 +98,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	/*someOne*/
 	private YearMonth[] yearMonth = new YearMonth[2];
 	private Calendar calendar = Calendar.getInstance();
-	private Calendar Cal = Calendar.getInstance();
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)};
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
-	private int planday = -1; // ボタンから取得した日
-	private Agenda agenda; // 予定
 	private int numSize = Slave.getSlaves().size();//アカウント数
 	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
 
@@ -218,7 +217,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				attButton[i][j].setBackground(Color.WHITE);
 			}
 		}
-		
+
 		gbc[1].gridx = 0;
 		gbc[1].gridy = 0;
 		gbc[1].ipadx = 31;	//+31ピクセル これで最小のXをでかくできる
@@ -283,7 +282,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				status[i][j] = Book[i].getData(j);
 			}
 		}
-		
+
 		gbc[1].ipadx = 0;	//+41ピクセル これで最小のXをでかくできる
 		gbc[1].ipady = 6;	//+08ピクセル これで最小のYをでかくできる
 		for(int i=0;i<numSize;i++){
@@ -468,10 +467,10 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			pDayButton[i].setText(""+(1+i-dayOfWeek));
-			Cal.set(year[1], month[1], (i+1-dayOfWeek));
-			if(Cal.get(Calendar.DAY_OF_WEEK) == 7)
+			calendar.set(year[1], month[1], (i+1-dayOfWeek));
+			if(calendar.get(Calendar.DAY_OF_WEEK) == 7)
 				pDayButton[i].setForeground(Color.BLUE);
-			else if(Cal.get(Calendar.DAY_OF_WEEK) == 1)
+			else if(calendar.get(Calendar.DAY_OF_WEEK) == 1)
 				pDayButton[i].setForeground(Color.RED);
 			else
 				pDayButton[i].setForeground(Color.BLACK);
@@ -538,7 +537,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3].add(cheAccButton);
 		panelNum[3].add(delAccButton);
 	}
-
+/*
 	private void accUpdate(){
 		slaves = Slave.getSlaves();
 		numSize = Slave.getSlaves().size();
@@ -549,14 +548,14 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			aStudentsButton[i].setBackground(Color.WHITE);
 			aStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
-			
+
 			aStudentsButton[i].addActionListener(this);
 			aStudentsButton[i].addKeyListener(this);
 			aStudentsButton[i].setActionCommand("aStudentsButton"+i);
-			
+
 			accPanel.add(aStudentsButton[i]);
 		}
-	}
+	}*/
 
 	private void CardPanel(){
 		cardPanel = new JPanel();
@@ -720,8 +719,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		}else if(e.getActionCommand().matches("rStudents" + ".*")){//報告書管理
 			String user = null;
 			for(int i=0;i<numSize;i++){
-				if(e.getSource() == rStudentsButton[i])
-					user= rStudentsButton[i].getText();
+				if(e.getSource() == rStudentsButton[i]){
+					user =  slaves.get(i);
+				}
 			}
 			controller.showReport(user);
 		}else if(e.getSource() == pNextButton){
