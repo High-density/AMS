@@ -1003,27 +1003,22 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 	public void windowOpened(WindowEvent e){		// ウィンドウが可視化したとき
 		// TODO 自動生成されたメソッド・スタブ
-		
 	}
 
 	public void windowClosing(WindowEvent e){		// ウィンドウを閉じようとしたとき
 		// TODO 自動生成されたメソッド・スタブ
-		
 	}
 
 	public void windowClosed(WindowEvent e){		// ウィンドウをdisposeの結果閉じたとき
 		// TODO 自動生成されたメソッド・スタブ
-		
 	}
 
 	public void windowIconified(WindowEvent e){		// ウィンドウを最小化したとき
 		// TODO 自動生成されたメソッド・スタブ
-		
 	}
 
 	public void windowDeiconified(WindowEvent e){	// ウィンドウを最小化から復帰したとき
 		// TODO 自動生成されたメソッド・スタブ
-		
 	}
 
 	public void windowActivated(WindowEvent e) {	// ウィンドウがアクティブになったとき
@@ -1035,6 +1030,5 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 	public void windowDeactivated(WindowEvent e) {	// ウィンドウをアクティブでなくしたとき
 		// TODO 自動生成されたメソッド・スタブ
-		
 	}
 }
