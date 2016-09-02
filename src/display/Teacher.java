@@ -40,8 +40,8 @@ import system.Slave;
 
 class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
 	/*main*/
-	private Controller controller;	//内部動作用
-	private Message message;		//エラー呼び出し用
+	private Controller controller;	// 内部動作用
+	private Message message;		// エラー呼び出し用
 	private NewAccount newAccount;
 	private JFrame mainFrame;
 	private Container contentPane;
@@ -59,7 +59,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JScrollPane IDScrollPanel;
 	private JScrollPane dayScrollPanel;
 	private JLabel ID;
-	private JLabel idLabel[] = new JLabel[128];
+	private JLabel idLabel[];
 	private JLabel dayLabel[] = new JLabel[31];
 	private JButton attButton[][];
 	private JButton aNextButton;
@@ -71,13 +71,13 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	/*report*/
 	private JPanel repoPanel;
 	private JScrollPane repoScrollPanel;
-	private JButton rStudentsButton[] = new JButton[128];
-	private JLabel updateLabel[] = new JLabel[128];
+	private JButton rStudentsButton[];
 	private JButton repoUpdateButton;
+	private JLabel updateLabel[];
 
 	/*plan*/
 	private JPanel planPanel;
-	private JLabel ymd;//year month day
+	private JLabel ymd;// year month day
 	private JLabel weekLabel[] = new JLabel[7];
 	private JButton pDayButton[] = new JButton[42];
 	private JButton addPlanButton;
@@ -91,7 +91,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	/*account*/
 	private JPanel accPanel;
 	private JScrollPane accScrollPanel;
-	private JButton aStudentsButton[] = new JButton[128];
+	private JButton aStudentsButton[];
 	private JButton addAccButton;	// 追加
 	private JButton cheAccButton;	// 変更
 	private JButton delAccButton;	// 削除
@@ -206,6 +206,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		attgbc[0].ipadx = 41;	//+41ピクセル これで最小のXをでかくできる
 		attgbc[0].ipady = 12;	//+08ピクセル これで最小のYをでかくできる
 		attgLayout[0].setConstraints(ID, attgbc[0]);
+		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		for(int i=0;i<numSize;i++){/*s12500*/
 			idLabel[i] = new JLabel(slaves.get(i));
@@ -294,6 +295,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		attgbc[0].ipadx = 41;	//+41ピクセル これで最小のXをでかくできる
 		attgbc[0].ipady = 12;	//+08ピクセル これで最小のYをでかくできる
 		attgLayout[0].setConstraints(ID, attgbc[0]);
+		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		for(int i=0;i<numSize;i++){/*s12500*/
 			idLabel[i] = new JLabel(slaves.get(i));
@@ -422,7 +424,8 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		repoUpdateButton.setBounds(500, 450, 200, 60);
 		repoUpdateButton.setBackground(Color.WHITE);
 		repoUpdateButton.setFont(new Font(null, Font.PLAIN, 14));
-
+		
+		rStudentsButton  = new JButton[128];
 		for(int i=0;i<numSize;i++){
 			rStudentsButton[i] = new JButton();
 			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
@@ -430,6 +433,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			rStudentsButton[i].setText(slaves.get(i));
 		}
 
+		updateLabel  = new JLabel[numSize];
 		for(int i=0;i<numSize;i++){
 			updateLabel[i] = new JLabel();
 			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
@@ -474,6 +478,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			rStudentsButton[i].setText(slaves.get(i));
 		}
 
+		updateLabel  = new JLabel[numSize];
 		for(int i=0;i<numSize;i++){
 			updateLabel[i] = new JLabel();
 			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
@@ -625,6 +630,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		stuNumLabel.setHorizontalAlignment(JLabel.CENTER);
 		stuNumLabel.setBackground(Color.LIGHT_GRAY);
 
+		aStudentsButton  = new JButton[128];
 		for(int i=0;i<numSize;i++){
 			aStudentsButton[i] = new JButton();
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
@@ -683,6 +689,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		accPanel = new JPanel(gridBagLayout);
+		aStudentsButton  = new JButton[128];
 		for(int i=0;i<numSize;i++){
 			aStudentsButton[i] = new JButton();
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
