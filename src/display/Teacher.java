@@ -14,6 +14,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -38,11 +40,11 @@ import system.AttendanceBook;
 import system.Controller;
 import system.Slave;
 
-class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラス*/
+class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機能選択クラス*/
 	/*main*/
 	private Controller controller;	// 内部動作用
 	private Message message;		// エラー呼び出し用
-	private NewAccount newAccount;
+	private NewAccount newAccount;	// アカウント用
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -275,81 +277,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[0].add(dayScrollPanel);
 		panelNum[0].add(attUpdateButton);
 	}
-	
-	private void attendUpdate(){
-		resetSlave();
-		IDPanel.removeAll();
-		calPanel.removeAll();
-		IDScrollPanel.remove(IDPanel);
-		dayScrollPanel.remove(calPanel);
-		
-		for(int i=0;i<2;i++){
-			attgLayout[i] = new GridBagLayout();
-			attgbc[i] = new GridBagConstraints();
-		}
-		IDPanel = new JPanel(attgLayout[0]);
-		calPanel = new JPanel(attgLayout[1]);
-		
-		attgbc[0].gridx = 0;
-		attgbc[0].gridy = 0;
-		attgbc[0].ipadx = 41;	//+41ピクセル これで最小のXをでかくできる
-		attgbc[0].ipady = 12;	//+08ピクセル これで最小のYをでかくできる
-		attgLayout[0].setConstraints(ID, attgbc[0]);
-		idLabel = new JLabel[numSize];
-		attButton = new JButton[numSize][31];
-		for(int i=0;i<numSize;i++){/*s12500*/
-			idLabel[i] = new JLabel(slaves.get(i));
-			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
-			idLabel[i].setForeground(Color.WHITE);
-			idLabel[i].setOpaque(true);
-			idLabel[i].setBackground(Color.GRAY);
-			idLabel[i].setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
-			attgbc[0].gridx = 0;
-			attgbc[0].gridy = i+1;
-			attgbc[0].ipadx = 10;
-			attgbc[0].ipady = 14;
-			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
-			for(int j=0;j<31;j++){
-				attButton[i][j] = new JButton();
-				attButton[i][j].setBounds(0,0,50,40);
-				attButton[i][j].setBackground(Color.WHITE);
-			}
-		}
-
-		attgbc[1].gridx = 0;
-		attgbc[1].gridy = 0;
-		attgbc[1].ipadx = 31;	//+31ピクセル これで最小のXをでかくできる
-		attgbc[1].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
-		for(int i=0;i<dayLabel.length;i++){/*日付表示*/
-			dayLabel[i] = new JLabel("00");
-			dayLabel[i].setBounds(0,0,50,40);
-			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
-			dayLabel[i].setOpaque(true);
-			dayLabel[i].setBackground(Color.YELLOW);
-			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
-			attgbc[1].gridx = i;
-			attgbc[1].gridy = 0;
-			attgLayout[1].setConstraints(dayLabel[i], attgbc[1]);
-		}
-
-		attendCalendar();/*カレンダー作成用*/
-
-		IDPanel.add(ID);
-		for(int i=0;i<numSize;i++){
-			IDPanel.add(idLabel[i]);
-		}
-		for(int i=0;i<dayLabel.length;i++){
-			calPanel.add(dayLabel[i]);
-		}
-		for(int i=0;i<numSize;i++){
-			for(int j=0;j<31;j++){
-				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
-			}
-		}
-		
-		IDScrollPanel.setViewportView(IDPanel);
-		dayScrollPanel.setViewportView(calPanel);
-	}
 
 	private void attendCalendar(){
 		year[0] = calendar.get(Calendar.YEAR);
@@ -406,12 +333,47 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			}
 		}
 	}
+	
+	private ChangeListener cl = new ChangeListener() {
+		private boolean adjflg;
+		public void stateChanged(ChangeEvent e) {
+			JViewport src = null;
+			JViewport tgt = null;
+			if (e.getSource() == dayScrollPanel.getViewport()) {
+				src = dayScrollPanel.getViewport();
+				tgt = IDScrollPanel.getViewport();
+			} else if (e.getSource() == IDScrollPanel.getViewport()) {
+				src = IDScrollPanel.getViewport();
+				tgt = dayScrollPanel.getViewport();
+			}
+			if (adjflg || tgt == null || src == null) {
+				return;
+			}
+			adjflg = true;
+			Dimension dim1 = src.getViewSize();
+			Dimension siz1 = src.getSize();
+			Point pnt1 = src.getViewPosition();
+			Dimension dim2 = tgt.getViewSize();
+			Dimension siz2 = tgt.getSize();
+			//Point pnt2 = tgt.getViewPosition();
+			double d;
+			d = pnt1.getY() / (dim1.getHeight() - siz1.getHeight())
+					* (dim2.getHeight() - siz2.getHeight());
+			pnt1.y = (int) d;
+			d = pnt1.getX() / (dim1.getWidth() - siz1.getWidth())
+					* (dim2.getWidth() - siz2.getWidth());
+			pnt1.x = (int) d;
+			tgt.setViewPosition(pnt1);
+			adjflg = false;
+		}
+	};
 
 	private void Report(){
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
-		repoPanel = new JPanel(new GridLayout(numSize,2));
-		repoPanel.setPreferredSize(new Dimension(600, (numSize*30)));
+		GridBagLayout gLayout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		repoPanel = new JPanel(gLayout);
 		repoScrollPanel = new JScrollPane();
 		repoScrollPanel.setBounds(80, 100, 650, 300);
 		repoScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
@@ -426,21 +388,31 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		repoUpdateButton.setFont(new Font(null, Font.PLAIN, 14));
 		
 		rStudentsButton  = new JButton[128];
+		gbc.gridx = 0;
+		gbc.ipadx = 0;
+		gbc.ipady = 8;
 		for(int i=0;i<numSize;i++){
+			gbc.gridy = i;
 			rStudentsButton[i] = new JButton();
 			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			rStudentsButton[i].setBackground(Color.WHITE);
 			rStudentsButton[i].setText(slaves.get(i));
+			gLayout.setConstraints(rStudentsButton[i], gbc);
 		}
 
 		updateLabel  = new JLabel[numSize];
+		gbc.gridx = 1;
+		gbc.ipadx = 128;
+		gbc.ipady = 19;
 		for(int i=0;i<numSize;i++){
+			gbc.gridy = i;
 			updateLabel[i] = new JLabel();
 			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			updateLabel[i].setFont(new Font(null, Font.PLAIN, 16));
 			updateLabel[i].setBackground(Color.WHITE);
 			updateLabel[i].setBorder(new LineBorder(Color.LIGHT_GRAY,1,true));
 			updateLabel[i].setOpaque(true);
+			gLayout.setConstraints(updateLabel[i], gbc);
 		}
 		
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
@@ -464,47 +436,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[1].add(labelNum[1]);
 		panelNum[1].add(repoScrollPanel);
 		panelNum[1].add(repoUpdateButton);
-	}
-	private void repoUpdate(){
-		resetSlave();
-		repoPanel.removeAll();
-		repoScrollPanel.remove(repoPanel);
-		
-		repoPanel = new JPanel(new GridLayout(numSize,2));
-		for(int i=0;i<numSize;i++){
-			rStudentsButton[i] = new JButton();
-			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
-			rStudentsButton[i].setBackground(Color.WHITE);
-			rStudentsButton[i].setText(slaves.get(i));
-		}
-
-		updateLabel  = new JLabel[numSize];
-		for(int i=0;i<numSize;i++){
-			updateLabel[i] = new JLabel();
-			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
-			updateLabel[i].setFont(new Font(null, Font.PLAIN, 16));
-			updateLabel[i].setBackground(Color.WHITE);
-			updateLabel[i].setBorder(new LineBorder(Color.LIGHT_GRAY,1,true));
-			updateLabel[i].setOpaque(true);
-		}
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
-		for(int i=0;i<numSize;i++){
-			LocalDate LastUpdate;
-			String update = "ファイルが存在しません";
-			if(controller.getLastUploadDate(slaves.get(i)) != null){
-				LastUpdate = controller.getLastUploadDate(slaves.get(i));
-				update = LastUpdate.format(formatter);
-			}
-			updateLabel[i].setText(update);
-		}
-
-		for(int i=0;i<numSize;i++){
-			repoPanel.add(rStudentsButton[i]);
-			repoPanel.add(updateLabel[i]);
-		}
-		
-		repoScrollPanel.setViewportView(repoPanel);
 	}
 
 	private void Plan(){
@@ -682,6 +613,168 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3].add(accUpdateButton);
 	}
 
+	private void CardPanel(){
+		cardPanel = new JPanel();
+		cLayout = new CardLayout();
+		cardPanel.setLayout(cLayout);
+		for(int i=0;i<4;i++){//それぞれの機能名を入れる
+			String str = "Meth" + (i+1);
+			cardPanel.add(panelNum[i], str);
+		}
+	}
+
+	private void member(int i){
+		if(i == -1){
+			newAccount.showNewAccount();
+		}else{
+			String slaveID = slaves.get(i);
+			String slaveName = controller.getName(slaveID);
+			newAccount.showCheAccount(slaveID, slaveName);
+		}
+	}
+	/**
+	 * slaveとnumSizeを更新する
+	 */
+	private void resetSlave(){
+		slaves = Slave.getSlaves();
+		numSize = Slave.getSlaves().size();
+	}
+	
+	public void UpdateAccount() {
+		attendUpdate();
+		repoUpdate();
+		accUpdate();
+	}
+	
+	private void attendUpdate(){
+		resetSlave();
+		IDPanel.removeAll();
+		calPanel.removeAll();
+		IDScrollPanel.remove(IDPanel);
+		dayScrollPanel.remove(calPanel);
+		
+		for(int i=0;i<2;i++){
+			attgLayout[i] = new GridBagLayout();
+			attgbc[i] = new GridBagConstraints();
+		}
+		IDPanel = new JPanel(attgLayout[0]);
+		calPanel = new JPanel(attgLayout[1]);
+		
+		attgbc[0].gridx = 0;
+		attgbc[0].gridy = 0;
+		attgbc[0].ipadx = 41;	//+41ピクセル これで最小のXをでかくできる
+		attgbc[0].ipady = 12;	//+08ピクセル これで最小のYをでかくできる
+		attgLayout[0].setConstraints(ID, attgbc[0]);
+		idLabel = new JLabel[numSize];
+		attButton = new JButton[numSize][31];
+		for(int i=0;i<numSize;i++){/*s12500*/
+			idLabel[i] = new JLabel(slaves.get(i));
+			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
+			idLabel[i].setForeground(Color.WHITE);
+			idLabel[i].setOpaque(true);
+			idLabel[i].setBackground(Color.GRAY);
+			idLabel[i].setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
+			attgbc[0].gridx = 0;
+			attgbc[0].gridy = i+1;
+			attgbc[0].ipadx = 10;
+			attgbc[0].ipady = 14;
+			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
+			for(int j=0;j<31;j++){
+				attButton[i][j] = new JButton();
+				attButton[i][j].setBounds(0,0,50,40);
+				attButton[i][j].setBackground(Color.WHITE);
+			}
+		}
+
+		attgbc[1].gridx = 0;
+		attgbc[1].gridy = 0;
+		attgbc[1].ipadx = 31;	//+31ピクセル これで最小のXをでかくできる
+		attgbc[1].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
+		for(int i=0;i<dayLabel.length;i++){/*日付表示*/
+			dayLabel[i] = new JLabel("00");
+			dayLabel[i].setBounds(0,0,50,40);
+			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
+			dayLabel[i].setOpaque(true);
+			dayLabel[i].setBackground(Color.YELLOW);
+			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
+			attgbc[1].gridx = i;
+			attgbc[1].gridy = 0;
+			attgLayout[1].setConstraints(dayLabel[i], attgbc[1]);
+		}
+
+		attendCalendar();/*カレンダー作成用*/
+
+		IDPanel.add(ID);
+		for(int i=0;i<numSize;i++){
+			IDPanel.add(idLabel[i]);
+		}
+		for(int i=0;i<dayLabel.length;i++){
+			calPanel.add(dayLabel[i]);
+		}
+		for(int i=0;i<numSize;i++){
+			for(int j=0;j<31;j++){
+				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
+			}
+		}
+		
+		IDScrollPanel.setViewportView(IDPanel);
+		dayScrollPanel.setViewportView(calPanel);
+	}
+	
+	private void repoUpdate(){
+		resetSlave();
+		repoPanel.removeAll();
+		repoScrollPanel.remove(repoPanel);
+		
+		GridBagLayout gLayout = new GridBagLayout();
+		GridBagConstraints gbc = new GridBagConstraints();
+		repoPanel = new JPanel(gLayout);
+		gbc.gridx = 0;
+		gbc.ipadx = 0;
+		gbc.ipady = 8;
+		for(int i=0;i<numSize;i++){
+			gbc.gridy = i;
+			rStudentsButton[i] = new JButton();
+			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
+			rStudentsButton[i].setBackground(Color.WHITE);
+			rStudentsButton[i].setText(slaves.get(i));
+			gLayout.setConstraints(rStudentsButton[i], gbc);
+		}
+
+		updateLabel  = new JLabel[numSize];
+		gbc.gridx = 1;
+		gbc.ipadx = 128;
+		gbc.ipady = 19;
+		for(int i=0;i<numSize;i++){
+			gbc.gridy = i;
+			updateLabel[i] = new JLabel();
+			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
+			updateLabel[i].setFont(new Font(null, Font.PLAIN, 16));
+			updateLabel[i].setBackground(Color.WHITE);
+			updateLabel[i].setBorder(new LineBorder(Color.LIGHT_GRAY,1,true));
+			updateLabel[i].setOpaque(true);
+			gLayout.setConstraints(updateLabel[i], gbc);
+		}
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
+		for(int i=0;i<numSize;i++){
+			LocalDate LastUpdate;
+			String update = "ファイルが存在しません";
+			if(controller.getLastUploadDate(slaves.get(i)) != null){
+				LastUpdate = controller.getLastUploadDate(slaves.get(i));
+				update = LastUpdate.format(formatter);
+			}
+			updateLabel[i].setText(update);
+		}
+
+		for(int i=0;i<numSize;i++){
+			repoPanel.add(rStudentsButton[i]);
+			repoPanel.add(updateLabel[i]);
+		}
+		
+		repoScrollPanel.setViewportView(repoPanel);
+	}
+	
 	private void accUpdate(){
 		resetSlave();
 		accPanel.removeAll();
@@ -712,35 +805,9 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		accScrollPanel.setViewportView(accPanel);
 	}
 
-	private void CardPanel(){
-		cardPanel = new JPanel();
-		cLayout = new CardLayout();
-		cardPanel.setLayout(cLayout);
-		for(int i=0;i<4;i++){//それぞれの機能名を入れる
-			String str = "Meth" + (i+1);
-			cardPanel.add(panelNum[i], str);
-		}
-	}
-
-	private void member(int i){
-		if(i == -1){
-			newAccount.showNewAccount();
-		}else{
-			String slaveID = slaves.get(i);
-			String slaveName = controller.getName(slaveID);
-			newAccount.showCheAccount(slaveID, slaveName);
-		}
-	}
-	/**
-	 * slaveとnumSizeを更新する
-	 */
-	private void resetSlave(){
-		slaves = Slave.getSlaves();
-		numSize = Slave.getSlaves().size();
-	}
-
 	private void actionButton(){
 		/*main*/
+		mainFrame.addWindowListener(this);
 		for(int i=0;i<5;i++){
 			numButton[i].addActionListener(this);
 			numButton[i].addKeyListener(this);
@@ -804,40 +871,6 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		accUpdateButton.addKeyListener(this);
 
 	}
-
-	private ChangeListener cl = new ChangeListener() {
-		private boolean adjflg;
-		public void stateChanged(ChangeEvent e) {
-			JViewport src = null;
-			JViewport tgt = null;
-			if (e.getSource() == dayScrollPanel.getViewport()) {
-				src = dayScrollPanel.getViewport();
-				tgt = IDScrollPanel.getViewport();
-			} else if (e.getSource() == IDScrollPanel.getViewport()) {
-				src = IDScrollPanel.getViewport();
-				tgt = dayScrollPanel.getViewport();
-			}
-			if (adjflg || tgt == null || src == null) {
-				return;
-			}
-			adjflg = true;
-			Dimension dim1 = src.getViewSize();
-			Dimension siz1 = src.getSize();
-			Point pnt1 = src.getViewPosition();
-			Dimension dim2 = tgt.getViewSize();
-			Dimension siz2 = tgt.getSize();
-			//Point pnt2 = tgt.getViewPosition();
-			double d;
-			d = pnt1.getY() / (dim1.getHeight() - siz1.getHeight())
-					* (dim2.getHeight() - siz2.getHeight());
-			pnt1.y = (int) d;
-			d = pnt1.getX() / (dim1.getWidth() - siz1.getWidth())
-					* (dim2.getWidth() - siz2.getWidth());
-			pnt1.x = (int) d;
-			tgt.setViewPosition(pnt1);
-			adjflg = false;
-		}
-	};
 
 	private int memNum = -1;
 	private String stuid = "";
@@ -953,7 +986,7 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			controller.deleteUser(stuid);
 			message.showMessage(stuid + "を削除しました");
 			stuNumLabel.setText("編集したいIDを選択");
-			accUpdate();
+			UpdateAccount();
 			panelNum[3].repaint();
 		}else if(e.getSource() == accUpdateButton){
 			accUpdate();
@@ -966,5 +999,42 @@ class Teacher extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			ActionEvent actionEvents = new ActionEvent(e.getComponent(),ActionEvent.ACTION_PERFORMED,"");
 			actionPerformed(actionEvents);
 		}
+	}
+
+	public void windowOpened(WindowEvent e){		// ウィンドウが可視化したとき
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void windowClosing(WindowEvent e){		// ウィンドウを閉じようとしたとき
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void windowClosed(WindowEvent e){		// ウィンドウをdisposeの結果閉じたとき
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void windowIconified(WindowEvent e){		// ウィンドウを最小化したとき
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void windowDeiconified(WindowEvent e){	// ウィンドウを最小化から復帰したとき
+		// TODO 自動生成されたメソッド・スタブ
+		
+	}
+
+	public void windowActivated(WindowEvent e) {	// ウィンドウがアクティブになったとき
+		UpdateAccount();
+		panelNum[0].repaint();
+		panelNum[1].repaint();
+		panelNum[3].repaint();
+	}
+
+	public void windowDeactivated(WindowEvent e) {	// ウィンドウをアクティブでなくしたとき
+		// TODO 自動生成されたメソッド・スタブ
+		
 	}
 }
