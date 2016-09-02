@@ -66,7 +66,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private JButton attButton[][];
 	private JButton aNextButton;
 	private JButton aBackButton;
-	private JButton attUpdateButton; // 画面更新
 	private JLabel aMonthLabel;
 	private JLabel pMonthLabel;
 
@@ -74,7 +73,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private JPanel repoPanel;
 	private JScrollPane repoScrollPanel;
 	private JButton rStudentsButton[];
-	private JButton repoUpdateButton;
 	private JLabel updateLabel[];
 
 	/*plan*/
@@ -98,7 +96,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private JButton cheAccButton;	// 変更
 	private JButton delAccButton;	// 削除
 	private JButton rootButton;		// 教員用
-	private JButton accUpdateButton;	// 画面更新
 	private JLabel stuNumLabel;
 
 	/*someOne*/
@@ -165,6 +162,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private void Attendance(){
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
+		labelNum[0] = new JLabel("出席管理");
+		labelNum[0].setBounds(0,10,800,40);
+		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
+		
 		for(int i=0;i<2;i++){
 			attgLayout[i] = new GridBagLayout();
 			attgbc[i] = new GridBagConstraints();
@@ -186,18 +188,18 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		aNextButton.setIcon(right);
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		attUpdateButton = new JButton("画面更新");
-		attUpdateButton.setBounds(500, 450, 200, 60);
-		attUpdateButton.setBackground(Color.WHITE);
-		attUpdateButton.setFont(new Font(null, Font.PLAIN, 14));
-		labelNum[0] = new JLabel("出席管理");
-		labelNum[0].setBounds(0,10,800,40);
-		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
-		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
-
+		IDScrollPanel = new JScrollPane();
+		IDScrollPanel.setBounds(10,130,60,285);
+		IDScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		dayScrollPanel = new JScrollPane();
+		dayScrollPanel.setBounds(70,130,710,300);
+		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
 		ID = new JLabel("ID");
 		ID.setHorizontalAlignment(JLabel.CENTER);
 		ID.setOpaque(true);
@@ -259,15 +261,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
 			}
 		}
-
-		IDScrollPanel = new JScrollPane(IDPanel);
-		IDScrollPanel.setBounds(10,130,60,285);
-		IDScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		dayScrollPanel = new JScrollPane(calPanel);
-		dayScrollPanel.setBounds(70,130,710,300);
-		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		
+		IDScrollPanel.setViewportView(IDPanel);
+		dayScrollPanel.setViewportView(calPanel);
 
 		panelNum[0].add(labelNum[0]);
 		panelNum[0].add(aNextButton);
@@ -275,7 +271,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		panelNum[0].add(aMonthLabel);
 		panelNum[0].add(IDScrollPanel);
 		panelNum[0].add(dayScrollPanel);
-		panelNum[0].add(attUpdateButton);
 	}
 
 	private void attendCalendar(){
@@ -371,6 +366,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private void Report(){
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
+		labelNum[1] = new JLabel("報告書管理");
+		labelNum[1].setBounds(0,10,800,40);
+		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
 		GridBagLayout gLayout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		repoPanel = new JPanel(gLayout);
@@ -378,14 +377,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		repoScrollPanel.setBounds(80, 100, 650, 300);
 		repoScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		repoScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		labelNum[1] = new JLabel("報告書管理");
-		labelNum[1].setBounds(0,10,800,40);
-		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
-		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
-		repoUpdateButton = new JButton("画面更新");
-		repoUpdateButton.setBounds(500, 450, 200, 60);
-		repoUpdateButton.setBackground(Color.WHITE);
-		repoUpdateButton.setFont(new Font(null, Font.PLAIN, 14));
 		
 		rStudentsButton  = new JButton[128];
 		gbc.gridx = 0;
@@ -435,32 +426,20 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 		panelNum[1].add(labelNum[1]);
 		panelNum[1].add(repoScrollPanel);
-		panelNum[1].add(repoUpdateButton);
 	}
 
 	private void Plan(){
 		panelNum[2] = new JPanel();
 		panelNum[2].setLayout(null);
-		planPanel = new JPanel();
-		planPanel.setLayout(new GridLayout(7, 7));
-		planPanel.setBounds(10, 120, 400, 400);
 		labelNum[2] = new JLabel("予定確認");
 		labelNum[2].setBounds(0,10,800,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
 		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
+
 		ymd = new JLabel("日付を選択");
 		ymd.setBounds(500,10,200,40);
 		ymd.setFont(new Font(null, Font.PLAIN, 18));
 		ymd.setHorizontalAlignment(JLabel.CENTER);
-		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
-		pMonthLabel.setBounds(150,70,200,40);
-		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
-		pTextArea = new JTextArea(20,24);
-		pTextArea.setBounds(450, 50, 300, 400);
-		pTextArea.setLineWrap(true);
-		addPlanButton = new JButton("予定追加");
-		addPlanButton.setBounds(500,470,200,40);
-		addPlanButton.setBackground(Color.WHITE);
 		pNextButton = new JButton();
 		pNextButton.setBounds(300,70,100,40);
 		pNextButton.setContentAreaFilled(false);
@@ -472,10 +451,23 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		//ボタンへのiconの設置
 		ImageIcon left = new ImageIcon("src/icon/left_mini.png");
 		ImageIcon right = new ImageIcon("src/icon/right_mini.png");
+		planPanel = new JPanel();
+		planPanel.setLayout(new GridLayout(7, 7));
+		planPanel.setBounds(10, 120, 400, 400);
+		
 		pNextButton.setIcon(right);
 		pBackButton.setIcon(left);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
+		pMonthLabel.setBounds(150,70,200,40);
+		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
+		pTextArea = new JTextArea(20,24);
+		pTextArea.setBounds(450, 50, 300, 400);
+		pTextArea.setLineWrap(true);
+		addPlanButton = new JButton("予定追加");
+		addPlanButton.setBounds(500,470,200,40);
+		addPlanButton.setBackground(Color.WHITE);
 		for(int i=0;i<7;i++){
 			weekLabel[i] = new JLabel(weekName[i]);
 			weekLabel[i].setHorizontalAlignment(JLabel.CENTER);
@@ -544,6 +536,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private void Account(){
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
+		labelNum[3] = new JLabel("アカウント管理");
+		labelNum[3].setBounds(0,10,800,40);
+		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		accPanel = new JPanel(gridBagLayout);
@@ -551,10 +547,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		accScrollPanel.setBounds(100,  80, 320, 400);
 		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		labelNum[3] = new JLabel("アカウント管理");
-		labelNum[3].setBounds(0,10,800,40);
-		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
-		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 		stuNumLabel = new JLabel("編集したいIDを選択");
 		stuNumLabel.setBounds(500,180,200,60);
 		stuNumLabel.setFont(new Font(null, Font.PLAIN, 18));
@@ -598,10 +590,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		rootButton.setBounds(500,350,200,80);
 		rootButton.setBackground(Color.WHITE);
 		rootButton.setFont(new Font(null, Font.PLAIN, 14));
-		accUpdateButton = new JButton("画面更新");
-		accUpdateButton.setBounds(500, 450, 200, 60);
-		accUpdateButton.setBackground(Color.WHITE);
-		accUpdateButton.setFont(new Font(null, Font.PLAIN, 14));
 		
 		panelNum[3].add(labelNum[3]);
 		panelNum[3].add(accScrollPanel);
@@ -610,7 +598,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		panelNum[3].add(cheAccButton);
 		panelNum[3].add(delAccButton);
 		panelNum[3].add(rootButton);
-		panelNum[3].add(accUpdateButton);
 	}
 
 	private void CardPanel(){
@@ -652,14 +639,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		calPanel.removeAll();
 		IDScrollPanel.remove(IDPanel);
 		dayScrollPanel.remove(calPanel);
-		
 		for(int i=0;i<2;i++){
 			attgLayout[i] = new GridBagLayout();
 			attgbc[i] = new GridBagConstraints();
 		}
 		IDPanel = new JPanel(attgLayout[0]);
 		calPanel = new JPanel(attgLayout[1]);
-		
 		attgbc[0].gridx = 0;
 		attgbc[0].gridy = 0;
 		attgbc[0].ipadx = 41;	//+41ピクセル これで最小のXをでかくできる
@@ -685,7 +670,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				attButton[i][j].setBackground(Color.WHITE);
 			}
 		}
-
 		attgbc[1].gridx = 0;
 		attgbc[1].gridy = 0;
 		attgbc[1].ipadx = 31;	//+31ピクセル これで最小のXをでかくできる
@@ -701,9 +685,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			attgbc[1].gridy = 0;
 			attgLayout[1].setConstraints(dayLabel[i], attgbc[1]);
 		}
-
+		
 		attendCalendar();/*カレンダー作成用*/
-
+		
 		IDPanel.add(ID);
 		for(int i=0;i<numSize;i++){
 			IDPanel.add(idLabel[i]);
@@ -716,9 +700,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
 			}
 		}
-		
 		IDScrollPanel.setViewportView(IDPanel);
 		dayScrollPanel.setViewportView(calPanel);
+		
+		panelNum[0].repaint();
 	}
 	
 	private void repoUpdate(){
@@ -771,8 +756,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			repoPanel.add(rStudentsButton[i]);
 			repoPanel.add(updateLabel[i]);
 		}
-		
 		repoScrollPanel.setViewportView(repoPanel);
+		
+		panelNum[1].repaint();
 	}
 	
 	private void accUpdate(){
@@ -803,6 +789,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			accPanel.add(aStudentsButton[i]);
 		}
 		accScrollPanel.setViewportView(accPanel);
+		
+		panelNum[3].repaint();
 	}
 
 	private void actionButton(){
@@ -825,8 +813,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				attButton[i][j].setActionCommand("attButton"+i+j);
 			}
 		}
-		attUpdateButton.addActionListener(this);
-		attUpdateButton.addKeyListener(this);
 		//スクロールを同期する
 		IDScrollPanel.getViewport().addChangeListener(cl);
 		dayScrollPanel.getViewport().addChangeListener(cl);
@@ -837,8 +823,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			rStudentsButton[i].addKeyListener(this);
 			rStudentsButton[i].setActionCommand("rStudents"+i);
 		}
-		repoUpdateButton.addActionListener(this);
-		repoUpdateButton.addKeyListener(this);
 		
 		/*plan*/
 		addPlanButton.addActionListener(this);
@@ -867,8 +851,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		delAccButton.addKeyListener(this);
 		rootButton.addActionListener(this);
 		rootButton.addKeyListener(this);
-		accUpdateButton.addActionListener(this);
-		accUpdateButton.addKeyListener(this);
 
 	}
 
@@ -921,9 +903,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 					}
 				}
 			}
-		}else if(e.getSource() == attUpdateButton){
-			attendUpdate();
-			panelNum[0].repaint();
 		}else if(e.getActionCommand().matches("rStudents" + ".*")){//報告書管理
 			String user = null;
 			for(int i=0;i<numSize;i++){
@@ -932,9 +911,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				}
 			}
 			controller.showReport(user);
-		}else if(e.getSource() == repoUpdateButton){
-			repoUpdate();
-			panelNum[1].repaint();
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//planで1ヶ月増やす
 			planCalendar();
@@ -987,10 +963,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			message.showMessage(stuid + "を削除しました");
 			stuNumLabel.setText("編集したいIDを選択");
 			UpdateAccount();
-			panelNum[3].repaint();
-		}else if(e.getSource() == accUpdateButton){
-			accUpdate();
-			panelNum[3].repaint();
 		}
 	}
 
@@ -1023,9 +995,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 	public void windowActivated(WindowEvent e) {	// ウィンドウがアクティブになったとき
 		UpdateAccount();
-		panelNum[0].repaint();
-		panelNum[1].repaint();
-		panelNum[3].repaint();
 	}
 
 	public void windowDeactivated(WindowEvent e) {	// ウィンドウをアクティブでなくしたとき
