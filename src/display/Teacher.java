@@ -166,7 +166,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		labelNum[0].setBounds(0,10,800,40);
 		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
 		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
-		
+
 		for(int i=0;i<2;i++){
 			attgLayout[i] = new GridBagLayout();
 			attgbc[i] = new GridBagConstraints();
@@ -199,7 +199,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		dayScrollPanel.setBounds(70,130,710,300);
 		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
+
 		ID = new JLabel("ID");
 		ID.setHorizontalAlignment(JLabel.CENTER);
 		ID.setOpaque(true);
@@ -261,7 +261,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				calPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
 			}
 		}
-		
+
 		IDScrollPanel.setViewportView(IDPanel);
 		dayScrollPanel.setViewportView(calPanel);
 
@@ -328,7 +328,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			}
 		}
 	}
-	
+
 	private ChangeListener cl = new ChangeListener() {
 		private boolean adjflg;
 		public void stateChanged(ChangeEvent e) {
@@ -377,7 +377,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		repoScrollPanel.setBounds(80, 100, 650, 300);
 		repoScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		repoScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		
+
 		rStudentsButton  = new JButton[128];
 		gbc.gridx = 0;
 		gbc.ipadx = 0;
@@ -388,6 +388,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			rStudentsButton[i].setBackground(Color.WHITE);
 			rStudentsButton[i].setText(slaves.get(i));
+			rStudentsButton[i].setFont(new Font(null, Font.PLAIN, 12));
 			gLayout.setConstraints(rStudentsButton[i], gbc);
 		}
 
@@ -451,12 +452,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		planPanel = new JPanel();
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 120, 400, 400);
-		
+
 		pNextButton.setIcon(right);
 		pBackButton.setIcon(left);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		
+
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -587,7 +588,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		rootButton.setBounds(500,350,200,80);
 		rootButton.setBackground(Color.WHITE);
 		rootButton.setFont(new Font(null, Font.PLAIN, 14));
-		
+
 		panelNum[3].add(labelNum[3]);
 		panelNum[3].add(accScrollPanel);
 		panelNum[3].add(stuNumLabel);
@@ -623,13 +624,13 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		slaves = Slave.getSlaves();
 		numSize = Slave.getSlaves().size();
 	}
-	
+
 	public void UpdateAccount() {
 		attendUpdate();
 		repoUpdate();
 		accUpdate();
 	}
-	
+
 	private void attendUpdate(){
 		resetSlave();
 		IDPanel.removeAll();
@@ -682,10 +683,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			attgbc[1].gridy = 0;
 			attgLayout[1].setConstraints(dayLabel[i], attgbc[1]);
 		}
-		
+
 		attendCalendar();/*カレンダー作成用*/
-		
-		
+
+
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<31;j++){
 				attButton[i][j].addActionListener(this);
@@ -693,7 +694,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				attButton[i][j].setActionCommand("attButton"+i+j);
 			}
 		}
-		
+
 		IDPanel.add(ID);
 		for(int i=0;i<numSize;i++){
 			IDPanel.add(idLabel[i]);
@@ -708,15 +709,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		}
 		IDScrollPanel.setViewportView(IDPanel);
 		dayScrollPanel.setViewportView(calPanel);
-		
+
 		panelNum[0].repaint();
 	}
-	
+
 	private void repoUpdate(){
 		resetSlave();
 		repoPanel.removeAll();
 		repoScrollPanel.remove(repoPanel);
-		
+
 		GridBagLayout gLayout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		repoPanel = new JPanel(gLayout);
@@ -729,6 +730,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			rStudentsButton[i].setBackground(Color.WHITE);
 			rStudentsButton[i].setText(slaves.get(i));
+			rStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
 			gLayout.setConstraints(rStudentsButton[i], gbc);
 			rStudentsButton[i].addActionListener(this);
 			rStudentsButton[i].addKeyListener(this);
@@ -738,7 +740,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		updateLabel  = new JLabel[numSize];
 		gbc.gridx = 1;
 		gbc.ipadx = 128;
-		gbc.ipady = 19;
+		gbc.ipady = 15;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
 		for(int i=0;i<numSize;i++){
 			gbc.gridy = i;
@@ -763,10 +765,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			repoPanel.add(updateLabel[i]);
 		}
 		repoScrollPanel.setViewportView(repoPanel);
-		
+
 		panelNum[1].repaint();
 	}
-	
+
 	private void accUpdate(){
 		resetSlave();
 		accPanel.removeAll();
@@ -795,7 +797,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			accPanel.add(aStudentsButton[i]);
 		}
 		accScrollPanel.setViewportView(accPanel);
-		
+
 		panelNum[3].repaint();
 	}
 
@@ -806,7 +808,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			numButton[i].addActionListener(this);
 			numButton[i].addKeyListener(this);
 		}
-		
+
 		/*attend*/
 		aNextButton.addActionListener(this);
 		aNextButton.addKeyListener(this);
@@ -822,14 +824,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		//スクロールを同期する
 		IDScrollPanel.getViewport().addChangeListener(cl);
 		dayScrollPanel.getViewport().addChangeListener(cl);
-		
+
 		/*repo*/
 		for(int i=0;i<numSize;i++){
 			rStudentsButton[i].addActionListener(this);
 			rStudentsButton[i].addKeyListener(this);
 			rStudentsButton[i].setActionCommand("rStudents"+i);
 		}
-		
+
 		/*plan*/
 		addPlanButton.addActionListener(this);
 		addPlanButton.addKeyListener(this);
@@ -842,7 +844,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			pDayButton[i].addKeyListener(this);
 			pDayButton[i].setActionCommand("pDayButton"+i);
 		}
-		
+
 		/*account*/
 		for(int i=0;i<numSize;i++){
 			aStudentsButton[i].addActionListener(this);

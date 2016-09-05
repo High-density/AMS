@@ -50,7 +50,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton aBackButton;
 	private JLabel aMonthLabel;
 	private JLabel[] weekLabel_att = new JLabel[7];
-	private JButton[] dayButton_att = new JButton[42];
+	private JLabel[] attDayLabel = new JLabel[42];
 
 	// report
 	private JButton referButton;
@@ -173,14 +173,21 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekLabel_att[i].setOpaque(true);
 		}
 
-		for(int i=0;i<42;i++)
-			dayButton_att[i] = new JButton();
+		for(int i=0;i<42;i++){
+			attDayLabel[i] = new JLabel();
+			attDayLabel[i].setOpaque(true);
+			attDayLabel[i].setBorder(new LineBorder(Color.BLACK, 1, true));
+			attDayLabel[i].setFont(new Font(null, Font.PLAIN, 14));
+			attDayLabel[i].setHorizontalAlignment(JLabel.CENTER);
+		}
 
 		attendCalendar();
-		for(int i=0;i<7;i++)
+
+		for(int i=0;i<7;i++){
 			calPanel.add(weekLabel_att[i]);
+		}
 		for(int i=0;i<42;i++){
-			calPanel.add(dayButton_att[i]);//カレンダーボタン追加
+			calPanel.add(attDayLabel[i]);//カレンダーボタン追加
 		}
 
 		panelNum[0].add(labelNum[0]);
@@ -204,26 +211,26 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			status[i] = Book[0].getData(i);
 		}
 		for(int i=0;i<dayOfWeek;i++){
-			dayButton_att[i].setText("");
-			dayButton_att[i].setBackground(Color.WHITE);
+			attDayLabel[i].setText("");
+			attDayLabel[i].setBackground(Color.WHITE);
 		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			int j = i - dayOfWeek;
-			dayButton_att[i].setText(""+(1+j));
+			attDayLabel[i].setText(""+(1+j));
 			if(status[j] == AttendanceBook.ATTENDED){
-				dayButton_att[i].setBackground(Color.CYAN);
-				dayButton_att[i].setForeground(Color.DARK_GRAY);
+				attDayLabel[i].setBackground(Color.CYAN);
+				attDayLabel[i].setForeground(Color.DARK_GRAY);
 			}else if(status[j] == AttendanceBook.ABSENCE){
-				dayButton_att[i].setBackground(Color.PINK);;
-				dayButton_att[i].setForeground(Color.DARK_GRAY);
+				attDayLabel[i].setBackground(Color.PINK);;
+				attDayLabel[i].setForeground(Color.DARK_GRAY);
 			}else if(status[j] == AttendanceBook.AUTHORIZED_ABSENCE){
-				dayButton_att[i].setBackground(Color.GREEN);
-				dayButton_att[i].setForeground(Color.DARK_GRAY);
+				attDayLabel[i].setBackground(Color.GREEN);
+				attDayLabel[i].setForeground(Color.DARK_GRAY);
 			}
 		}
 		for (int i=dayOfWeek+maxDate;i<42;i++){
-			dayButton_att[i].setText("");
-			dayButton_att[i].setBackground(Color.WHITE);
+			attDayLabel[i].setText("");
+			attDayLabel[i].setBackground(Color.WHITE);
 		}
 	}
 
