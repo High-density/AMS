@@ -290,8 +290,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			}
 		}
 
-		attgbc[1].ipadx = 0;	//+41ピクセル これで最小のXをでかくできる
-		attgbc[1].ipady = 6;	//+08ピクセル これで最小のYをでかくできる
+		attgbc[1].ipadx = 0;	//+0ピクセル これで最小のXをでかくできる
+		attgbc[1].ipady = 6;	//+6ピクセル これで最小のYをでかくできる
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				dayLabel[j].setText(String.format("%1$02d", j+1));
@@ -395,26 +395,23 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		gbc.gridx = 1;
 		gbc.ipadx = 128;
 		gbc.ipady = 19;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
 		for(int i=0;i<numSize;i++){
 			gbc.gridy = i;
-			updateLabel[i] = new JLabel();
+			gbc.ipadx = 128;
+			updateLabel[i] = new JLabel("ファイルが存在しません");
 			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			updateLabel[i].setFont(new Font(null, Font.PLAIN, 16));
 			updateLabel[i].setBackground(Color.WHITE);
 			updateLabel[i].setBorder(new LineBorder(Color.LIGHT_GRAY,1,true));
 			updateLabel[i].setOpaque(true);
-			gLayout.setConstraints(updateLabel[i], gbc);
-		}
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
-		for(int i=0;i<numSize;i++){
-			LocalDate LastUpdate;
-			String update = "ファイルが存在しません";
 			if(controller.getLastUploadDate(slaves.get(i)) != null){
-				LastUpdate = controller.getLastUploadDate(slaves.get(i));
-				update = LastUpdate.format(formatter);
+				LocalDate LastUpdate = controller.getLastUploadDate(slaves.get(i));
+				String update = LastUpdate.format(formatter);
+				updateLabel[i].setText(update);
+				gbc.ipadx = 149;
 			}
-			updateLabel[i].setText(update);
+			gLayout.setConstraints(updateLabel[i], gbc);
 		}
 
 		for(int i=0;i<numSize;i++){
@@ -458,7 +455,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		pNextButton.setIcon(right);
 		pBackButton.setIcon(left);
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -508,23 +506,22 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private void planCalendar(){
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
-		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
+		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		yearMonth[1] = YearMonth.of(year[1], month[1]+1);
 		agenda  = controller.getAgenda(yearMonth[1]);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		//System.out.println(dayOfWeek);
 		int maxDate = yearMonth[1].lengthOfMonth();
 		for(int i=0;i<dayOfWeek;i++){
 			pDayButton[i].setText("");
 		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
-			pDayButton[i].setText(""+(1+i-dayOfWeek));
-			calendar.set(year[1], month[1], (i+1-dayOfWeek));
-			if(calendar.get(Calendar.DAY_OF_WEEK) == 7)
-				pDayButton[i].setForeground(Color.BLUE);
-			else if(calendar.get(Calendar.DAY_OF_WEEK) == 1)
+			int day = 1+i-dayOfWeek;
+			pDayButton[i].setText(""+day);
+			if(i % 7 == 0)
 				pDayButton[i].setForeground(Color.RED);
+			else if(i % 7 == 6)
+				pDayButton[i].setForeground(Color.BLUE);
 			else
 				pDayButton[i].setForeground(Color.BLACK);
 		}
@@ -688,6 +685,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		
 		attendCalendar();/*カレンダー作成用*/
 		
+		
+		for(int i=0;i<numSize;i++){
+			for(int j=0;j<31;j++){
+				attButton[i][j].addActionListener(this);
+				attButton[i][j].addKeyListener(this);
+				attButton[i][j].setActionCommand("attButton"+i+j);
+			}
+		}
+		
 		IDPanel.add(ID);
 		for(int i=0;i<numSize;i++){
 			IDPanel.add(idLabel[i]);
@@ -724,32 +730,32 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			rStudentsButton[i].setBackground(Color.WHITE);
 			rStudentsButton[i].setText(slaves.get(i));
 			gLayout.setConstraints(rStudentsButton[i], gbc);
+			rStudentsButton[i].addActionListener(this);
+			rStudentsButton[i].addKeyListener(this);
+			rStudentsButton[i].setActionCommand("rStudents"+i);
 		}
 
 		updateLabel  = new JLabel[numSize];
 		gbc.gridx = 1;
 		gbc.ipadx = 128;
 		gbc.ipady = 19;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
 		for(int i=0;i<numSize;i++){
 			gbc.gridy = i;
-			updateLabel[i] = new JLabel();
+			gbc.ipadx = 128;
+			updateLabel[i] = new JLabel("ファイルが存在しません");
 			updateLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			updateLabel[i].setFont(new Font(null, Font.PLAIN, 16));
 			updateLabel[i].setBackground(Color.WHITE);
 			updateLabel[i].setBorder(new LineBorder(Color.LIGHT_GRAY,1,true));
 			updateLabel[i].setOpaque(true);
-			gLayout.setConstraints(updateLabel[i], gbc);
-		}
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
-		for(int i=0;i<numSize;i++){
-			LocalDate LastUpdate;
-			String update = "ファイルが存在しません";
 			if(controller.getLastUploadDate(slaves.get(i)) != null){
-				LastUpdate = controller.getLastUploadDate(slaves.get(i));
-				update = LastUpdate.format(formatter);
+				LocalDate LastUpdate = controller.getLastUploadDate(slaves.get(i));
+				String update = LastUpdate.format(formatter);
+				updateLabel[i].setText(update);
+				gbc.ipadx = 149;
 			}
-			updateLabel[i].setText(update);
+			gLayout.setConstraints(updateLabel[i], gbc);
 		}
 
 		for(int i=0;i<numSize;i++){
@@ -912,11 +918,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			}
 			controller.showReport(user);
 		}else if(e.getSource() == pNextButton){
-			calendar.set(Calendar.MONTH, month[1] +1);	//planで1ヶ月増やす
+			calendar.set(Calendar.MONTH, month[1]+1);	//planで1ヶ月増やす
 			planCalendar();
 			panelNum[2].repaint();
 		}else if(e.getSource() == pBackButton){
-			calendar.set(Calendar.MONTH, month[1] -1);	//planで1ヶ月減らす
+			calendar.set(Calendar.MONTH, month[1]-1);	//planで1ヶ月減らす
 			planCalendar();
 			panelNum[2].repaint();
 		}else if(e.getActionCommand().matches("pDayButton" + ".*")){/*planで日付を取得するとき*/
