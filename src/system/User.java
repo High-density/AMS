@@ -230,7 +230,10 @@ public abstract class User {
 			String osname = System.getProperty("os.name");
 			// OSごとに開くためのコマンドを変える
 			if (osname.indexOf("Windows") >= 0) {
-				cmd = "start";
+				cmd = "explorer";
+				Pattern p = Pattern.compile("/");
+				Matcher m = p.matcher(dirName);
+				dirName = m.replaceAll("\\\\");
 			} else if (osname.indexOf("Linux") >= 0) {
 				cmd = "xdg-open";
 			} else if (osname.indexOf("Mac") >= 0) {

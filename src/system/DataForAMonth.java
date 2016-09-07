@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * 一月分のデータを扱うクラス
  * @author Shinichi Yanagido
- * @version 1.0
+ * @version 1.1
  */
 abstract public class DataForAMonth<T> {
 	protected YearMonth yearMonth; // いつの情報を取得しているのか
@@ -17,6 +17,15 @@ abstract public class DataForAMonth<T> {
 		data = new ArrayList<T>(getMaxDate());
 		for (int d = 0; d < getMaxDate(); d++) {
 			data.add(d, null);
+		}
+	}
+
+	// 指定された日付にデータがあるかどうか
+	public boolean hasData(int day) {
+		if (0 <= day && day < getMaxDate() && data.get(day) != null) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
