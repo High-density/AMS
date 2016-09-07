@@ -12,7 +12,7 @@ import java.time.YearMonth;
 /**
  * 各月の予定を一月分保持するクラス
  * @author Shinichi Yanagido
- * @version 1.0
+ * @version 1.1
  */
 public class Agenda extends DataForAMonth<String> {
 	private File dir;
@@ -37,15 +37,20 @@ public class Agenda extends DataForAMonth<String> {
 				// ファイルが存在したら，ファイル内のデータを全て読み込む
 				try {
 					BufferedReader br = new BufferedReader(new FileReader(file));
-					String line, content = "";
-					while ((line = br.readLine()) != null) content += line + System.getProperty("line.separator");
+					String line, content = null;
+					if ((line = br.readLine()) != null) {
+						content = line;
+						while ((line = br.readLine()) != null) {
+							content = System.getProperty("line.separator") + line;
+						}
+					}
 					set(day, content);
 				} catch (IOException e) {
 					Log.error(e);
 				}
 			} else {
-				// ファイルが存在しなかったら，改行のみ
-				set(day, System.getProperty("line.separator"));
+				// ファイルが存在しなかったら，nullをセット
+				set(day, null);
 			}
 		}
 	}
