@@ -123,7 +123,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelButton = new JPanel(new GridLayout(1,5));
 		panelButton.setPreferredSize(new Dimension(800, 40));
 		numButton[0] = new JButton("出席管理");
-		numButton[1] = new JButton("週報アップロード");
+		numButton[1] = new JButton("報告書アップロード");
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
 		numButton[4] = new JButton("ログアウト");
@@ -299,10 +299,14 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekLabel_plan[i] = new JLabel(weekName[i]);
 			weekLabel_plan[i].setFont(new Font(null, Font.PLAIN, 16));
 			weekLabel_plan[i].setHorizontalAlignment(JLabel.CENTER);
-			weekLabel_plan[i].setBackground(Color.ORANGE);
-			weekLabel_plan[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekLabel_plan[i].setBackground(Color.WHITE);
+			weekLabel_plan[i].setBorder(new LineBorder(Color.DARK_GRAY,1,true));
 			weekLabel_plan[i].setOpaque(true);
 		}
+		weekLabel_plan[0].setForeground(Color.RED);
+		weekLabel_plan[0].setBorder(new LineBorder(Color.RED,1,true));
+		weekLabel_plan[6].setForeground(Color.BLUE);
+		weekLabel_plan[6].setBorder(new LineBorder(Color.BLUE,1,true));
 		for(int i=0;i<42;i++){
 			dayButton_plan[i] = new JButton();
 		}
@@ -312,7 +316,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		for(int i=0;i<7;i++)
 			planPanel.add(weekLabel_plan[i]);
 		for(int i=0;i<42;i++){
-			dayButton_plan[i].setBackground(Color.WHITE);
 			planPanel.add(dayButton_plan[i]);//カレンダーボタン追加
 		}
 
@@ -336,19 +339,26 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		int maxDate = yearMonth[0].lengthOfMonth();
 
 		agenda  = controller.getAgenda(yearMonth[1]);
+
 		for(int i=0;i<dayOfWeek;i++){
 			dayButton_plan[i].setText("");
 			dayButton_plan[i].setBackground(Color.WHITE);
 		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			int day = 1 + i - dayOfWeek;
-			//String plan = agenda.getData(day);
 			dayButton_plan[i].setText(""+day);
-			//if(!("\n".equals(plan))){
-			dayButton_plan[i].setBackground(Color.WHITE);
-			//}else{
-			//dayButton_plan[i].setBackground(Color.CYAN);
-			//}*/
+			if(i%7==0){
+				dayButton_plan[i].setForeground(Color.RED);
+			}else if(i%7==6){
+				dayButton_plan[i].setForeground(Color.BLUE);
+			}else{
+				dayButton_plan[i].setForeground(Color.BLACK);
+			}
+			if(agenda.hasData(day-1)){
+				dayButton_plan[i].setBackground(Color.ORANGE);
+			}else{
+				dayButton_plan[i].setBackground(Color.WHITE);
+			}
 		}
 		for (int i=dayOfWeek+maxDate;i<42;i++){
 			dayButton_plan[i].setText("");

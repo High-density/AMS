@@ -532,14 +532,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			weekLabel[i].setBackground(Color.WHITE);
 			weekLabel[i].setBorder(new LineBorder(Color.DARK_GRAY,1,true));
 			weekLabel[i].setOpaque(true);
-			if(i==0){
-				weekLabel[i].setForeground(Color.RED);
-				weekLabel[i].setBorder(new LineBorder(Color.RED,1,true));
-			}else if(i==6){
-				weekLabel[i].setForeground(Color.BLUE);
-				weekLabel[i].setBorder(new LineBorder(Color.BLUE,1,true));
-			}
 		}
+		weekLabel[0].setForeground(Color.RED);
+		weekLabel[0].setBorder(new LineBorder(Color.RED,1,true));
+		weekLabel[6].setForeground(Color.BLUE);
+		weekLabel[6].setBorder(new LineBorder(Color.BLUE,1,true));
+
 		for(int i=0;i<pDayButton.length;i++)
 			pDayButton[i] = new JButton();
 
@@ -548,7 +546,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		for(int i=0;i<7;i++)
 			planPanel.add(weekLabel[i]);
 		for(int i=0;i<pDayButton.length;i++){
-			pDayButton[i].setBackground(Color.WHITE);
 			planPanel.add(pDayButton[i]);//カレンダーボタン追加
 		}
 
@@ -574,19 +571,26 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 		for(int i=0;i<dayOfWeek;i++){
 			pDayButton[i].setText("");
+			pDayButton[i].setBackground(Color.WHITE);
 		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			int day = 1+i-dayOfWeek;
 			pDayButton[i].setText(""+day);
-			if(i % 7 == 0)
+			if(i % 7 == 0){
 				pDayButton[i].setForeground(Color.RED);
-			else if(i % 7 == 6)
+			}else if(i % 7 == 6){
 				pDayButton[i].setForeground(Color.BLUE);
-			else
+			}else{
 				pDayButton[i].setForeground(Color.BLACK);
+			}
+			if(agenda.hasData(day-1)){
+				pDayButton[i].setBackground(Color.ORANGE);
+			}else
+				pDayButton[i].setBackground(Color.WHITE);
 		}
 		for (int i=dayOfWeek+maxDate;i<pDayButton.length;i++){
 			pDayButton[i].setText("");
+			pDayButton[i].setBackground(Color.WHITE);
 		}
 	}
 
