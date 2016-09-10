@@ -240,7 +240,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		}
 
 		attgbc[2].gridy = 0;
-		attgbc[2].ipadx = 31;	//+31ピクセル これで最小のXをでかくできる
+		attgbc[2].ipadx = 32;	//+31ピクセル これで最小のXをでかくできる
 		attgbc[2].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
 		for(int i=0;i<maxDate;i++){// 日付表示
 			dayLabel[i].setText(String.format("%1$02d", i+1));
@@ -250,7 +250,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 		int ix=0;
 		if(CheckOS.isWindows()){
-			ix = 0;
+			ix = 1;
 		}else{// if(CheckOS.isLinux()){
 			ix = 4;
 		}
@@ -418,10 +418,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		labelNum[1].setBounds(0,10,800,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
 		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
+		Border border = new EmptyBorder(0,0,0,0);
 		repoScrollPanel = new JScrollPane();
 		repoScrollPanel.setBounds(80, 100, 650, 300);
 		repoScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		repoScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		repoScrollPanel.setBorder(border);
 
 		repoReset();
 
@@ -625,11 +627,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		rootButton.setBounds(500,350,200,80);
 		rootButton.setBackground(Color.WHITE);
 		rootButton.setFont(new Font(null, Font.PLAIN, 14));
-
+		Border border = new EmptyBorder(0,0,0,0);
 		accScrollPanel = new JScrollPane();
 		accScrollPanel.setBounds(100,  80, 320, 400);
 		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		accScrollPanel.setBorder(border);
 
 		accReset();
 
@@ -875,7 +878,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == aStudentsButton[i]){
 					memNum = i;
-					stuNumLabel.setText(aStudentsButton[memNum].getText() + "を");
+					stuNumLabel.setText(aStudentsButton[memNum].getText());// + "を");
 				}
 			}
 		}else if(e.getSource() == addAccButton){//新規作成
@@ -914,7 +917,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		// TODO 自動生成されたメソッド・スタブ
 	}
 
-	public void windowIconified(WindowEvent e){		// ウィンドウを最小化したとき
+	public void windowIconified(WindowEvent e){	// ウィンドウを最小化したとき
 		// TODO 自動生成されたメソッド・スタブ
 	}
 

@@ -30,7 +30,7 @@ import system.Agenda;
 import system.AttendanceBook;
 import system.Controller;
 
-class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
+class Method extends KeyAdapter implements ActionListener{// 機能選択クラス
 	// main
 	private Controller controller; // 内部動作用
 	private Message message; //エラー呼び出し用
@@ -123,7 +123,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelButton = new JPanel(new GridLayout(1,5));
 		panelButton.setPreferredSize(new Dimension(800, 40));
 		numButton[0] = new JButton("出席管理");
-		numButton[1] = new JButton("報告書アップロード");
+		numButton[1] = new JButton("報告書アップローダ");
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
 		numButton[4] = new JButton("ログアウト");
@@ -158,8 +158,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelNum[0] = new JLabel("出席");
-		labelNum[0].setBounds(380,10,200,40);
-		labelNum[0].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[0].setBounds(0,10,800,40);
+		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
 
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
@@ -237,9 +238,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private void Report(){
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
-		labelNum[1] = new JLabel("週報");
-		labelNum[1].setBounds(380,10,200,40);
-		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[1] = new JLabel("報告書アップローダ");
+		labelNum[1].setBounds(0,10,800,40);
+		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
 		referButton  = new JButton("参照");
 		referButton.setBounds(500,100,150,50);
 		referButton.setBackground(Color.WHITE);
@@ -265,8 +267,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 120, 400, 400);
 		labelNum[2] = new JLabel("予定");
-		labelNum[2].setBounds(180,10,200,40);
-		labelNum[2].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[2].setBounds(0,10,800,40);
+		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -329,7 +332,6 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	}
 
 	private void planCalendar(){
-		final String NewLine = System.getProperty("line.separator");
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
@@ -370,8 +372,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
 		labelNum[3] = new JLabel("アカウント");
-		labelNum[3].setBounds(380,10,200,40);
-		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[3].setBounds(0,10,800,40);
+		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 		//IDの表示
 		IDLabel = new JLabel("ID");
 		IDLabel.setBounds(280,130,200,40);
