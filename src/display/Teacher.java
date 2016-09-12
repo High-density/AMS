@@ -241,20 +241,22 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 		attgbc[2].gridy = 0;
 		attgbc[2].ipadx = 32;	//+31ピクセル これで最小のXをでかくできる
-		attgbc[2].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
+		if(CheckOS.isWindows()){
+			attgbc[2].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
+		}else{// if(CheckOS.isLinux()){
+			attgbc[2].ipady = 15;
+		}
 		for(int i=0;i<maxDate;i++){// 日付表示
 			dayLabel[i].setText(String.format("%1$02d", i+1));
 			attgbc[2].gridx = i;
 			attgLayout[2].setConstraints(dayLabel[i], attgbc[2]);
 		}
 
-		int ix=0;
 		if(CheckOS.isWindows()){
-			ix = 1;
+			attgbc[1].ipadx = 1;	//+0ピクセル これで最小のXをでかくできる
 		}else{// if(CheckOS.isLinux()){
-			ix = 4;
+			attgbc[1].ipadx = 5;
 		}
-		attgbc[1].ipadx = ix;	//+0ピクセル これで最小のXをでかくできる
 		attgbc[1].ipady = 6;	//+6ピクセル これで最小のYをでかくできる
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
@@ -279,12 +281,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 
 		if(maxDate < 31){
 			if(CheckOS.isWindows()){
-				ix = 40;
+				attgbc[2].ipadx = 40;
+				attgbc[2].ipady = 12;
 			}else{// if(CheckOS.isLinux()){
-				ix = 32;
+				attgbc[2].ipadx = 38;
+				attgbc[2].ipady = 15;
 			}
-			attgbc[2].ipadx = ix;
-			attgbc[2].ipady = 12;
 			for(int i=maxDate;i<31;i++){
 				dayLabel[i].setText("/");
 				attgbc[2].gridx = i;
@@ -292,11 +294,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			}
 
 			if(CheckOS.isWindows()){
-				ix = 8;
+				attgbc[1].ipadx = 8;
 			}else{// if(CheckOS.isLinux()){
-				ix = 3;
+				attgbc[1].ipadx = 6;
 			}
-			attgbc[1].ipadx = ix;
 			attgbc[1].ipady = 6;
 			for (int i=0;i<numSize;i++){
 				for(int j=maxDate;j<31;j++){
@@ -437,7 +438,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		repoPanel = new JPanel(gLayout);
 		gbc.gridx = 0;
 		gbc.ipadx = 0;
-		gbc.ipady = 8;
+		if(CheckOS.isWindows()){
+			gbc.ipady = 8;
+		}else{// if(CheckOS.isLinux()){
+			gbc.ipady = 13;
+		}
 		rStudentsButton = new JButton[numSize];
 		for(int i=0;i<numSize;i++){
 			gbc.gridy = i;
@@ -458,7 +463,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			yx = 149;
 		}
 		gbc.gridx = 1;
-		gbc.ipady = 15;
+		if(CheckOS.isWindows()){
+			gbc.ipady = 15;
+		}else{// if(CheckOS.isLinux()){
+			gbc.ipady = 24;
+		}
 		updateLabel  = new JLabel[numSize];
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年 MM月 dd日");
 		for(int i=0;i<numSize;i++){
@@ -631,7 +640,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 		accScrollPanel = new JScrollPane();
 		accScrollPanel.setBounds(100,  80, 320, 400);
 		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		accScrollPanel.setBorder(border);
 
 		accReset();
@@ -656,8 +665,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			gbc.ipadx = 12;
 			gbc.ipady = 12;
 		}else{
-			gbc.ipadx = 8;
-			gbc.ipady = 8;
+			gbc.ipadx = 4;
+			gbc.ipady = 16;
 		}
 		aStudentsButton  = new JButton[numSize];
 		for(int i=0;i<numSize;i++){
