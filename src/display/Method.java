@@ -25,9 +25,11 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import system.Agenda;
 import system.AttendanceBook;
+import system.CheckOS;
 import system.Controller;
 
 class Method extends KeyAdapter implements ActionListener{// 機能選択クラス
@@ -56,6 +58,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private JButton referButton;
 	private JButton upButton;
 	private JTextField pathTextField;
+	private JFileChooser filechooser;
 
 	// plan
 	private JPanel planPanel;
@@ -177,7 +180,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		for(int i=0;i<42;i++){
 			attDayLabel[i] = new JLabel();
 			attDayLabel[i].setOpaque(true);
-			attDayLabel[i].setBorder(new LineBorder(Color.BLACK, 1, true));
+			attDayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
 			attDayLabel[i].setFont(new Font(null, Font.PLAIN, 14));
 			attDayLabel[i].setHorizontalAlignment(JLabel.CENTER);
 		}
@@ -253,6 +256,17 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pathTextField = new JTextField("ファイルを参照してください");
 		pathTextField.setBounds(200,100,300,51);
 		pathTextField.setFont(new Font(null, Font.PLAIN, 14));
+		
+		File dir;
+		if(CheckOS.isWindows()){
+			dir = new File(System.getProperty("user.home"));
+		}else{
+			dir = new File(System.getProperty("user.home") + "/Documents");
+		}
+		filechooser = new JFileChooser(dir);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("ドキュメントファイル", "pdf", "docx", "doc");
+		filechooser.addChoosableFileFilter(filter); // ファイルのフィルタを設定
+		filechooser.setAcceptAllFileFilterUsed(true); // すべてのファイルを使うか
 
 		panelNum[1].add(labelNum[1]);
 		panelNum[1].add(pathTextField);
@@ -463,9 +477,11 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			cLayout.show(cardPanel, "Meth3");
 		}else if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
+		}else if(e.getSource() == numButton[4]){/*ログアウト*/
+			controller.logout();
+			mainFrame.setVisible(false);
+			Login.loginFrame.setVisible(true);
 		}else if(e.getSource() == referButton){/*ファイル参照用*/
-			File dir = new File("ライブラリ/ドキュメント");
-			JFileChooser filechooser = new JFileChooser(dir);
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 			if (selected == JFileChooser.APPROVE_OPTION){
 				File file = filechooser.getSelectedFile();
@@ -476,12 +492,12 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 				pathTextField.setText("エラー又は取消しがありました");
 			}
 		}else if(e.getSource() == upButton){/*アップロード*/
-			message("アップロードしました");
-			controller.submitReport(pathTextField.getText());
-		}else if(e.getSource() == numButton[4]){/*ログアウト*/
-			controller.logout();
-			mainFrame.setVisible(false);
-			Login.loginFrame.setVisible(true);
+			if(pathTextField.getText().equals("ファイルを参照してください") || pathTextField.getText().equals("キャンセルされました"))
+				message("ファイルを選択してください");
+			else{
+				message("アップロードしました");
+				controller.submitReport(pathTextField.getText());
+			}
 		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
 			attendCalendar();
@@ -505,7 +521,6 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 					if(!dayName.equals("")){
 						pday = Integer.parseInt(dayName) -1;
 						planDate.setText(year[1]+"年"+(month[1]+1)+"月"+(pday+1)+"日");
-						planDate.setFont(new Font(null, Font.PLAIN, 24));
 						pTextArea.setEditable(true);
 						String plan = agenda.getData(pday);
 						pTextArea.setText(plan);

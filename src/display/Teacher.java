@@ -39,7 +39,7 @@ import system.CheckOS;
 import system.Controller;
 import system.Slave;
 
-class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機能選択クラス*/
+class Teacher extends KeyAdapter implements ActionListener, WindowListener{// 先生用クラス
 	/*main*/
 	private Controller controller;	// 内部動作用
 	private Message message;		// エラー呼び出し用
@@ -52,7 +52,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 	private JButton numButton[] = new JButton[5];
 	private JLabel labelNum[] = new JLabel[4];
 	private final String[] funcName = {"出席管理","報告書管理","予定管理",
-										"アカウント管理", "ログアウト"};
+									   "アカウント管理", "ログアウト"};
 
 	/*attend*/
 	private JPanel IDPanel;
@@ -284,7 +284,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				attgbc[2].ipadx = 40;
 				attgbc[2].ipady = 12;
 			}else{// if(CheckOS.isLinux()){
-				attgbc[2].ipadx = 38;
+				attgbc[2].ipadx = 43;
 				attgbc[2].ipady = 15;
 			}
 			for(int i=maxDate;i<31;i++){
@@ -296,7 +296,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 			if(CheckOS.isWindows()){
 				attgbc[1].ipadx = 8;
 			}else{// if(CheckOS.isLinux()){
-				attgbc[1].ipadx = 6;
+				attgbc[1].ipadx = 11;
 			}
 			attgbc[1].ipady = 6;
 			for (int i=0;i<numSize;i++){
@@ -845,13 +845,13 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{/*機
 				}
 			}
 		}else if(e.getActionCommand().matches("rStudents" + ".*")){//報告書管理
-			String user = null;
+			String user = "";
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == rStudentsButton[i]){
 					user =  slaves.get(i);
+					controller.showReport(user);
 				}
 			}
-			controller.showReport(user);
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1]+1);	//planで1ヶ月増やす
 			planCalendar();
