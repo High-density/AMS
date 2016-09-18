@@ -195,7 +195,7 @@ class Master extends User {
 			pw.println(gotNicName + ":[" + gotMacAddress + "]");
 			pw.close();
 
-        } catch(IOException | NoSuchElementException e) {
+		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
 			return false;
 		}

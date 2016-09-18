@@ -96,10 +96,8 @@ public abstract class User {
 
 	// 認証されたMacAddressを保持しているか
 	private static boolean hasCertifiedMacAddress(String id) {
-		String registeredNicName = null; // 登録されているNICの表示名
-		String registeredMacAddress = null; // 登録されているMACアドレス
-		String gotNicName = null; // 現パソコンのNICの表示名
-		String gotMacAddress = ""; // 現パソコンのMACアドレス
+		String nicName = null; // 登録されているNICの表示名
+		String macAddress = null; // 登録されているMACアドレス
 
 		// ファイルからMACアドレスNIC表示名の読み込み
 		try {
@@ -109,8 +107,8 @@ public abstract class User {
 			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 			Matcher m = p.matcher(line);
 			if (m.find()) {
-				registeredNicName = m.group(1);
-				registeredMacAddress = m.group(2);
+				nicName = m.group(1);
+				macAddress = m.group(2);
 			}
 
 			br.close();
@@ -123,32 +121,16 @@ public abstract class User {
 		}
 
 		// MACアドレスの取得
-		try {
-			// 全NICを取得
-			Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
-			// 登録MACアドレスと同じものを探す
-			while (gotNics.hasMoreElements() && !registeredNicName.equals(gotNicName)) {
-				NetworkInterface gotNic = gotNics.nextElement();
-				byte[] hardwareAddress = gotNic.getHardwareAddress();
-				if (hardwareAddress != null) {
-					for (byte b : hardwareAddress) {
-						gotMacAddress += String.format("%02X:", b);
-					}
-					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
+		Nics nics = new Nics();
+		for (int i = 0; i < nics.length(); i++) {
+			if (nicName.equals(nics.getName(i))) {
+				if (macAddress.equals(nics.getMacAddress(i).toString())) {
+					return true;
 				}
-				gotNicName = gotNic.getName();
+				return false;
 			}
-		} catch (IOException e) {
-			Log.error(e);
-			return false;
 		}
-
-		// 登録されているMACアドレスが見つかったか
-		if (registeredMacAddress.equals(gotMacAddress) && registeredNicName.equals(gotNicName)) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	// idから名前を取得する
