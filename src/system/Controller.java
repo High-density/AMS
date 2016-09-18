@@ -1,15 +1,19 @@
 package system;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -18,12 +22,13 @@ import java.time.YearMonth;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.4
+ * @version 1.5
  */
 public class Controller {
 	private User user; // ログインしているユーザ
 	// 予定ファイルの置き場所
 	public static final String homeDirName = "file";
+	public static final File masterDir = new File(homeDirName + "/root");
 	public static final File agendaDir = new File(homeDirName + "/root/agenda/");
 	public static final File logDir = new File(homeDirName + "/root/log/");
 	public static final File logFile = new File(logDir.toString() + "/log.txt");
@@ -50,6 +55,7 @@ public class Controller {
 		} else {
 			// ログイン成功したら出席チェック
 			attend();
+            System.out.println(getComputerHolder());
 			return true;
 		}
 	}
@@ -172,7 +178,7 @@ public class Controller {
 	 * @param id 名前を取得したいID
 	 * @return idに対応する名前
 	 */
-	public String getName(String id) {
+	public static String getName(String id) {
 		return User.getName(id);
 	}
 
@@ -213,6 +219,46 @@ public class Controller {
 			return fileName.substring(fileName.lastIndexOf("/") + 1, point);
 		}
 		return fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length() - 1);
+	}
+
+	// MACアドレスからその所有者を特定する
+	public static String getComputerHolder() {
+		String nicName = null; // 登録されているNICの表示名
+		String macAddress = null; // 登録されているMACアドレス
+		ArrayList<String> slaves = Slave.getSlaves();
+		Nics nics = new Nics();
+
+		// ファイルからMACアドレスNIC表示名の読み込み
+		for(String slave : slaves) {
+			try {
+				File file = new File(Controller.homeDirName + "/" + slave + "/nics");
+				BufferedReader br = new BufferedReader(new FileReader(file));
+				String line = br.readLine();
+				Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
+				Matcher m = p.matcher(line);
+				if (m.find()) {
+					nicName = m.group(1);
+					macAddress = m.group(2);
+					for (int i = 0; i < nics.length(); i++) {
+						// 一致の検証
+						if (nicName.equals(nics.getName(i))
+							&& macAddress.equals(nics.getMacAddress(i).toString())) {
+							return slave;
+						}
+					}
+				}
+
+				br.close();
+			} catch (FileNotFoundException e) {
+				// ID未登録時
+				return null;
+			} catch (IOException | NullPointerException e) {
+				Log.error(e);
+				return null;
+			}
+		}
+
+		return null;
 	}
 
 	/**
