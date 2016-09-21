@@ -25,6 +25,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -42,7 +43,7 @@ import system.Slave;
 class Teacher extends KeyAdapter implements ActionListener, WindowListener{// 先生用クラス
 	/*main*/
 	private Controller controller;	// 内部動作用
-	private Message message;		// エラー呼び出し用
+	//private Message message;		// エラー呼び出し用
 	private NewAccount newAccount;	// アカウント用
 	private JFrame mainFrame;
 	private Container contentPane;
@@ -113,7 +114,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
 		this.controller = controller;
-		this.message = message;
+		//this.message = message;
 		newAccount = new NewAccount(this.controller);
 
 		/* メインフレーム設定 */
@@ -878,11 +879,17 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				}
 			}
 		}else if(e.getSource() == addPlanButton){//予定追加機能
-			if(!(planday < 0)){
+			int opt = JOptionPane.showConfirmDialog(mainFrame, "予定を追加しますか？");
+			String mess = "";
+			if(!(planday < 0) && opt == 0){
 				String plan = pTextArea.getText();
 				controller.setAgenda(agenda, planday, plan);
-				message.showMessage(ymd.getText() + "の予定を更新しました");
+				mess = ymd.getText() + "の予定を更新しました";
+				planCalendar();
+			}else{
+				mess = "操作を取り消しました";
 			}
+			JOptionPane.showMessageDialog(mainFrame, mess);
 		}else if(e.getActionCommand().matches("aStudentsButton" + ".*")){//アカウント選択
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == aStudentsButton[i]){
@@ -900,10 +907,18 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			memNum = -1;
 		}else if(e.getSource() == delAccButton){//削除
 			stuid = slaves.get(memNum);
-			controller.deleteUser(stuid);
-			message.showMessage(stuid + "を削除しました");
+			int opt = JOptionPane.showConfirmDialog(mainFrame, stuid+"を削除しますか?");
+			String mess="";
+			if(opt == 0){
+				controller.deleteUser(stuid);
+				mess = stuid + "を削除しました";
+				UpdateAccount();
+			}else{
+				mess = "削除を取り消しました";
+			}
+			JOptionPane.showMessageDialog(mainFrame, mess);
 			stuNumLabel.setText("編集したいIDを選択");
-			UpdateAccount();
+			memNum = -1;
 		}
 	}
 
