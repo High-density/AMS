@@ -25,11 +25,14 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import system.Agenda;
+import system.AttendanceBook;
+import system.CheckOS;
 import system.Controller;
 
-class Method extends KeyAdapter implements ActionListener{/*機能選択クラス*/
+class Method extends KeyAdapter implements ActionListener{// 機能選択クラス
 	// main
 	private Controller controller; // 内部動作用
 	private Message message; //エラー呼び出し用
@@ -49,12 +52,13 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton aBackButton;
 	private JLabel aMonthLabel;
 	private JLabel[] weekLabel_att = new JLabel[7];
-	private JButton[] dayButton_att = new JButton[42];
+	private JLabel[] attDayLabel = new JLabel[42];
 
 	// report
 	private JButton referButton;
 	private JButton upButton;
 	private JTextField pathTextField;
+	private JFileChooser filechooser;
 
 	// plan
 	private JPanel planPanel;
@@ -65,6 +69,8 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 	private JButton dayButton_plan[] = new JButton[42];
 	private JLabel planDate; // 予定取得日
 	private JTextArea pTextArea; // 予定表示
+	private Agenda agenda;
+	private int pday = -1; // ボタンを押した時の数字から日付
 
 	// account
 	private JLabel IDLabel;
@@ -75,12 +81,10 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 
 	// some
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
-	private YearMonth yearMonth;
+	private YearMonth[] yearMonth = new YearMonth[2];
 	private Calendar calendar = Calendar.getInstance();
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)}; // 年
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
-	private int day = 0; // ボタンを押した時の数字から日付
-	private Agenda agenda;
 	private String myID; // ログインしたIDを引き継ぎ
 
 	Method(system.Controller controller, display.Message message, String myID){
@@ -122,7 +126,7 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelButton = new JPanel(new GridLayout(1,5));
 		panelButton.setPreferredSize(new Dimension(800, 40));
 		numButton[0] = new JButton("出席管理");
-		numButton[1] = new JButton("週報アップロード");
+		numButton[1] = new JButton("報告書アップローダ");
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
 		numButton[4] = new JButton("ログアウト");
@@ -157,8 +161,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelNum[0] = new JLabel("出席");
-		labelNum[0].setBounds(380,10,200,40);
-		labelNum[0].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[0].setBounds(0,10,800,40);
+		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
 
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
@@ -172,14 +177,21 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekLabel_att[i].setOpaque(true);
 		}
 
-		for(int i=0;i<42;i++)
-			dayButton_att[i] = new JButton();
-		calr();
-		for(int i=0;i<7;i++)
-			calPanel.add(weekLabel_att[i]);
 		for(int i=0;i<42;i++){
-			dayButton_att[i].setBackground(Color.WHITE);
-			calPanel.add(dayButton_att[i]);//カレンダーボタン追加
+			attDayLabel[i] = new JLabel();
+			attDayLabel[i].setOpaque(true);
+			attDayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
+			attDayLabel[i].setFont(new Font(null, Font.PLAIN, 14));
+			attDayLabel[i].setHorizontalAlignment(JLabel.CENTER);
+		}
+
+		attendCalendar();
+
+		for(int i=0;i<7;i++){
+			calPanel.add(weekLabel_att[i]);
+		}
+		for(int i=0;i<42;i++){
+			calPanel.add(attDayLabel[i]);//カレンダーボタン追加
 		}
 
 		panelNum[0].add(labelNum[0]);
@@ -189,30 +201,52 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[0].add(aMonthLabel);
 	}
 
-	private void calr(){
+	private void attendCalendar(){
+		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
-
 		calendar.set(year[0], month[0], 1);
-		yearMonth = YearMonth.of(year[0], month[0]+1);
+		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		int maxDate = yearMonth.lengthOfMonth();
-		for(int i=0;i<dayOfWeek;i++)
-			dayButton_att[i].setText("");
-		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
-			dayButton_att[i].setText(""+(1+i-dayOfWeek));
-		for (int i=dayOfWeek+maxDate;i<42;i++)
-			dayButton_att[i].setText("");
+		int maxDate = yearMonth[0].lengthOfMonth();
+		AttendanceBook[] Book = controller.getAttendance(yearMonth[0]);
+		int status[] = new int [maxDate];
+		for(int i=0;i<maxDate;i++){
+			status[i] = Book[0].getData(i);
+		}
+		for(int i=0;i<dayOfWeek;i++){
+			attDayLabel[i].setText("");
+			attDayLabel[i].setBackground(Color.WHITE);
+		}
+		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
+			int j = i - dayOfWeek;
+			attDayLabel[i].setText(""+(1+j));
+			if(status[j] == AttendanceBook.ATTENDED){
+				attDayLabel[i].setBackground(Color.CYAN);
+				attDayLabel[i].setForeground(Color.DARK_GRAY);
+			}else if(status[j] == AttendanceBook.ABSENCE){
+				attDayLabel[i].setBackground(Color.PINK);;
+				attDayLabel[i].setForeground(Color.DARK_GRAY);
+			}else if(status[j] == AttendanceBook.AUTHORIZED_ABSENCE){
+				attDayLabel[i].setBackground(Color.GREEN);
+				attDayLabel[i].setForeground(Color.DARK_GRAY);
+			}
+		}
+		for (int i=dayOfWeek+maxDate;i<42;i++){
+			attDayLabel[i].setText("");
+			attDayLabel[i].setBackground(Color.WHITE);
+		}
 	}
 
 	private void Report(){
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
-		labelNum[1] = new JLabel("週報");
-		labelNum[1].setBounds(380,10,200,40);
-		labelNum[1].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[1] = new JLabel("報告書アップローダ");
+		labelNum[1].setBounds(0,10,800,40);
+		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
 		referButton  = new JButton("参照");
-		referButton.setBounds(500,100,100,30);
+		referButton.setBounds(500,100,150,50);
 		referButton.setBackground(Color.WHITE);
 		upButton = new JButton("アップロード");
 		upButton.setBounds(300,200,200,60);
@@ -220,15 +254,24 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		ImageIcon upload = new ImageIcon("src/icon/upload.png");
 		upButton.setIcon(upload);
 		pathTextField = new JTextField("ファイルを参照してください");
-		pathTextField.setBounds(200,100,300,31);
-		//testPathLabel = new JLabel("ここにファイルパスを表示");//ファイルパス取得
-		//testPathLabel.setBounds(10,500,500,30);//ファイルパス取得テ
+		pathTextField.setBounds(200,100,300,51);
+		pathTextField.setFont(new Font(null, Font.PLAIN, 14));
+		
+		File dir;
+		if(CheckOS.isWindows()){
+			dir = new File(System.getProperty("user.home"));
+		}else{
+			dir = new File(System.getProperty("user.home") + "/Documents");
+		}
+		filechooser = new JFileChooser(dir);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("ドキュメントファイル", "pdf", "docx", "doc");
+		filechooser.addChoosableFileFilter(filter); // ファイルのフィルタを設定
+		filechooser.setAcceptAllFileFilterUsed(true); // すべてのファイルを使うか
 
 		panelNum[1].add(labelNum[1]);
 		panelNum[1].add(pathTextField);
 		panelNum[1].add(referButton);
 		panelNum[1].add(upButton);
-		//panelNum[1].add(testPathLabel);
 	}
 
 	private void Plan(){
@@ -238,8 +281,9 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 120, 400, 400);
 		labelNum[2] = new JLabel("予定");
-		labelNum[2].setBounds(180,10,200,40);
-		labelNum[2].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[2].setBounds(0,10,800,40);
+		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -272,19 +316,23 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			weekLabel_plan[i] = new JLabel(weekName[i]);
 			weekLabel_plan[i].setFont(new Font(null, Font.PLAIN, 16));
 			weekLabel_plan[i].setHorizontalAlignment(JLabel.CENTER);
-			weekLabel_plan[i].setBackground(Color.ORANGE);
-			weekLabel_plan[i].setBorder(new LineBorder(Color.BLACK,1,true));
+			weekLabel_plan[i].setBackground(Color.WHITE);
+			weekLabel_plan[i].setBorder(new LineBorder(Color.DARK_GRAY,1,true));
 			weekLabel_plan[i].setOpaque(true);
 		}
-		for(int i=0;i<42;i++)
+		weekLabel_plan[0].setForeground(Color.RED);
+		weekLabel_plan[0].setBorder(new LineBorder(Color.RED,1,true));
+		weekLabel_plan[6].setForeground(Color.BLUE);
+		weekLabel_plan[6].setBorder(new LineBorder(Color.BLUE,1,true));
+		for(int i=0;i<42;i++){
 			dayButton_plan[i] = new JButton();
+		}
 
-		calr_clone();/*カレンダーの表示*/
+		planCalendar();/*カレンダーの表示*/
 
 		for(int i=0;i<7;i++)
 			planPanel.add(weekLabel_plan[i]);
 		for(int i=0;i<42;i++){
-			dayButton_plan[i].setBackground(Color.WHITE);
 			planPanel.add(dayButton_plan[i]);//カレンダーボタン追加
 		}
 
@@ -297,29 +345,50 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 		panelNum[2].add(pTextArea);
 	}
 
-	private void calr_clone(){
+	private void planCalendar(){
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
 		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		calendar.set(year[1], month[1], 1);
-		yearMonth = YearMonth.of(year[1], month[1]+1);
-		agenda  = controller.getAgenda(yearMonth);
+		yearMonth[1] = YearMonth.of(year[1], month[1]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		int maxDate = yearMonth.lengthOfMonth();
-		for(int i=0;i<dayOfWeek;i++)
+		int maxDate = yearMonth[0].lengthOfMonth();
+
+		agenda  = controller.getAgenda(yearMonth[1]);
+
+		for(int i=0;i<dayOfWeek;i++){
 			dayButton_plan[i].setText("");
-		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++)
-			dayButton_plan[i].setText(""+(1+i-dayOfWeek));
-		for (int i=dayOfWeek+maxDate;i<42;i++)
+			dayButton_plan[i].setBackground(Color.WHITE);
+		}
+		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
+			int day = 1 + i - dayOfWeek;
+			dayButton_plan[i].setText(""+day);
+			if(i%7==0){
+				dayButton_plan[i].setForeground(Color.RED);
+			}else if(i%7==6){
+				dayButton_plan[i].setForeground(Color.BLUE);
+			}else{
+				dayButton_plan[i].setForeground(Color.BLACK);
+			}
+			if(agenda.hasData(day-1)){
+				dayButton_plan[i].setBackground(Color.ORANGE);
+			}else{
+				dayButton_plan[i].setBackground(Color.WHITE);
+			}
+		}
+		for (int i=dayOfWeek+maxDate;i<42;i++){
 			dayButton_plan[i].setText("");
+			dayButton_plan[i].setBackground(Color.WHITE);
+		}
 	}
 
 	private void Account(){
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
 		labelNum[3] = new JLabel("アカウント");
-		labelNum[3].setBounds(380,10,200,40);
-		labelNum[3].setFont(new Font(null, Font.PLAIN, 18));
+		labelNum[3].setBounds(0,10,800,40);
+		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 		//IDの表示
 		IDLabel = new JLabel("ID");
 		IDLabel.setBounds(280,130,200,40);
@@ -408,9 +477,11 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 			cLayout.show(cardPanel, "Meth3");
 		}else if(e.getSource() == numButton[3]){/*機能4*/
 			cLayout.show(cardPanel, "Meth4");
+		}else if(e.getSource() == numButton[4]){/*ログアウト*/
+			controller.logout();
+			mainFrame.setVisible(false);
+			Login.loginFrame.setVisible(true);
 		}else if(e.getSource() == referButton){/*ファイル参照用*/
-			File dir = new File("ライブラリ/ドキュメント");
-			JFileChooser filechooser = new JFileChooser(dir);
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 			if (selected == JFileChooser.APPROVE_OPTION){
 				File file = filechooser.getSelectedFile();
@@ -421,46 +492,41 @@ class Method extends KeyAdapter implements ActionListener{/*機能選択クラ�
 				pathTextField.setText("エラー又は取消しがありました");
 			}
 		}else if(e.getSource() == upButton){/*アップロード*/
-			message("アップロードしました");
-			controller.submitReport(pathTextField.getText());
-		}else if(e.getSource() == numButton[4]){/*ログアウト*/
-			controller.logout();
-			mainFrame.setVisible(false);
-			Login.loginFrame.setVisible(true);
+			if(pathTextField.getText().equals("ファイルを参照してください") || pathTextField.getText().equals("キャンセルされました"))
+				message("ファイルを選択してください");
+			else{
+				message("アップロードしました");
+				controller.submitReport(pathTextField.getText());
+			}
 		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
-			calr();
+			attendCalendar();
 			panelNum[0].repaint();
 		}else if(e.getSource() == aBackButton){
 			calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
-			calr();
+			attendCalendar();
 			panelNum[0].repaint();
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
-			if(month[1]+1 == 13)
-				calendar.set(Calendar.YEAR, year[1]+1);
-			calr_clone();
+			planCalendar();
 			panelNum[2].repaint();
 		}else if(e.getSource() == pBackButton){
 			calendar.set(Calendar.MONTH, month[1] -1);	//1ヶ月減らす
-			if(month[1]-1 == -1)
-				calendar.set(Calendar.YEAR, year[1]-1);
-			calr_clone();
+			planCalendar();
 			panelNum[2].repaint();
 		}else if(e.getActionCommand().matches("dayButton_plan" + ".*")){ // 予定の取得
 			for(int i=0;i<42;i++){
 				if(e.getSource() == dayButton_plan[i]){
 					String dayName = dayButton_plan[i].getText();
 					if(!dayName.equals("")){
-						day = Integer.parseInt(dayName);
-						planDate.setText(year[1]+"年"+(month[1]+1)+"月"+day+"日");
-						planDate.setFont(new Font(null, Font.PLAIN, 24));
+						pday = Integer.parseInt(dayName) -1;
+						planDate.setText(year[1]+"年"+(month[1]+1)+"月"+(pday+1)+"日");
 						pTextArea.setEditable(true);
-						String plan = agenda.getData(day);
+						String plan = agenda.getData(pday);
 						pTextArea.setText(plan);
 						pTextArea.setEditable(false);
 					}else{
-						day = 0;
+						pday = -1;
 						planDate.setText("日付なし");
 					}
 				}
