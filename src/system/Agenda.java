@@ -76,6 +76,14 @@ public class Agenda extends DataForAMonth<String> {
 		}
 	}
 
+	// 予定を削除する
+	public void unsetData(int day) {
+		super.setData(day, null);
+		
+		File file = new File(dir + "/" + yearMonth.toString() + "-" + String.format("%02d", day));
+		Controller.deleteFile(file);
+	}
+
 	/**
 	 * 予定の追加をするが，ファイルの更新はしない
 	 * @param day 対象の日付-1

@@ -899,7 +899,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			}else if(flagNull == 1){
 				int opt = JOptionPane.showConfirmDialog(mainFrame, "予定を削除しますか？");
 				if(opt == 0){
-					//deletePlan(agenda, planday);
+					controller.deleteAgenda(agenda, planday);
 					mess = ymd.getText() + "の予定を削除しました";
 					planCalendar();
 				}else{
