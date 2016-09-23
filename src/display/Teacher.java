@@ -242,14 +242,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		attgbc[2].gridy = 0;
 		attgbc[2].ipadx = 32;	//+31ピクセル これで最小のXをでかくできる
-		if(CheckOS.isWindows()){
+/*		if(CheckOS.isWindows()){
 			attgbc[2].ipady = 7;	//+12ピクセル これで最小のYをでかくできる
 		}else{// if(CheckOS.isLinux()){
 			attgbc[2].ipady = 15;
-		}
+		}*/
 		for(int i=0;i<maxDate;i++){// 日付表示
 			dayLabel[i].setText(String.format("%1$02d", i+1));
 			attgbc[2].gridx = i;
+			attgbc[2].fill = GridBagConstraints.VERTICAL;
 			attgLayout[2].setConstraints(dayLabel[i], attgbc[2]);
 		}
 
@@ -326,13 +327,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
+/* 名前表示ラベルを幅いっぱいに伸ばすのでいらなくなった
 		int ix=0;
 		if(CheckOS.isWindows()){
 			ix = 13;
 		}else{// if(CheckOS.isLinux()){
 			ix = 3;
 		}
-		//attgbc[0].ipadx = ix;
+		attgbc[0].ipadx = ix;
+*/
 		attgbc[0].ipady = 14;
 		for(int i=0;i<numSize;i++){	// s12500
 			//idLabel[i] = new JLabel(slaves.get(i));
@@ -342,6 +345,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			idLabel[i].setOpaque(true);
 			idLabel[i].setBackground(Color.GRAY);
 			idLabel[i].setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
+			idLabel[i].setHorizontalAlignment(JLabel.LEFT);
 			attgbc[0].gridy = i;
 			attgbc[0].fill = GridBagConstraints.HORIZONTAL;
 			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
@@ -440,7 +444,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		GridBagConstraints gbc = new GridBagConstraints();
 		repoPanel = new JPanel(gLayout);
 		gbc.gridx = 0;
-		gbc.ipadx = 0;
+		//gbc.ipadx = 0;
 		if(CheckOS.isWindows()){
 			gbc.ipady = 15; // 8
 		}else{// if(CheckOS.isLinux()){
@@ -452,18 +456,18 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			rStudentsButton[i] = new JButton();
 			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			rStudentsButton[i].setBackground(Color.WHITE);
-			rStudentsButton[i].setText(slaves.get(i));
+			rStudentsButton[i].setText(controller.getName(slaves.get(i)));
 			rStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
+			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gLayout.setConstraints(rStudentsButton[i], gbc);
 			rStudentsButton[i].addActionListener(this);
 			rStudentsButton[i].addKeyListener(this);
 			rStudentsButton[i].setActionCommand("rStudents"+i);
 		}
 
-		int nx=128, yx=149;
+		int nx=128;
 		if(CheckOS.isWindows()){
 			nx = 128;
-			yx = 149;
 		}
 		gbc.gridx = 1;
 		if(CheckOS.isWindows()){
@@ -486,8 +490,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				LocalDate LastUpdate = controller.getLastUploadDate(slaves.get(i));
 				String update = LastUpdate.format(formatter);
 				updateLabel[i].setText(update);
-				gbc.ipadx = yx;
 			}
+			gbc.fill = GridBagConstraints.BOTH;
 			gLayout.setConstraints(updateLabel[i], gbc);
 		}
 
