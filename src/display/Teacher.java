@@ -15,6 +15,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -109,8 +110,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
 	private int numSize = Slave.getSlaves().size();//アカウント数
 	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
-
-
+	private ImageIcon icorn;
+	private ImageIcon right;
+	private ImageIcon left;
+	
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
 		this.controller = controller;
@@ -125,8 +128,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		contentPane = mainFrame.getContentPane();
 
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/icon/icon.png");
-		mainFrame.setIconImage(icon.getImage());
+		try{
+		URL icon=this.getClass().getResource("src/icon/icon.png");
+		ImageIcon icorn = new ImageIcon(icon);
+		mainFrame.setIconImage(icorn.getImage());
+		}catch(Exception e){
+			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
+			mainFrame.setIconImage(icorn.getImage());
+		}
 
 		/* 各種設定*/
 		PanelButton();	//機能選択ボタンの追加
@@ -165,22 +174,34 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
 		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
 
-		//ボタンへのiconの設置
-		ImageIcon right = new ImageIcon("src/icon/right.png");
 		aNextButton = new JButton();
 		aNextButton.setBounds(550,60,200,50);
 		aNextButton.setContentAreaFilled(false);
 		aNextButton.setBorderPainted(false);
-		aNextButton.setIcon(right);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		ImageIcon left = new ImageIcon("src/icon/left.png");
+		//ボタンへのiconの設置
+		try{
+		URL url_right=this.getClass().getResource("src/icon/right.png");
+		ImageIcon right = new ImageIcon(url_right);
+		aNextButton.setIcon(right);
+		}catch(Exception e){
+			ImageIcon right = new ImageIcon("src/icon/right.png");
+			aNextButton.setIcon(right);
+		}
 		aBackButton = new JButton();
 		aBackButton.setBounds(050,60,200,50);
 		aBackButton.setContentAreaFilled(false);
 		aBackButton.setBorderPainted(false);
-		aBackButton.setIcon(left);
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		//
+		try{
+			URL url_left=this.getClass().getResource("src/icon/left.png");
+			ImageIcon left = new ImageIcon(url_left);
+			aBackButton.setIcon(left);
+			}catch(Exception e){
+				ImageIcon left = new ImageIcon("src/icon/left.png");
+				aBackButton.setIcon(left);
+			}
+			
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -500,42 +521,55 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[2] = new JPanel();
 		panelNum[2].setLayout(null);
 		labelNum[2] = new JLabel("予定確認");
-		labelNum[2].setBounds(0,15,800,40);
+		labelNum[2].setBounds(0,10,800,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
 		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
-
+		
 		ymd = new JLabel("日付を選択");
-		ymd.setBounds(500,10,200,40);
+		ymd.setBounds(500,20,200,40);
 		ymd.setFont(new Font(null, Font.PLAIN, 18));
 		ymd.setHorizontalAlignment(JLabel.CENTER);
 		pNextButton = new JButton();
-		pNextButton.setBounds(305,50,100,40);
+		pNextButton.setBounds(310,60,100,40);
 		pNextButton.setContentAreaFilled(false);
 		pNextButton.setBorderPainted(false);
 		pBackButton = new JButton();
-		pBackButton.setBounds(035,50,100,40);
+		pBackButton.setBounds(040,60,100,40);
 		pBackButton.setContentAreaFilled(false);
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
-		ImageIcon left = new ImageIcon("src/icon/left_mini.png");
-		ImageIcon right = new ImageIcon("src/icon/right_mini.png");
+		try{
+		URL url_right=this.getClass().getResource("src/icon/right_mini.png");
+		ImageIcon right = new ImageIcon(url_right);
+		pNextButton.setIcon(right);
+		}catch(Exception e){
+			ImageIcon right = new ImageIcon("src/icon/right_mini.png");
+			pNextButton.setIcon(right);
+		}
+		try{
+		URL url_left=this.getClass().getResource("src/icon/left_mini.png");
+		ImageIcon left = new ImageIcon(url_left);
+		pBackButton.setIcon(left);
+		}catch(Exception e){
+			ImageIcon left = new ImageIcon("src/icon/left_mini.png");
+			pBackButton.setIcon(left);
+		}
+		
 		planPanel = new JPanel();
 		planPanel.setLayout(new GridLayout(7, 7));
-		planPanel.setBounds(10, 120, 400, 400);
-
-		pNextButton.setIcon(right);
-		pBackButton.setIcon(left);
+		planPanel.setBounds(20, 110, 400, 400);
+		
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
-		pMonthLabel.setBounds(155,50,200,40);
+		pMonthLabel.setBounds(160,60,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		pTextArea = new JTextArea(20,24);
-		pTextArea.setBounds(450, 55, 300, 405);
+		pTextArea.setBounds(450, 60, 300, 400);
 		pTextArea.setLineWrap(true);
 		addPlanButton = new JButton("予定追加");
-		addPlanButton.setBounds(550,460,200,40);
+		addPlanButton.setBounds(500,470,200,40);
 		addPlanButton.setBackground(Color.WHITE);
 		for(int i=0;i<7;i++){
 			weekLabel[i] = new JLabel(weekName[i]);
@@ -589,6 +623,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			int day = 1+i-dayOfWeek;
 			pDayButton[i].setText(""+day);
+			pDayButton[i].setFont(new Font(null, Font.BOLD, 20));
 			if(i % 7 == 0){
 				pDayButton[i].setForeground(Color.RED);
 			}else if(i % 7 == 6){

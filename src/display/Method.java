@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.net.URL;
 import java.time.YearMonth;
 import java.util.Calendar;
 
@@ -86,7 +87,8 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)}; // 年
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
 	private String myID; // ログインしたIDを引き継ぎ
-
+	private ImageIcon upload;
+	
 	Method(system.Controller controller, display.Message message, String myID){
 		/* システム引き継ぎ */
 		this.controller = controller;
@@ -118,8 +120,15 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		mainFrame.setVisible(true);
 
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/icon/icon.png");
-		mainFrame.setIconImage(icon.getImage());
+		try{
+		URL icon=this.getClass().getResource("src/icon/icon.png");
+		ImageIcon icorn = new ImageIcon(icon);
+		mainFrame.setIconImage(icorn.getImage());
+		}catch(Exception e){
+			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
+			mainFrame.setIconImage(icorn.getImage());
+		}
+
 	}
 
 	private void PanelButton(){
@@ -154,11 +163,22 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		aBackButton.setBounds(150,50,140,60);
 		aBackButton.setContentAreaFilled(false);
 		aBackButton.setBorderPainted(false);
-		//ボタンへのiconの設置
-		ImageIcon left = new ImageIcon("src/icon/left.png");
-		ImageIcon right = new ImageIcon("src/icon/right.png");
-		aBackButton.setIcon(left);
+		try{
+		URL url_right=this.getClass().getResource("src/icon/right.png");
+		ImageIcon right = new ImageIcon(url_right);
 		aNextButton.setIcon(right);
+		}catch(Exception e){
+			ImageIcon right = new ImageIcon("src/icon/right.png");
+			aNextButton.setIcon(right);
+		}
+		try{
+		URL url_left=this.getClass().getResource("src/icon/left.png");
+		ImageIcon left = new ImageIcon(url_left);
+		aBackButton.setIcon(left);
+		}catch(Exception e){
+			ImageIcon left = new ImageIcon("src/icon/left.png");
+			aBackButton.setIcon(left);
+		}
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelNum[0] = new JLabel("出席");
@@ -265,8 +285,14 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		upButton = new JButton("アップロード");
 		upButton.setBounds(300,200,200,60);
 		upButton.setBackground(Color.WHITE);
-		ImageIcon upload = new ImageIcon("src/icon/upload.png");
-		upButton.setIcon(upload);
+		try{
+			URL uploader=this.getClass().getResource("src/icon/upload.png");
+			ImageIcon upload = new ImageIcon("src/icon/upload.png");
+			upButton.setIcon(upload);
+			}catch(Exception e){
+				ImageIcon upload = new ImageIcon("src/icon/upload.png");
+				upButton.setIcon(upload);
+			}
 		pathTextField = new JTextField("ファイルを参照してください");
 		pathTextField.setBounds(200,100,300,51);
 		pathTextField.setFont(new Font(null, Font.PLAIN, 14));
@@ -317,10 +343,22 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pBackButton.setContentAreaFilled(false);
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
-		ImageIcon left = new ImageIcon("src/icon/left_mini.png");
-		ImageIcon right = new ImageIcon("src/icon/right_mini.png");
+		try{
+		URL url_right=this.getClass().getResource("src/icon/right_mini.png");
+		ImageIcon right = new ImageIcon(url_right);
 		pNextButton.setIcon(right);
+		}catch(Exception e){
+			ImageIcon right = new ImageIcon("src/icon/right_mini.png");
+			pNextButton.setIcon(right);
+		}
+		try{
+		URL url_left=this.getClass().getResource("src/icon/left_mini.png");
+		ImageIcon left = new ImageIcon(url_left);
 		pBackButton.setIcon(left);
+		}catch(Exception e){
+			ImageIcon left = new ImageIcon("src/icon/left_mini.png");
+			pBackButton.setIcon(left);
+		}
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
