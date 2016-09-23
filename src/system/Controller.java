@@ -174,6 +174,11 @@ public class Controller {
 		return newAgenda;
 	}
 
+	// 特定の予定を削除する
+	public Agenda deleteAgenda(Agenda agenda, int date) {
+		return user.deleteAgenda(agenda, date);
+	}
+
 	/**
 	 * idからユーザの名前を取得する
 	 * @param id 名前を取得したいID

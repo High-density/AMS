@@ -312,6 +312,9 @@ public abstract class User {
 	// 予定の更新
 	public abstract Agenda setAgenda(Agenda agenda, int date, String content);
 
+	// 予定の削除
+	public abstract Agenda deleteAgenda(Agenda agenda, int date);
+
 	// setter
 	public void setId(String id) {
 		this.id = id;

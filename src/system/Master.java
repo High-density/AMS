@@ -234,4 +234,10 @@ class Master extends User {
 
 		return agenda;
 	}
+
+	// 予定の削除
+	public Agenda deleteAgenda(Agenda agenda, int date) {
+		agenda.setData(date, null);
+		return agenda;
+	}
 }

@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 /**
  * 学生用クラス
  * @author Shinichi Yanagido
- * @version 1.1
+ * @version 1.2
  */
 public class Slave extends User {
 	public Slave(String id, String passwd) {
@@ -150,6 +150,11 @@ public class Slave extends User {
 
 	// Slaveは予定の更新不可
 	public Agenda setAgenda(Agenda agenda, int date, String content) {
+		return agenda;
+	}
+
+	// Slateは予定の削除不可
+	public Agenda deleteAgenda(Agenda agenda, int date) {
 		return agenda;
 	}
 
