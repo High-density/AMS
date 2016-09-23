@@ -440,7 +440,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 		gbc.gridx = 0;
 		gbc.ipadx = 0;
 		if(CheckOS.isWindows()){
-			gbc.ipady = 8;
+			gbc.ipady = 15; // 8
 		}else{// if(CheckOS.isLinux()){
 			gbc.ipady = 13;
 		}
@@ -664,7 +664,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 		gbc.gridy = 0;
 		if(CheckOS.isWindows()){
 			gbc.ipadx = 12;
-			gbc.ipady = 12;
+			gbc.ipady = 16; // 12
 		}else{
 			gbc.ipadx = 4;
 			gbc.ipady = 16;
