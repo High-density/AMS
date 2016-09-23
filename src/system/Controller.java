@@ -33,6 +33,7 @@ public class Controller {
 	public static final File logDir = new File(homeDirName + "/root/log/");
 	public static final File logFile = new File(logDir.toString() + "/log.txt");
 	public static final File errorFile = new File(logDir.toString() + "/error.txt");
+	public static final File incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
 
 	public Controller() {
 		Log.logDir = logDir;
@@ -55,7 +56,7 @@ public class Controller {
 		} else {
 			// ログイン成功したら出席チェック
 			attend();
-            System.out.println(getComputerHolder());
+			user.popNotification();
 			return true;
 		}
 	}

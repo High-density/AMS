@@ -1,14 +1,19 @@
 package system;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.NetworkInterface;
 import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,41 +41,103 @@ public abstract class User {
 	public static User login(String id, String passwd) {
 		String attribute = null; // 属性
 
-		// パスワードが一致するかどうか検証
-		if (isCorrectPasswd(id, passwd) /*&& hasCertifiedMacAddress(id)*/) {
-			// ファイルから属性の読み込み
+		// パスワードとMACアドレスの検証
+		if (!isCorrectPasswd(id, passwd)) {
+			return null;
+		}
+		if (false /*!hasCertifiedMacAddress(id)*/) {
+			// 不正ログインを試みた場合はMasterに報告
+			File dir = new File(Controller.masterDir + "/" + notificationDirName);
+			File file = Controller.incorrectLoginFile;
+			if(!Controller.mkdirs(dir.toString())) return null;
 			try {
-				File file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
-				BufferedReader br = new BufferedReader(new FileReader(file));
-				attribute = br.readLine(); // Fileから読み取った行
+				file.createNewFile();
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+				pw.println("[" + LocalDateTime.now() + "]");
+				String operator = Controller.getComputerHolder();
+				String content;
 
-				br.close();
-			} catch (IOException | NullPointerException e) {
+				if (operator == null) {
+					content = "登録されていない";
+				} else {
+					content = Controller.getName(operator) + "(" + operator + ")の";
+				}
+				content += "コンピュータで";
+				content += Controller.getName(id) + "(" + id + ")";
+				content += "へのログインが試みられました．";
+				pw.println(content + "\n");
+				pw.close();
+			} catch(IOException e) {
 				Log.error(e);
 				return null;
 			}
 
-			// 属性に合わせてユーザの作成
-			if (attribute == null) {
-				// 属性読み込みエラー
-				Log.error(new Throwable(), "属性読み込みエラー: attribute = null");
-				return null;
-			} else if (attribute.equals(Master.class.getSimpleName())) {
-				// 学生のIDで一致したとき
-				return new Master(id, passwd);
-			} else if (attribute.equals(Slave.class.getSimpleName())) {
-				// 教員のIDで一致したとき
-				return new Slave(id, passwd);
-			} else {
-				// 登録されていない属性が見つかったとき
-				Log.error(new Throwable(), "属性読み込みエラー: attribute = " + attribute);
-				return null;
-			}
-		} else {
-			// 不正なパスワードの入力
+			return null;
 		}
 
-		return null; // 認証失敗
+		// ファイルから属性の読み込み
+		try {
+			File file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			attribute = br.readLine(); // Fileから読み取った行
+			br.close();
+		} catch (IOException | NullPointerException e) {
+			Log.error(e);
+			return null;
+		}
+
+		// 属性に合わせてユーザの作成
+		if (attribute == null) {
+			// 属性読み込みエラー
+			Log.error(new Throwable(), "属性読み込みエラー: attribute = null");
+			return null;
+		} else if (attribute.equals(Master.class.getSimpleName())) {
+			// 学生のIDで一致したとき
+			return new Master(id, passwd);
+		} else if (attribute.equals(Slave.class.getSimpleName())) {
+			// 教員のIDで一致したとき
+			return new Slave(id, passwd);
+		} else {
+			// 登録されていない属性が見つかったとき
+			Log.error(new Throwable(), "属性読み込みエラー: attribute = " + attribute);
+			return null;
+		}
+	}
+
+	// 通知を表示する
+	public boolean popNotification() {
+		String message = ""; // 通知内容
+
+		// 更新された通知を全て取得
+		File dir = new File(Controller.homeDirName + "/" + id + "/" + notificationDirName);
+		String fileNames[] = dir.list();
+		if (fileNames != null && fileNames.length != 0) {
+			Arrays.sort(fileNames);
+			for (String fileName : fileNames) {
+				File file = new File(dir.toString() + "/" + fileName);
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					message += "***** " + fileName + " *****\n";
+					String line;
+					while ((line = br.readLine()) != null) {
+						message += line + "\n";
+					}
+					message += "\n";
+
+					br.close();
+					Controller.deleteFile(file); // 通知した情報の削除
+				} catch (IOException e) {
+					Log.error(e);
+					return false;
+				}
+			}
+
+			// 実際の表示処理
+			display.Message popup = new display.Message();
+			popup.showMessage(message.trim());
+		}
+
+		return true;
 	}
 
 	// 入力されたパスワードがIDに対して正しいか
@@ -135,6 +202,8 @@ public abstract class User {
 
 	// idから名前を取得する
 	public static String getName(String id) {
+		if (id == null) return null;
+
 		String name;
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nameFileName);
 		try {
