@@ -187,17 +187,17 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// ÂÖ
 
 		Border border = new EmptyBorder(0,0,0,0);
 		dayScrollPanel = new JScrollPane();
-		dayScrollPanel.setBounds(70,130,693,31);
+		dayScrollPanel.setBounds(80,130,683,31);
 		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		dayScrollPanel.setBorder(border);
 		IDScrollPanel = new JScrollPane();
-		IDScrollPanel.setBounds(10,160,60,285);
+		IDScrollPanel.setBounds(10,161,70,300);
 		IDScrollPanel.setBorder(border);
 		IDScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		attScrollPanel = new JScrollPane();
-		attScrollPanel.setBounds(70,161,710,300);
+		attScrollPanel.setBounds(80,161,700,300);
 		attScrollPanel.setBorder(border);
 		attScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		attScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -205,8 +205,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// ÂÖ
 		IDScrollPanel.getVerticalScrollBar().setModel(attScrollPanel.getVerticalScrollBar().getModel());
 		dayScrollPanel.getHorizontalScrollBar().setModel(attScrollPanel.getHorizontalScrollBar().getModel());
 
-		ID = new JLabel("ID");
-		ID.setBounds(10,130,60,30);
+		ID = new JLabel("ÂêçÂâç");
+		ID.setBounds(10,130,70,30);
 		ID.setHorizontalAlignment(JLabel.CENTER);
 		ID.setOpaque(true);
 		ID.setBackground(Color.YELLOW);
@@ -332,16 +332,18 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// ÂÖ
 		}else{// if(CheckOS.isLinux()){
 			ix = 3;
 		}
-		attgbc[0].ipadx = ix;
+		//attgbc[0].ipadx = ix;
 		attgbc[0].ipady = 14;
 		for(int i=0;i<numSize;i++){	// s12500
-			idLabel[i] = new JLabel(slaves.get(i));
+			//idLabel[i] = new JLabel(slaves.get(i));
+			idLabel[i] = new JLabel(controller.getName(slaves.get(i)));
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
 			idLabel[i].setBackground(Color.GRAY);
 			idLabel[i].setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
 			attgbc[0].gridy = i;
+			attgbc[0].fill = GridBagConstraints.HORIZONTAL;
 			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
 			for(int j=0;j<31;j++){
 				attButton[i][j] = new JButton();
