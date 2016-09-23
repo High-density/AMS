@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.nio.channels.FileChannel;
@@ -22,7 +23,7 @@ import java.time.YearMonth;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.5
+ * @version 1.6
  */
 public class Controller {
 	private User user; // ログインしているユーザ
@@ -102,7 +103,9 @@ public class Controller {
 		File fileDir = new File(homeDirName + "/" + id + "/" + User.reportDirName);
 		String reports[] = fileDir.list();
 		if (reports == null || reports.length == 0) return null;
-		return LocalDate.parse(getFileNameWithoutSuffix(reports[reports.length - 1]));
+
+		Arrays.sort(reports, Comparator.reverseOrder());
+		return LocalDate.parse(getFileNameWithoutSuffix(reports[0]));
 	}
 
 	/**
@@ -224,7 +227,7 @@ public class Controller {
 		if (point != -1) {
 			return fileName.substring(fileName.lastIndexOf("/") + 1, point);
 		}
-		return fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length() - 1);
+		return fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length());
 	}
 
 	// MACアドレスからその所有者を特定する
