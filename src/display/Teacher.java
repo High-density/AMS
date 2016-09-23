@@ -243,7 +243,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		attgbc[2].gridy = 0;
 		attgbc[2].ipadx = 32;	//+31ピクセル これで最小のXをでかくできる
 		if(CheckOS.isWindows()){
-			attgbc[2].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
+			attgbc[2].ipady = 7;	//+12ピクセル これで最小のYをでかくできる
 		}else{// if(CheckOS.isLinux()){
 			attgbc[2].ipady = 15;
 		}
@@ -282,8 +282,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		if(maxDate < 31){
 			if(CheckOS.isWindows()){
-				attgbc[2].ipadx = 40;
-				attgbc[2].ipady = 12;
+				attgbc[2].ipadx = 43;
+				attgbc[2].ipady = 7;
 			}else{// if(CheckOS.isLinux()){
 				attgbc[2].ipadx = 43;
 				attgbc[2].ipady = 15;
@@ -295,7 +295,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			}
 
 			if(CheckOS.isWindows()){
-				attgbc[1].ipadx = 8;
+				attgbc[1].ipadx = 11;
 			}else{// if(CheckOS.isLinux()){
 				attgbc[1].ipadx = 11;
 			}
@@ -879,17 +879,34 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				}
 			}
 		}else if(e.getSource() == addPlanButton){//予定追加機能
-			int opt = JOptionPane.showConfirmDialog(mainFrame, "予定を追加しますか？");
 			String mess = "";
-			if(!(planday < 0) && opt == 0){
-				String plan = pTextArea.getText();
-				controller.setAgenda(agenda, planday, plan);
-				mess = ymd.getText() + "の予定を更新しました";
-				planCalendar();
-			}else{
-				mess = "操作を取り消しました";
+			String plan = pTextArea.getText();
+			int flagNull = 0;
+			if(plan.equals("")){
+				flagNull = 1;
+				//System.out.println("空");
 			}
-			JOptionPane.showMessageDialog(mainFrame, mess);
+			if(!(planday < 0) && flagNull == 0){
+				int opt = JOptionPane.showConfirmDialog(mainFrame, "予定を追加しますか？");
+				if(opt == 0){
+					controller.setAgenda(agenda, planday, plan);
+					mess = ymd.getText() + "の予定を更新しました";
+					planCalendar();
+				}else{
+					mess = "操作を取り消しました";
+				}
+				JOptionPane.showMessageDialog(mainFrame, mess);
+			}else if(flagNull == 1){
+				int opt = JOptionPane.showConfirmDialog(mainFrame, "予定を削除しますか？");
+				if(opt == 0){
+					//deletePlan(agenda, planday);
+					mess = ymd.getText() + "の予定を削除しました";
+					planCalendar();
+				}else{
+					mess = "操作を取り消しました";
+				}
+				JOptionPane.showMessageDialog(mainFrame, mess);
+			}
 		}else if(e.getActionCommand().matches("aStudentsButton" + ".*")){//アカウント選択
 			for(int i=0;i<numSize;i++){
 				if(e.getSource() == aStudentsButton[i]){
@@ -906,19 +923,23 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			stuNumLabel.setText("編集したいIDを選択");
 			memNum = -1;
 		}else if(e.getSource() == delAccButton){//削除
-			stuid = slaves.get(memNum);
-			int opt = JOptionPane.showConfirmDialog(mainFrame, stuid+"を削除しますか?");
-			String mess="";
-			if(opt == 0){
-				controller.deleteUser(stuid);
-				mess = stuid + "を削除しました";
-				UpdateAccount();
+			if(memNum != -1){
+				stuid = slaves.get(memNum);
+				int opt = JOptionPane.showConfirmDialog(mainFrame, stuid+"を削除しますか?");
+				String mess="";
+				if(opt == 0){
+					controller.deleteUser(stuid);
+					mess = stuid + "を削除しました";
+					UpdateAccount();
+				}else{
+					mess = "削除を取り消しました";
+				}
+				JOptionPane.showMessageDialog(mainFrame, mess);
+				stuNumLabel.setText("編集したいIDを選択");
+				memNum = -1;
 			}else{
-				mess = "削除を取り消しました";
+				JOptionPane.showMessageDialog(mainFrame, "学生を選択してください");
 			}
-			JOptionPane.showMessageDialog(mainFrame, mess);
-			stuNumLabel.setText("編集したいIDを選択");
-			memNum = -1;
 		}
 	}
 
