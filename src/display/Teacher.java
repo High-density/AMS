@@ -500,7 +500,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[2] = new JPanel();
 		panelNum[2].setLayout(null);
 		labelNum[2] = new JLabel("予定確認");
-		labelNum[2].setBounds(0,10,800,40);
+		labelNum[2].setBounds(0,15,800,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
 		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
 
@@ -509,11 +509,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		ymd.setFont(new Font(null, Font.PLAIN, 18));
 		ymd.setHorizontalAlignment(JLabel.CENTER);
 		pNextButton = new JButton();
-		pNextButton.setBounds(300,70,100,40);
+		pNextButton.setBounds(305,50,100,40);
 		pNextButton.setContentAreaFilled(false);
 		pNextButton.setBorderPainted(false);
 		pBackButton = new JButton();
-		pBackButton.setBounds(030,70,100,40);
+		pBackButton.setBounds(035,50,100,40);
 		pBackButton.setContentAreaFilled(false);
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
@@ -529,13 +529,13 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
-		pMonthLabel.setBounds(150,70,200,40);
+		pMonthLabel.setBounds(155,50,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		pTextArea = new JTextArea(20,24);
-		pTextArea.setBounds(450, 50, 300, 400);
+		pTextArea.setBounds(450, 55, 300, 405);
 		pTextArea.setLineWrap(true);
 		addPlanButton = new JButton("予定追加");
-		addPlanButton.setBounds(500,470,200,40);
+		addPlanButton.setBounds(550,460,200,40);
 		addPlanButton.setBackground(Color.WHITE);
 		for(int i=0;i<7;i++){
 			weekLabel[i] = new JLabel(weekName[i]);
@@ -543,6 +543,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			weekLabel[i].setFont(new Font(null, Font.PLAIN, 16));
 			weekLabel[i].setBackground(Color.WHITE);
 			weekLabel[i].setBorder(new LineBorder(Color.DARK_GRAY,1,true));
+			weekLabel[i].setFont(new Font(null, Font.BOLD, 24));
 			weekLabel[i].setOpaque(true);
 		}
 		weekLabel[0].setForeground(Color.RED);

@@ -143,6 +143,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void Attendance(){
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
+		
 		calPanel = new JPanel(new GridLayout(7,7));
 		calPanel.setBounds(200,110,400,400);
 		aNextButton = new JButton();
@@ -161,20 +162,23 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelNum[0] = new JLabel("出席");
-		labelNum[0].setBounds(0,10,800,40);
-		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
-		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
+		labelNum[0].setBounds(380,10,200,40);
+		labelNum[0].setFont(new Font(null, Font.BOLD, 18));
 
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
-		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
+		aMonthLabel.setFont(new Font(null, Font.BOLD, 24));
 		for(int i=0;i<7;i++){
 			weekLabel_att[i] = new JLabel(weekName[i]);
-			weekLabel_att[i].setFont(new Font(null, Font.PLAIN, 16));
+			weekLabel_att[i].setFont(new Font(null, Font.BOLD, 20));
 			weekLabel_att[i].setHorizontalAlignment(JLabel.CENTER);
-			weekLabel_att[i].setBackground(Color.YELLOW);
+			weekLabel_att[i].setBackground(Color.WHITE);
 			weekLabel_att[i].setBorder(new LineBorder(Color.BLACK,1,true));
 			weekLabel_att[i].setOpaque(true);
+			if( i == 0)
+				weekLabel_att[i].setForeground(Color.RED);
+			if( i == 6)
+				weekLabel_att[i].setForeground(Color.BLUE);
 		}
 
 		for(int i=0;i<42;i++){
@@ -205,6 +209,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
 		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
+		aMonthLabel.setFont(new Font(null, Font.BOLD, 20));
 		calendar.set(year[0], month[0], 1);
 		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -222,15 +227,24 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			int j = i - dayOfWeek;
 			attDayLabel[i].setText(""+(1+j));
 			if(status[j] == AttendanceBook.ATTENDED){
-				attDayLabel[i].setBackground(Color.CYAN);
+				attDayLabel[i].setBackground(new Color(198 ,237 ,254));
 				attDayLabel[i].setForeground(Color.DARK_GRAY);
+				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}else if(status[j] == AttendanceBook.ABSENCE){
-				attDayLabel[i].setBackground(Color.PINK);;
+				attDayLabel[i].setBackground(new Color(254 ,200 ,199));;
 				attDayLabel[i].setForeground(Color.DARK_GRAY);
+				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}else if(status[j] == AttendanceBook.AUTHORIZED_ABSENCE){
 				attDayLabel[i].setBackground(Color.GREEN);
 				attDayLabel[i].setForeground(Color.DARK_GRAY);
+				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}
+			if(i % 7 == 0)
+				attDayLabel[i].setForeground(Color.RED);
+			else if(i % 7 == 6)
+				attDayLabel[i].setForeground(Color.BLUE);
+			else
+				attDayLabel[i].setForeground(Color.BLACK);
 		}
 		for (int i=dayOfWeek+maxDate;i<42;i++){
 			attDayLabel[i].setText("");
@@ -281,15 +295,14 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 120, 400, 400);
 		labelNum[2] = new JLabel("予定");
-		labelNum[2].setBounds(0,10,800,40);
-		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
-		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
+		labelNum[2].setBounds(180,10,200,40);
+		labelNum[2].setFont(new Font(null, Font.BOLD, 18));
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
 		pMonthLabel.setBounds(150,70,200,40);
-		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
+		pMonthLabel.setFont(new Font(null, Font.BOLD, 24));
 		planDate = new JLabel("指定された日付");
 		planDate.setBounds(520,40,200,40);
-		planDate.setFont(new Font(null, Font.PLAIN, 24));
+		planDate.setFont(new Font(null, Font.BOLD, 24));
 		planDate.setBackground(Color.WHITE);
 		pTextArea = new JTextArea(20,24);
 		pTextArea.setBounds(450, 100, 300, 400);
@@ -312,13 +325,15 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
 
+
 		for(int i=0;i<7;i++){
 			weekLabel_plan[i] = new JLabel(weekName[i]);
-			weekLabel_plan[i].setFont(new Font(null, Font.PLAIN, 16));
+			weekLabel_plan[i].setFont(new Font(null, Font.BOLD, 20));
 			weekLabel_plan[i].setHorizontalAlignment(JLabel.CENTER);
-			weekLabel_plan[i].setBackground(Color.WHITE);
-			weekLabel_plan[i].setBorder(new LineBorder(Color.DARK_GRAY,1,true));
+			weekLabel_plan[i].setBackground(Color.ORANGE);
+			weekLabel_plan[i].setBorder(new LineBorder(Color.BLACK,1,true));
 			weekLabel_plan[i].setOpaque(true);
+			weekLabel_plan[i].setBackground(Color.WHITE);
 		}
 		weekLabel_plan[0].setForeground(Color.RED);
 		weekLabel_plan[0].setBorder(new LineBorder(Color.RED,1,true));
@@ -355,26 +370,26 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		int maxDate = yearMonth[0].lengthOfMonth();
 
 		agenda  = controller.getAgenda(yearMonth[1]);
-
 		for(int i=0;i<dayOfWeek;i++){
 			dayButton_plan[i].setText("");
 			dayButton_plan[i].setBackground(Color.WHITE);
 		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			int day = 1 + i - dayOfWeek;
+			//String plan = agenda.getData(day);
 			dayButton_plan[i].setText(""+day);
-			if(i%7==0){
+			//if(!("\n".equals(plan))){
+			dayButton_plan[i].setBackground(Color.WHITE);
+			dayButton_plan[i].setFont(new Font(null, Font.BOLD, 20));
+			//}else{
+			//dayButton_plan[i].setBackground(Color.CYAN);
+			//}*/
+			if(i % 7 == 0)
 				dayButton_plan[i].setForeground(Color.RED);
-			}else if(i%7==6){
+			else if(i % 7 == 6)
 				dayButton_plan[i].setForeground(Color.BLUE);
-			}else{
+			else
 				dayButton_plan[i].setForeground(Color.BLACK);
-			}
-			if(agenda.hasData(day-1)){
-				dayButton_plan[i].setBackground(Color.ORANGE);
-			}else{
-				dayButton_plan[i].setBackground(Color.WHITE);
-			}
 		}
 		for (int i=dayOfWeek+maxDate;i<42;i++){
 			dayButton_plan[i].setText("");
