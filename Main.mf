@@ -1,2 +1,2 @@
-Main-Class: main/Main.class
+Main-Class: main/Main
 

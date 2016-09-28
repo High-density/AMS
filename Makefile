@@ -15,5 +15,9 @@ do:
 
 .PHONY: jar
 jar:
-	cp Main.mf bin/Main.mf;cd bin/; jar cfm ../AMS.jar Main.mf *;cd ../;chmod +x AMS.jar;
+	mkdir bin/; javac src/*/*.java -d bin/;cp Main.mf bin/Main.mf;cd bin/; jar cfm ../AMS.jar Main.mf *;cd ../;chmod +x AMS.jar
+
+.PHONY: dojar
+dojar:
+	make jar;java -jar AMS.jar
 
