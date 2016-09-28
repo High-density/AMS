@@ -98,7 +98,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JButton addAccButton;	// 追加
 	private JButton cheAccButton;	// 変更
 	private JButton delAccButton;	// 削除
-	private JButton rootButton;		// 教員用
+	private JButton rootButton;	// 教員用
 	private JLabel stuNumLabel;
 
 	/*someOne*/
@@ -794,19 +794,19 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private int memNum = -1;
 	private String stuid = "";
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == numButton[0]){//出席情報
+		if(e.getSource() == numButton[0]){			//出席情報
 			calendar.set(Calendar.YEAR, year[0]);
 			calendar.set(Calendar.MONTH, month[0]);
 			cLayout.show(cardPanel, "Meth1");
-		}else if(e.getSource() == numButton[1]){//報告書管理
+		}else if(e.getSource() == numButton[1]){	//報告書管理
 			cLayout.show(cardPanel, "Meth2");
-		}else if(e.getSource() == numButton[2]){//予定確認
+		}else if(e.getSource() == numButton[2]){	//予定確認
 			calendar.set(Calendar.YEAR, year[1]);
 			calendar.set(Calendar.MONTH, month[1]);
 			cLayout.show(cardPanel, "Meth3");
-		}else if(e.getSource() == numButton[3]){//アカウント管理
+		}else if(e.getSource() == numButton[3]){	//アカウント管理
 			cLayout.show(cardPanel, "Meth4");
-		}else if(e.getSource() == numButton[4]){//ログアウト
+		}else if(e.getSource() == numButton[4]){	//ログアウト
 			controller.logout();
 			mainFrame.setVisible(false);
 			Login.loginFrame.setVisible(true);

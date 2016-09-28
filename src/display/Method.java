@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -35,7 +36,6 @@ import system.Controller;
 class Method extends KeyAdapter implements ActionListener{// 機能選択クラス
 	// main
 	private Controller controller; // 内部動作用
-	private Message message; //エラー呼び出し用
 	private ChangePassword changePassword; // パスワード変更用
 	static JFrame mainFrame;
 	private Container contentPane;
@@ -67,10 +67,10 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private JButton pBackButton;
 	private JLabel weekLabel_plan[] = new JLabel[7];
 	private JButton dayButton_plan[] = new JButton[42];
-	private JLabel planDate; // 予定取得日
-	private JTextArea pTextArea; // 予定表示
+	private JLabel planDate; 		// 予定取得日
+	private JTextArea pTextArea; 	// 予定表示
 	private Agenda agenda;
-	private int pday = -1; // ボタンを押した時の数字から日付
+	private int pday = -1; 		// ボタンを押した時の数字から日付
 
 	// account
 	private JLabel IDLabel;
@@ -87,10 +87,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
 	private String myID; // ログインしたIDを引き継ぎ
 
-	Method(system.Controller controller, display.Message message, String myID){
+	Method(system.Controller controller, String myID){
 		/* システム引き継ぎ */
 		this.controller = controller;
-		this.message = message;
 		this.myID = myID;
 		changePassword = new display.ChangePassword(controller);
 
@@ -102,12 +101,12 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		contentPane = mainFrame.getContentPane();
 
 		/* 各種設定*/
-		PanelButton();//機能選択ボタンの追加
-		Attendance();//機能1用パネル設定
-		Report();//機能2用パネル設定
-		Plan();
-		Account();
-		CardPanel();//機能パネル
+		PanelButton();	// 機能選択ボタンの追加
+		Attendance();	// 出欠席用パネル設定
+		Report();		// 報告書用パネル設定
+		Plan();			// 予定用
+		Account();		// アカウント用
+		CardPanel();	// パネル
 
 		/* ボタンのアクション用 */
 		actionButton();
@@ -259,7 +258,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 
 		File dir;
 		if(CheckOS.isWindows()){
-			dir = new File(System.getProperty("user.home"));
+			dir = new File(System.getProperty("user.home") + "/Documents");
 		}else{
 			dir = new File(System.getProperty("user.home") + "/Documents");
 		}
@@ -428,10 +427,6 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		}
 	}
 
-	private void message(String mess){/*message()でメッセージを表示*/
-		message.showMessage(mess);
-	}
-
 	private void actionButton(){
 		numButton[0].addActionListener(this);
 		numButton[0].addKeyListener(this);
@@ -465,23 +460,23 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == numButton[0]){/*機能1*/
+		if(e.getSource() == numButton[0]){			// 機能1
 			calendar.set(Calendar.YEAR, year[0]);
 			calendar.set(Calendar.MONTH, month[0]);
 			cLayout.show(cardPanel, "Meth1");
-		}else if(e.getSource() == numButton[1]){/*機能2*/
+		}else if(e.getSource() == numButton[1]){	// 機能2
 			cLayout.show(cardPanel, "Meth2");
-		}else if(e.getSource() == numButton[2]){/*機能3*/
+		}else if(e.getSource() == numButton[2]){	// 機能3
 			calendar.set(Calendar.YEAR, year[1]);
 			calendar.set(Calendar.MONTH, month[1]);
 			cLayout.show(cardPanel, "Meth3");
-		}else if(e.getSource() == numButton[3]){/*機能4*/
+		}else if(e.getSource() == numButton[3]){	// 機能4
 			cLayout.show(cardPanel, "Meth4");
-		}else if(e.getSource() == numButton[4]){/*ログアウト*/
+		}else if(e.getSource() == numButton[4]){	// ログアウト
 			controller.logout();
 			mainFrame.setVisible(false);
 			Login.loginFrame.setVisible(true);
-		}else if(e.getSource() == referButton){/*ファイル参照用*/
+		}else if(e.getSource() == referButton){	// ファイル参照用
 			int selected = filechooser.showOpenDialog(null);//ダイアログ表示
 			if (selected == JFileChooser.APPROVE_OPTION){
 				File file = filechooser.getSelectedFile();
@@ -491,12 +486,23 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			}else if (selected == JFileChooser.ERROR_OPTION){
 				pathTextField.setText("エラー又は取消しがありました");
 			}
-		}else if(e.getSource() == upButton){/*アップロード*/
+		}else if(e.getSource() == upButton){	// アップロード
 			if(pathTextField.getText().equals("ファイルを参照してください") || pathTextField.getText().equals("キャンセルされました"))
-				message("ファイルを選択してください");
+				JOptionPane.showMessageDialog(mainFrame, "ファイルを選択してください");
 			else{
-				message("アップロードしました");
-				controller.submitReport(pathTextField.getText());
+				String mess = "";
+				int opt = JOptionPane.showConfirmDialog(mainFrame, "アップロードしますか？");
+				if(opt == 0){
+					boolean bool = controller.submitReport(pathTextField.getText());
+					if(bool){
+						mess = "アップロードしました";
+					}else{
+						mess = "本日分の報告書は提出済みです．\n更新したい場合は管理者に問い合わせてください．";
+					}
+				}else{
+					mess = "操作を取り消しました";
+				}
+				JOptionPane.showMessageDialog(mainFrame, mess);
 			}
 		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす

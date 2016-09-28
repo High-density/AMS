@@ -3,7 +3,6 @@ package system;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Matcher;
@@ -85,7 +83,6 @@ public class Slave extends User {
 		for (String fileName: dir.list()) {
 			Matcher m = p.matcher(fileName);
 			if (m.find()) {
-				Log.popup("本日分の報告書は提出済みです．\n更新したい場合は管理者に問い合わせてください．");
 				return false;
 			}
 		}
