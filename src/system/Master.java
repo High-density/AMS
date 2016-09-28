@@ -195,7 +195,7 @@ class Master extends User {
 			pw.println(gotNicName + ":[" + gotMacAddress + "]");
 			pw.close();
 
-        } catch(IOException | NoSuchElementException e) {
+		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
 			return false;
 		}
@@ -232,6 +232,12 @@ class Master extends User {
 			}
 		}
 
+		return agenda;
+	}
+
+	// 予定の削除
+	public Agenda deleteAgenda(Agenda agenda, int date) {
+		agenda.unsetData(date);
 		return agenda;
 	}
 }

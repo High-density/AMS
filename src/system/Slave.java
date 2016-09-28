@@ -21,13 +21,12 @@ import java.util.regex.Pattern;
 /**
  * 学生用クラス
  * @author Shinichi Yanagido
- * @version 1.1
+ * @version 1.2
  */
 public class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
 		attribute = this.getClass().getSimpleName();
-		popNotification();
 	}
 
 	// 出席
@@ -154,6 +153,11 @@ public class Slave extends User {
 		return agenda;
 	}
 
+	// Slateは予定の削除不可
+	public Agenda deleteAgenda(Agenda agenda, int date) {
+		return agenda;
+	}
+
 	/**
 	 * Slaveの一覧を取得する
 	 * @return ユーザのIDをListで返す
@@ -179,41 +183,5 @@ public class Slave extends User {
 		Collections.sort(slaves);
 
 		return slaves;
-	}
-
-	// 通知を表示する
-	private boolean popNotification() {
-		String message = ""; // 通知内容
-
-		// 更新された通知を全て取得
-		File dir = new File(Controller.homeDirName + "/" + id + "/" + notificationDirName);
-		String fileNames[] = dir.list();
-		if (fileNames != null && fileNames.length != 0) {
-			Arrays.sort(fileNames);
-			for (String fileName : fileNames) {
-				File file = new File(dir.toString() + "/" + fileName);
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(file));
-					message += "[" + fileName + "]\n";
-					String line;
-					while ((line = br.readLine()) != null) {
-						message += line;
-					}
-					message += "\n\n";
-
-					br.close();
-					Controller.deleteFile(file); // 通知した情報の削除
-				} catch (IOException e) {
-					Log.error(e);
-					return false;
-				}
-			}
-
-			// 実際の表示処理
-			display.Message popup = new display.Message();
-			popup.showMessage(message);
-		}
-
-		return true;
 	}
 }

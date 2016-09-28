@@ -1,14 +1,19 @@
 package system;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.NetworkInterface;
 import java.time.LocalTime;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,41 +41,103 @@ public abstract class User {
 	public static User login(String id, String passwd) {
 		String attribute = null; // 属性
 
-		// パスワードが一致するかどうか検証
-		if (isCorrectPasswd(id, passwd) /*&& hasCertifiedMacAddress(id)*/) {
-			// ファイルから属性の読み込み
+		// パスワードとMACアドレスの検証
+		if (!isCorrectPasswd(id, passwd)) {
+			return null;
+		}
+		if (false /*!hasCertifiedMacAddress(id)*/) {
+			// 不正ログインを試みた場合はMasterに報告
+			File dir = new File(Controller.masterDir + "/" + notificationDirName);
+			File file = Controller.incorrectLoginFile;
+			if(!Controller.mkdirs(dir.toString())) return null;
 			try {
-				File file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
-				BufferedReader br = new BufferedReader(new FileReader(file));
-				attribute = br.readLine(); // Fileから読み取った行
+				file.createNewFile();
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+				pw.println("[" + LocalDateTime.now() + "]");
+				String operator = Controller.getComputerHolder();
+				String content;
 
-				br.close();
-			} catch (IOException | NullPointerException e) {
+				if (operator == null) {
+					content = "登録されていない";
+				} else {
+					content = Controller.getName(operator) + "(" + operator + ")の";
+				}
+				content += "コンピュータで";
+				content += Controller.getName(id) + "(" + id + ")";
+				content += "へのログインが試みられました．";
+				pw.println(content + "\n");
+				pw.close();
+			} catch(IOException e) {
 				Log.error(e);
 				return null;
 			}
 
-			// 属性に合わせてユーザの作成
-			if (attribute == null) {
-				// 属性読み込みエラー
-				Log.error(new Throwable(), "属性読み込みエラー: attribute = null");
-				return null;
-			} else if (attribute.equals(Master.class.getSimpleName())) {
-				// 学生のIDで一致したとき
-				return new Master(id, passwd);
-			} else if (attribute.equals(Slave.class.getSimpleName())) {
-				// 教員のIDで一致したとき
-				return new Slave(id, passwd);
-			} else {
-				// 登録されていない属性が見つかったとき
-				Log.error(new Throwable(), "属性読み込みエラー: attribute = " + attribute);
-				return null;
-			}
-		} else {
-			// 不正なパスワードの入力
+			return null;
 		}
 
-		return null; // 認証失敗
+		// ファイルから属性の読み込み
+		try {
+			File file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
+			BufferedReader br = new BufferedReader(new FileReader(file));
+			attribute = br.readLine(); // Fileから読み取った行
+			br.close();
+		} catch (IOException | NullPointerException e) {
+			Log.error(e);
+			return null;
+		}
+
+		// 属性に合わせてユーザの作成
+		if (attribute == null) {
+			// 属性読み込みエラー
+			Log.error(new Throwable(), "属性読み込みエラー: attribute = null");
+			return null;
+		} else if (attribute.equals(Master.class.getSimpleName())) {
+			// 学生のIDで一致したとき
+			return new Master(id, passwd);
+		} else if (attribute.equals(Slave.class.getSimpleName())) {
+			// 教員のIDで一致したとき
+			return new Slave(id, passwd);
+		} else {
+			// 登録されていない属性が見つかったとき
+			Log.error(new Throwable(), "属性読み込みエラー: attribute = " + attribute);
+			return null;
+		}
+	}
+
+	// 通知を表示する
+	public boolean popNotification() {
+		String message = ""; // 通知内容
+
+		// 更新された通知を全て取得
+		File dir = new File(Controller.homeDirName + "/" + id + "/" + notificationDirName);
+		String fileNames[] = dir.list();
+		if (fileNames != null && fileNames.length != 0) {
+			Arrays.sort(fileNames);
+			for (String fileName : fileNames) {
+				File file = new File(dir.toString() + "/" + fileName);
+				try {
+					BufferedReader br = new BufferedReader(new FileReader(file));
+					message += "***** " + fileName + " *****\n";
+					String line;
+					while ((line = br.readLine()) != null) {
+						message += line + "\n";
+					}
+					message += "\n";
+
+					br.close();
+					Controller.deleteFile(file); // 通知した情報の削除
+				} catch (IOException e) {
+					Log.error(e);
+					return false;
+				}
+			}
+
+			// 実際の表示処理
+			display.Message popup = new display.Message();
+			popup.showMessage(message.trim());
+		}
+
+		return true;
 	}
 
 	// 入力されたパスワードがIDに対して正しいか
@@ -96,10 +163,8 @@ public abstract class User {
 
 	// 認証されたMacAddressを保持しているか
 	private static boolean hasCertifiedMacAddress(String id) {
-		String registeredNicName = null; // 登録されているNICの表示名
-		String registeredMacAddress = null; // 登録されているMACアドレス
-		String gotNicName = null; // 現パソコンのNICの表示名
-		String gotMacAddress = ""; // 現パソコンのMACアドレス
+		String nicName = null; // 登録されているNICの表示名
+		String macAddress = null; // 登録されているMACアドレス
 
 		// ファイルからMACアドレスNIC表示名の読み込み
 		try {
@@ -109,8 +174,8 @@ public abstract class User {
 			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 			Matcher m = p.matcher(line);
 			if (m.find()) {
-				registeredNicName = m.group(1);
-				registeredMacAddress = m.group(2);
+				nicName = m.group(1);
+				macAddress = m.group(2);
 			}
 
 			br.close();
@@ -123,36 +188,22 @@ public abstract class User {
 		}
 
 		// MACアドレスの取得
-		try {
-			// 全NICを取得
-			Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
-			// 登録MACアドレスと同じものを探す
-			while (gotNics.hasMoreElements() && !registeredNicName.equals(gotNicName)) {
-				NetworkInterface gotNic = gotNics.nextElement();
-				byte[] hardwareAddress = gotNic.getHardwareAddress();
-				if (hardwareAddress != null) {
-					for (byte b : hardwareAddress) {
-						gotMacAddress += String.format("%02X:", b);
-					}
-					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
+		Nics nics = new Nics();
+		for (int i = 0; i < nics.length(); i++) {
+			if (nicName.equals(nics.getName(i))) {
+				if (macAddress.equals(nics.getMacAddress(i).toString())) {
+					return true;
 				}
-				gotNicName = gotNic.getName();
+				return false;
 			}
-		} catch (IOException e) {
-			Log.error(e);
-			return false;
 		}
-
-		// 登録されているMACアドレスが見つかったか
-		if (registeredMacAddress.equals(gotMacAddress) && registeredNicName.equals(gotNicName)) {
-			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	// idから名前を取得する
 	public static String getName(String id) {
+		if (id == null) return null;
+
 		String name;
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nameFileName);
 		try {
@@ -260,6 +311,9 @@ public abstract class User {
 
 	// 予定の更新
 	public abstract Agenda setAgenda(Agenda agenda, int date, String content);
+
+	// 予定の削除
+	public abstract Agenda deleteAgenda(Agenda agenda, int date);
 
 	// setter
 	public void setId(String id) {
