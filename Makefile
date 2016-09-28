@@ -12,3 +12,8 @@ javadoc:
 .PHONY: do
 do:
 	javac src/*/*.java && java -cp src main.Main
+
+.PHONY: jar
+jar:
+	cp Main.mf bin/Main.mf;cd bin/; jar cfm ../AMS.jar Main.mf *;cd ../;chmod +x AMS.jar;
+
