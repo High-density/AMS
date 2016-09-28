@@ -256,7 +256,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pathTextField = new JTextField("ファイルを参照してください");
 		pathTextField.setBounds(200,100,300,51);
 		pathTextField.setFont(new Font(null, Font.PLAIN, 14));
-		
+
 		File dir;
 		if(CheckOS.isWindows()){
 			dir = new File(System.getProperty("user.home"));
@@ -400,7 +400,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		usrLabel = new JLabel("ユーザ名");
 		usrLabel.setBounds(250,200,200,40);
 		usrLabel.setFont(new Font(null, Font.PLAIN, 24));
-		usr_Mine = new JLabel(controller.getName(myID));
+		usr_Mine = new JLabel(Controller.getName(myID));
 		usr_Mine.setBounds(380,200,200,40);
 		usr_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//アカウント情報変更ボタン

@@ -43,7 +43,6 @@ import system.Slave;
 class Teacher extends KeyAdapter implements ActionListener, WindowListener{// 先生用クラス
 	/*main*/
 	private Controller controller;	// 内部動作用
-	//private Message message;		// エラー呼び出し用
 	private NewAccount newAccount;	// アカウント用
 	private JFrame mainFrame;
 	private Container contentPane;
@@ -242,9 +241,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		attgbc[2].gridy = 0;
 		attgbc[2].ipadx = 32;	//+31ピクセル これで最小のXをでかくできる
-/*		if(CheckOS.isWindows()){
-			attgbc[2].ipady = 7;	//+12ピクセル これで最小のYをでかくできる
-		}else{// if(CheckOS.isLinux()){
+		if(CheckOS.isWindows()){
+			attgbc[2].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
+		}
+		/*else{// if(CheckOS.isLinux()){
 			attgbc[2].ipady = 15;
 		}*/
 		for(int i=0;i<maxDate;i++){// 日付表示
@@ -327,19 +327,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
-/* 名前表示ラベルを幅いっぱいに伸ばすのでいらなくなった
-		int ix=0;
-		if(CheckOS.isWindows()){
-			ix = 13;
-		}else{// if(CheckOS.isLinux()){
-			ix = 3;
-		}
-		attgbc[0].ipadx = ix;
-*/
 		attgbc[0].ipady = 14;
 		for(int i=0;i<numSize;i++){	// s12500
 			//idLabel[i] = new JLabel(slaves.get(i));
-			idLabel[i] = new JLabel(controller.getName(slaves.get(i)));
+			idLabel[i] = new JLabel(Controller.getName(slaves.get(i)));
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
@@ -361,7 +352,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		for(int i=0;i<dayLabel.length;i++){// 1 - 31
 			dayLabel[i] = new JLabel("00");
-			dayLabel[i].setBounds(0,0,50,40);
 			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			dayLabel[i].setOpaque(true);
 			dayLabel[i].setBackground(Color.YELLOW);
@@ -456,7 +446,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			rStudentsButton[i] = new JButton();
 			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			rStudentsButton[i].setBackground(Color.WHITE);
-			rStudentsButton[i].setText(controller.getName(slaves.get(i)));
+			rStudentsButton[i].setText(Controller.getName(slaves.get(i)));
 			rStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gLayout.setConstraints(rStudentsButton[i], gbc);
@@ -677,11 +667,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 		aStudentsButton  = new JButton[numSize];
 		for(int i=0;i<numSize;i++){
-			aStudentsButton[i] = new JButton();
+			aStudentsButton[i] = new JButton(Controller.getName(slaves.get(i)));
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			aStudentsButton[i].setBackground(Color.WHITE);
 			aStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
-			aStudentsButton[i].setText(slaves.get(i));
 			gbc.gridy = i;
 			gridBagLayout.setConstraints(aStudentsButton[i], gbc);
 			accPanel.add(aStudentsButton[i]);
@@ -709,7 +698,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			newAccount.showNewAccount();
 		}else{
 			String slaveID = slaves.get(i);
-			String slaveName = controller.getName(slaveID);
+			String slaveName = Controller.getName(slaveID);
 			newAccount.showCheAccount(slaveID, slaveName);
 		}
 	}
@@ -890,9 +879,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			int flagNull = 0;
 			if(plan.equals("")){
 				flagNull = 1;
-				//System.out.println("空");
 			}
-			if(!(planday < 0) && flagNull == 0){
+			if(planday != -1 && flagNull == 0){
 				int opt = JOptionPane.showConfirmDialog(mainFrame, "予定を追加しますか？");
 				if(opt == 0){
 					controller.setAgenda(agenda, planday, plan);
@@ -902,7 +890,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 					mess = "操作を取り消しました";
 				}
 				JOptionPane.showMessageDialog(mainFrame, mess);
-			}else if(flagNull == 1){
+			}else if(planday != -1 && flagNull == 1){
 				int opt = JOptionPane.showConfirmDialog(mainFrame, "予定を削除しますか？");
 				if(opt == 0){
 					controller.deleteAgenda(agenda, planday);

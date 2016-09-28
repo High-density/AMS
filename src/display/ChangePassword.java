@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import system.AccountInformation;
+import system.Controller;
 
 public class ChangePassword extends KeyAdapter implements ActionListener{
 	private system.Controller controller;
@@ -98,7 +99,7 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 	 */
 	public void showChangePassword(String myID){
 		oldID = myID;
-		oldName = controller.getName(oldID);
+		oldName = Controller.getName(oldID);
 		ID_Mine.setText(oldID);
 		usr_Mine.setText(oldName);
 		accountFrame.setVisible(true);
