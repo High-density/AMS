@@ -187,17 +187,17 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		Border border = new EmptyBorder(0,0,0,0);
 		dayScrollPanel = new JScrollPane();
-		dayScrollPanel.setBounds(70,130,693,31);
+		dayScrollPanel.setBounds(80,130,683,31);
 		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		dayScrollPanel.setBorder(border);
 		IDScrollPanel = new JScrollPane();
-		IDScrollPanel.setBounds(10,160,60,285);
+		IDScrollPanel.setBounds(10,161,70,300);
 		IDScrollPanel.setBorder(border);
 		IDScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		attScrollPanel = new JScrollPane();
-		attScrollPanel.setBounds(70,161,710,300);
+		attScrollPanel.setBounds(80,161,700,300);
 		attScrollPanel.setBorder(border);
 		attScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		attScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -205,8 +205,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		IDScrollPanel.getVerticalScrollBar().setModel(attScrollPanel.getVerticalScrollBar().getModel());
 		dayScrollPanel.getHorizontalScrollBar().setModel(attScrollPanel.getHorizontalScrollBar().getModel());
 
-		ID = new JLabel("ID");
-		ID.setBounds(10,130,60,30);
+		ID = new JLabel("名前");
+		ID.setBounds(10,130,70,30);
 		ID.setHorizontalAlignment(JLabel.CENTER);
 		ID.setOpaque(true);
 		ID.setBackground(Color.YELLOW);
@@ -242,14 +242,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		attgbc[2].gridy = 0;
 		attgbc[2].ipadx = 32;	//+31ピクセル これで最小のXをでかくできる
-		if(CheckOS.isWindows()){
+/*		if(CheckOS.isWindows()){
 			attgbc[2].ipady = 7;	//+12ピクセル これで最小のYをでかくできる
 		}else{// if(CheckOS.isLinux()){
 			attgbc[2].ipady = 15;
-		}
+		}*/
 		for(int i=0;i<maxDate;i++){// 日付表示
 			dayLabel[i].setText(String.format("%1$02d", i+1));
 			attgbc[2].gridx = i;
+			attgbc[2].fill = GridBagConstraints.VERTICAL;
 			attgLayout[2].setConstraints(dayLabel[i], attgbc[2]);
 		}
 
@@ -326,6 +327,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
+/* 名前表示ラベルを幅いっぱいに伸ばすのでいらなくなった
 		int ix=0;
 		if(CheckOS.isWindows()){
 			ix = 13;
@@ -333,15 +335,19 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			ix = 3;
 		}
 		attgbc[0].ipadx = ix;
+*/
 		attgbc[0].ipady = 14;
 		for(int i=0;i<numSize;i++){	// s12500
-			idLabel[i] = new JLabel(slaves.get(i));
+			//idLabel[i] = new JLabel(slaves.get(i));
+			idLabel[i] = new JLabel(controller.getName(slaves.get(i)));
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
 			idLabel[i].setBackground(Color.GRAY);
 			idLabel[i].setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
+			idLabel[i].setHorizontalAlignment(JLabel.LEFT);
 			attgbc[0].gridy = i;
+			attgbc[0].fill = GridBagConstraints.HORIZONTAL;
 			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
 			for(int j=0;j<31;j++){
 				attButton[i][j] = new JButton();
@@ -438,9 +444,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		GridBagConstraints gbc = new GridBagConstraints();
 		repoPanel = new JPanel(gLayout);
 		gbc.gridx = 0;
-		gbc.ipadx = 0;
+		//gbc.ipadx = 0;
 		if(CheckOS.isWindows()){
-			gbc.ipady = 8;
+			gbc.ipady = 15; // 8
 		}else{// if(CheckOS.isLinux()){
 			gbc.ipady = 13;
 		}
@@ -450,18 +456,18 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			rStudentsButton[i] = new JButton();
 			rStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			rStudentsButton[i].setBackground(Color.WHITE);
-			rStudentsButton[i].setText(slaves.get(i));
+			rStudentsButton[i].setText(controller.getName(slaves.get(i)));
 			rStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
+			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gLayout.setConstraints(rStudentsButton[i], gbc);
 			rStudentsButton[i].addActionListener(this);
 			rStudentsButton[i].addKeyListener(this);
 			rStudentsButton[i].setActionCommand("rStudents"+i);
 		}
 
-		int nx=128, yx=149;
+		int nx=128;
 		if(CheckOS.isWindows()){
 			nx = 128;
-			yx = 149;
 		}
 		gbc.gridx = 1;
 		if(CheckOS.isWindows()){
@@ -484,8 +490,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				LocalDate LastUpdate = controller.getLastUploadDate(slaves.get(i));
 				String update = LastUpdate.format(formatter);
 				updateLabel[i].setText(update);
-				gbc.ipadx = yx;
 			}
+			gbc.fill = GridBagConstraints.BOTH;
 			gLayout.setConstraints(updateLabel[i], gbc);
 		}
 
@@ -664,7 +670,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		gbc.gridy = 0;
 		if(CheckOS.isWindows()){
 			gbc.ipadx = 12;
-			gbc.ipady = 12;
+			gbc.ipady = 16; // 12
 		}else{
 			gbc.ipadx = 4;
 			gbc.ipady = 16;
