@@ -12,7 +12,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.net.URL;
 import java.time.YearMonth;
 import java.util.Calendar;
 
@@ -119,8 +118,8 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 
 		/*アイコンの設定*/
 		try{
-		ClassLoader cl = this.getClass().getClassLoader(); 
-		ImageIcon icon = new ImageIcon(cl.getResource("src/icon/icon.png"));
+		java.net.URL url = getClass().getClassLoader().getResource("icon/icon.png");
+		ImageIcon icon = new ImageIcon(url);
 		mainFrame.setIconImage(icon.getImage());
 		}catch(Exception e){
 			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
@@ -162,17 +161,17 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		aBackButton.setContentAreaFilled(false);
 		aBackButton.setBorderPainted(false);
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
-			ImageIcon right = new ImageIcon(cl.getResource("src/icon/right.png"));
+			java.net.URL url = getClass().getClassLoader().getResource("icon/right.png");
+			ImageIcon right = new ImageIcon(url);
 		aNextButton.setIcon(right);
 		}catch(Exception e){
 			ImageIcon right = new ImageIcon("src/icon/right.png");
 			aNextButton.setIcon(right);
 		}
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
-			ImageIcon left = new ImageIcon(cl.getResource("src/icon/left.png"));
-		aBackButton.setIcon(left);
+			java.net.URL url = getClass().getClassLoader().getResource("icon/left.png");
+			ImageIcon left = new ImageIcon(url);
+			aBackButton.setIcon(left);
 		}catch(Exception e){
 			ImageIcon left = new ImageIcon("src/icon/left.png");
 			aBackButton.setIcon(left);
@@ -284,8 +283,8 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		upButton.setBounds(300,200,200,60);
 		upButton.setBackground(Color.WHITE);
 		try{
-			URL uploader=this.getClass().getResource("src/icon/upload.png");
-			ImageIcon upload = new ImageIcon("src/icon/upload.png");
+			java.net.URL url = getClass().getClassLoader().getResource("icon/upload.png");
+			ImageIcon upload = new ImageIcon(url);
 			upButton.setIcon(upload);
 			}catch(Exception e){
 				ImageIcon upload = new ImageIcon("src/icon/upload.png");
@@ -342,16 +341,16 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
 		try{
-			ClassLoader cl = this.getClass().getClassLoader();
-			ImageIcon right = new ImageIcon(cl.getResource("src/icon/right_mini.png"));
+			java.net.URL url = getClass().getClassLoader().getResource("icon/right_mini.png");
+			ImageIcon right = new ImageIcon(url);
 			pNextButton.setIcon(right);
 		}catch(Exception e){
 			ImageIcon right = new ImageIcon("src/icon/right_mini.png");
 			pNextButton.setIcon(right);
 		}
 		try{
-			ClassLoader cl = this.getClass().getClassLoader();
-			ImageIcon left = new ImageIcon(cl.getResource("src/icon/left_mini.png"));
+			java.net.URL url = getClass().getClassLoader().getResource("icon/left_mini.png");
+			ImageIcon left = new ImageIcon(url);
 			pBackButton.setIcon(left);
 		}catch(Exception e){
 			ImageIcon left = new ImageIcon("src/icon/left_mini.png");

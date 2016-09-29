@@ -52,7 +52,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JButton numButton[] = new JButton[5];
 	private JLabel labelNum[] = new JLabel[4];
 	private final String[] funcName = {"出席管理","報告書管理","予定管理",
-									   "アカウント管理", "ログアウト"};
+			"アカウント管理", "ログアウト"};
 
 	/*attend*/
 	private JPanel IDPanel;
@@ -108,10 +108,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
 	private int numSize = Slave.getSlaves().size();//アカウント数
 	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
-	private ImageIcon icorn;
-	private ImageIcon right;
-	private ImageIcon left;
-	
+
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
 		this.controller = controller;
@@ -127,13 +124,13 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		/*アイコンの設定*/
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
-			ImageIcon icon = new ImageIcon(cl.getResource("src/icon/icon.png"));
+			java.net.URL url = getClass().getClassLoader().getResource("icon/icon.png");
+			ImageIcon icon = new ImageIcon(url);
 			mainFrame.setIconImage(icon.getImage());
-			}catch(Exception e){
-				ImageIcon icorn = new ImageIcon("src/icon/icon.png");
-				mainFrame.setIconImage(icorn.getImage());
-			}
+		}catch(Exception e){
+			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
+			mainFrame.setIconImage(icorn.getImage());
+		}
 
 		/* 各種設定*/
 		PanelButton();	//機能選択ボタンの追加
@@ -179,9 +176,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		//ボタンへのiconの設置
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
-			ImageIcon right = new ImageIcon(cl.getResource("src/icon/right.png"));
-		aNextButton.setIcon(right);
+			java.net.URL url = getClass().getClassLoader().getResource("icon/right.png");
+			ImageIcon right = new ImageIcon(url);
+			aNextButton.setIcon(right);
 		}catch(Exception e){
 			ImageIcon right = new ImageIcon("src/icon/right.png");
 			aNextButton.setIcon(right);
@@ -191,11 +188,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aBackButton.setContentAreaFilled(false);
 		aBackButton.setBorderPainted(false);
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		
+
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
-			ImageIcon left = new ImageIcon(cl.getResource("src/icon/left.png"));
-		aBackButton.setIcon(left);
+			java.net.URL url = getClass().getClassLoader().getResource("icon/left.png");
+			ImageIcon left = new ImageIcon(url);
+			aBackButton.setIcon(left);
 		}catch(Exception e){
 			ImageIcon left = new ImageIcon("src/icon/left.png");
 			aBackButton.setIcon(left);
@@ -395,7 +392,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		attScrollPanel.setViewportView(attPanel);
 	}
 
-/*	private ChangeListener cl = new ChangeListener() {
+	/*	private ChangeListener cl = new ChangeListener() {
 		private boolean adjflg;
 		public void stateChanged(ChangeEvent e) {
 			JViewport src = null;
@@ -419,10 +416,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			//Point pnt2 = tgt.getViewPosition();
 			double d;
 			d = pnt1.getY() / (dim1.getHeight() - siz1.getHeight())
-					* (dim2.getHeight() - siz2.getHeight());
+	 * (dim2.getHeight() - siz2.getHeight());
 			pnt1.y = (int) d;
 			d = pnt1.getX() / (dim1.getWidth() - siz1.getWidth())
-					* (dim2.getWidth() - siz2.getWidth());
+	 * (dim2.getWidth() - siz2.getWidth());
 			pnt1.x = (int) d;
 			tgt.setViewPosition(pnt1);
 			adjflg = false;
@@ -519,7 +516,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		labelNum[2].setBounds(0,10,800,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
 		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
-		
+
 		ymd = new JLabel("日付を選択");
 		ymd.setBounds(500,20,200,40);
 		ymd.setFont(new Font(null, Font.PLAIN, 18));
@@ -534,26 +531,26 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
-			ImageIcon right = new ImageIcon(cl.getResource("src/icon/right_mini.png"));
+			java.net.URL url = getClass().getClassLoader().getResource("icon/right_mini.png");
+			ImageIcon right = new ImageIcon(url);
 			pNextButton.setIcon(right);
 		}catch(Exception e){
 			ImageIcon right = new ImageIcon("src/icon/right_mini.png");
 			pNextButton.setIcon(right);
 		}
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
-			ImageIcon left = new ImageIcon(cl.getResource("src/icon/left_mini.png"));
+			java.net.URL url = getClass().getClassLoader().getResource("icon/left_mini.png");
+			ImageIcon left = new ImageIcon(url);
 			pBackButton.setIcon(left);
 		}catch(Exception e){
 			ImageIcon left = new ImageIcon("src/icon/left_mini.png");
 			pBackButton.setIcon(left);
 		}
-		
+
 		planPanel = new JPanel();
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(20, 110, 400, 400);
-		
+
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
@@ -615,7 +612,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			pDayButton[i].setText("");
 			pDayButton[i].setBackground(Color.WHITE);
 		}
-		
+
 		int fontSize = 16;
 		if(CheckOS.isWindows()){
 			fontSize = 20;
