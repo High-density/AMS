@@ -86,10 +86,14 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		loginFrame.setVisible(true);
 
 		/*アイコンの設定*/
-		ImageIcon icon = new ImageIcon("src/icon/icon.png");
+		try{
+		ClassLoader cl = this.getClass().getClassLoader(); 
+		ImageIcon icon = new ImageIcon(cl.getResource("src/icon/icon.png"));
 		loginFrame.setIconImage(icon.getImage());
-
-
+		}catch(Exception e){
+			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
+			loginFrame.setIconImage(icorn.getImage());
+		}
 	}
 
 	/**
