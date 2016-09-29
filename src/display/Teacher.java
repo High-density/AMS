@@ -615,10 +615,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 			pDayButton[i].setText("");
 			pDayButton[i].setBackground(Color.WHITE);
 		}
+		
+		int fontSize = 16;
+		if(CheckOS.isWindows()){
+			fontSize = 20;
+		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			int day = 1+i-dayOfWeek;
 			pDayButton[i].setText(""+day);
-			pDayButton[i].setFont(new Font(null, Font.BOLD, 20));
+			pDayButton[i].setFont(new Font(null, Font.BOLD, fontSize));
 			if(i % 7 == 0){
 				pDayButton[i].setForeground(Color.RED);
 			}else if(i % 7 == 6){

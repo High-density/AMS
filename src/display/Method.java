@@ -342,7 +342,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
+			ClassLoader cl = this.getClass().getClassLoader();
 			ImageIcon right = new ImageIcon(cl.getResource("src/icon/right_mini.png"));
 			pNextButton.setIcon(right);
 		}catch(Exception e){
@@ -350,7 +350,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			pNextButton.setIcon(right);
 		}
 		try{
-			ClassLoader cl = this.getClass().getClassLoader(); 
+			ClassLoader cl = this.getClass().getClassLoader();
 			ImageIcon left = new ImageIcon(cl.getResource("src/icon/left_mini.png"));
 			pBackButton.setIcon(left);
 		}catch(Exception e){
@@ -410,16 +410,16 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			dayButton_plan[i].setText("");
 			dayButton_plan[i].setBackground(Color.WHITE);
 		}
+		
+		int fontSize = 16;
+		if(CheckOS.isWindows()){
+			fontSize = 20;
+		}
 		for(int i=dayOfWeek;i<dayOfWeek+maxDate;i++){
 			int day = 1 + i - dayOfWeek;
-			//String plan = agenda.getData(day);
 			dayButton_plan[i].setText(""+day);
-			//if(!("\n".equals(plan))){
 			dayButton_plan[i].setBackground(Color.WHITE);
-			dayButton_plan[i].setFont(new Font(null, Font.BOLD, 20));
-			//}else{
-			//dayButton_plan[i].setBackground(Color.CYAN);
-			//}*/
+			dayButton_plan[i].setFont(new Font(null, Font.BOLD, fontSize));
 			if(i % 7 == 0)
 				dayButton_plan[i].setForeground(Color.RED);
 			else if(i % 7 == 6)
