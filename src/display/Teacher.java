@@ -15,7 +15,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
@@ -129,13 +128,13 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		/*アイコンの設定*/
 		try{
-		URL icon=this.getClass().getResource("src/icon/icon.png");
-		ImageIcon icorn = new ImageIcon(icon);
-		mainFrame.setIconImage(icorn.getImage());
-		}catch(Exception e){
-			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
-			mainFrame.setIconImage(icorn.getImage());
-		}
+			ClassLoader cl = this.getClass().getClassLoader(); 
+			ImageIcon icon = new ImageIcon(cl.getResource("src/icon/icon.png"));
+			mainFrame.setIconImage(icon.getImage());
+			}catch(Exception e){
+				ImageIcon icorn = new ImageIcon("src/icon/icon.png");
+				mainFrame.setIconImage(icorn.getImage());
+			}
 
 		/* 各種設定*/
 		PanelButton();	//機能選択ボタンの追加
@@ -181,8 +180,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		//ボタンへのiconの設置
 		try{
-		URL url_right=this.getClass().getResource("src/icon/right.png");
-		ImageIcon right = new ImageIcon(url_right);
+			ClassLoader cl = this.getClass().getClassLoader(); 
+			ImageIcon right = new ImageIcon(cl.getResource("src/icon/right.png"));
 		aNextButton.setIcon(right);
 		}catch(Exception e){
 			ImageIcon right = new ImageIcon("src/icon/right.png");
@@ -193,15 +192,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aBackButton.setContentAreaFilled(false);
 		aBackButton.setBorderPainted(false);
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
+		
 		try{
-			URL url_left=this.getClass().getResource("src/icon/left.png");
-			ImageIcon left = new ImageIcon(url_left);
+			ClassLoader cl = this.getClass().getClassLoader(); 
+			ImageIcon left = new ImageIcon(cl.getResource("src/icon/left.png"));
+		aBackButton.setIcon(left);
+		}catch(Exception e){
+			ImageIcon left = new ImageIcon("src/icon/left.png");
 			aBackButton.setIcon(left);
-			}catch(Exception e){
-				ImageIcon left = new ImageIcon("src/icon/left.png");
-				aBackButton.setIcon(left);
-			}
-			
+		}	
 		aMonthLabel = new JLabel(year+"年"+month+"月");
 		aMonthLabel.setBounds(340,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -539,17 +538,17 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
 		try{
-		URL url_right=this.getClass().getResource("src/icon/right_mini.png");
-		ImageIcon right = new ImageIcon(url_right);
-		pNextButton.setIcon(right);
+			ClassLoader cl = this.getClass().getClassLoader(); 
+			ImageIcon right = new ImageIcon(cl.getResource("src/icon/right_mini.png"));
+			pNextButton.setIcon(right);
 		}catch(Exception e){
 			ImageIcon right = new ImageIcon("src/icon/right_mini.png");
 			pNextButton.setIcon(right);
 		}
 		try{
-		URL url_left=this.getClass().getResource("src/icon/left_mini.png");
-		ImageIcon left = new ImageIcon(url_left);
-		pBackButton.setIcon(left);
+			ClassLoader cl = this.getClass().getClassLoader(); 
+			ImageIcon left = new ImageIcon(cl.getResource("src/icon/left_mini.png"));
+			pBackButton.setIcon(left);
 		}catch(Exception e){
 			ImageIcon left = new ImageIcon("src/icon/left_mini.png");
 			pBackButton.setIcon(left);
