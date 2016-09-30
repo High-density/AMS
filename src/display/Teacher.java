@@ -196,7 +196,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 		}catch(Exception e){
 			ImageIcon left = new ImageIcon("src/icon/left.png");
 			aBackButton.setIcon(left);
-		}	
+		}
 		aMonthLabel = new JLabel(year+"å¹´"+month+"æœˆ");
 		aMonthLabel.setBounds(340,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
@@ -225,7 +225,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 		ID.setBounds(10,130,70,30);
 		ID.setHorizontalAlignment(JLabel.CENTER);
 		ID.setOpaque(true);
-		ID.setBackground(Color.YELLOW);
+		ID.setBackground(new Color(254 ,205 ,21));
 		ID.setBorder(new LineBorder(Color.GRAY, 1, true));
 
 		attReset();
@@ -281,15 +281,15 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 			for(int j=0;j<maxDate;j++){
 				if(status[i][j] == AttendanceBook.ATTENDED){
 					attButton[i][j].setText("å‡º");
-					attButton[i][j].setBackground(Color.CYAN);
+					attButton[i][j].setBackground(new Color(87 ,167 ,255));
 					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}else if(status[i][j] == AttendanceBook.ABSENCE){
 					attButton[i][j].setText("æ¬ ");
-					attButton[i][j].setBackground(Color.PINK);;
+					attButton[i][j].setBackground(new Color(254 ,154 ,157));
 					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}else if(status[i][j] == AttendanceBook.AUTHORIZED_ABSENCE){
 					attButton[i][j].setText("å…¬");
-					attButton[i][j].setBackground(Color.GREEN);
+					attButton[i][j].setBackground(new Color(203 ,249 ,83));
 					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}
 				attgbc[1].gridx = j;
@@ -371,7 +371,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 			dayLabel[i] = new JLabel("00");
 			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			dayLabel[i].setOpaque(true);
-			dayLabel[i].setBackground(Color.YELLOW);
+			dayLabel[i].setBackground(new Color(254 ,205 ,21));
 			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
 		}
 

@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.YearMonth;
 import java.util.Calendar;
@@ -86,7 +87,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)}; // 年
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
 	private String myID; // ログインしたIDを引き継ぎ
-
+	private BufferedImage image = null;
 	Method(system.Controller controller, String myID){
 		/* システム引き継ぎ */
 		this.controller = controller;
