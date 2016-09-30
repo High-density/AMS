@@ -15,7 +15,15 @@ do:
 
 .PHONY: jar
 jar:
-	mkdir bin;javac src/*/*.java -d bin/;cp Main.mf bin/Main.mf;cp -r src/icon/ bin/icon;cd bin/;jar cfm ../AMS.jar Main.mf *;cd ../;chmod +x AMS.jar
+	mkdir bin;\
+	javac src/*/*.java -d bin/;\
+	cp Main.mf bin/Main.mf;\
+	cp -r src/icon/ bin/icon;\
+	cd bin/;\
+	jar cfm ../AMS.jar Main.mf *;\
+	cd ../;\
+	chmod +x AMS.jar;\
+	echo "finish making AMS.jar"
 
 .PHONY: dojar
 dojar:

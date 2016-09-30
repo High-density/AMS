@@ -217,7 +217,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		attScrollPanel.setBorder(border);
 		attScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		attScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
+		
 		IDScrollPanel.getVerticalScrollBar().setModel(attScrollPanel.getVerticalScrollBar().getModel());
 		dayScrollPanel.getHorizontalScrollBar().setModel(attScrollPanel.getHorizontalScrollBar().getModel());
 
@@ -257,17 +257,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 
 		attgbc[2].gridy = 0;
-		attgbc[2].ipadx = 32;	//+31ピクセル これで最小のXをでかくできる
+		/*attgbc[2].ipadx = 32;		//+31ピクセル これで最小のXをでかくできる
 		if(CheckOS.isWindows()){
 			attgbc[2].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
-		}
-		/*else{// if(CheckOS.isLinux()){
-			attgbc[2].ipady = 15;
 		}*/
-		for(int i=0;i<maxDate;i++){// 日付表示
+		attgbc[2].fill = GridBagConstraints.BOTH;
+		for(int i=0;i<maxDate;i++){	// 日付表示
 			dayLabel[i].setText(String.format("%1$02d", i+1));
 			attgbc[2].gridx = i;
-			attgbc[2].fill = GridBagConstraints.VERTICAL;
 			attgLayout[2].setConstraints(dayLabel[i], attgbc[2]);
 		}
 
@@ -291,6 +288,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 					attButton[i][j].setText("公");
 					attButton[i][j].setBackground(new Color(203 ,249 ,83));
 					attButton[i][j].setForeground(Color.DARK_GRAY);
+				}else if(status[i][j] == AttendanceBook.NO_MARK){
+					attButton[i][j].setText("□");
+					attButton[i][j].setBackground(new Color(255 ,255 ,255));
+					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}
 				attgbc[1].gridx = j;
 				attgbc[1].gridy = i;
@@ -299,12 +300,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 
 		if(maxDate < 31){
+			//attgbc[2].ipadx = 43;
+			//attgbc[2].ipady = 15;
 			if(CheckOS.isWindows()){
 				attgbc[2].ipadx = 43;
 				attgbc[2].ipady = 7;
-			}else{// if(CheckOS.isLinux()){
-				attgbc[2].ipadx = 43;
-				attgbc[2].ipady = 15;
 			}
 			for(int i=maxDate;i<31;i++){
 				dayLabel[i].setText("/");
@@ -339,7 +339,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 		IDPanel = new JPanel(attgLayout[0]);
 		attPanel = new JPanel(attgLayout[1]);
-		aDayPanel = new JPanel(attgLayout[2]);
+		aDayPanel = new JPanel(new GridLayout(1, 31));
+		aDayPanel.setPreferredSize(new Dimension(682,30));
 
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
@@ -869,6 +870,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 							controller.changeAttendance(LocalDate.parse(chengeDay)
 									, slaves.get(i), AttendanceBook.AUTHORIZED_ABSENCE);
 						}else if(attButton[i][j].getText().equals("公")){
+							controller.changeAttendance(LocalDate.parse(chengeDay)
+									, slaves.get(i), AttendanceBook.NO_MARK);
+						}else if(attButton[i][j].getText().equals("□")){
 							controller.changeAttendance(LocalDate.parse(chengeDay)
 									, slaves.get(i), AttendanceBook.ATTENDED);
 						}
