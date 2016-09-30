@@ -251,8 +251,8 @@ public abstract class User {
 
 				br.close();
 			} catch (FileNotFoundException e) {
-				// 欠席のとき
-				book.setData(d, AttendanceBook.ABSENCE);
+				// 出席もしてなく，ファイルを作成してないとき
+				book.setData(d, AttendanceBook.NO_MARK);
 			} catch (IOException | NullPointerException e) {
 				book.setData(d, AttendanceBook.ERROR);
 			}

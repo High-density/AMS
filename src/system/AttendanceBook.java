@@ -26,6 +26,10 @@ public class AttendanceBook extends DataForAMonth<Integer> {
 	 * 公欠コード
 	 */
 	public static final int AUTHORIZED_ABSENCE = 2;
+	/**
+	 * 無印
+	 */
+	public static final int NO_MARK = 3;
 
 	private LocalTime attendedTime[]; // 出席時刻
 	private LocalTime returnTime[]; // 下校時刻
