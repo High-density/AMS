@@ -47,6 +47,8 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		newAccFrame.setLocationRelativeTo(null);
 		contentPane = newAccFrame.getContentPane();
 		panelMaster = new JPanel();
+		panelMaster.setBackground(Color.WHITE);
+		
 		panelMaster.setLayout(null);
 
 		int wid = 120, hei = 40;

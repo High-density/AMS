@@ -126,7 +126,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
 			mainFrame.setIconImage(icorn.getImage());
 		}
-
+		contentPane.setBackground(Color.WHITE);
 	}
 
 	private void PanelButton(){
@@ -150,7 +150,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void Attendance(){
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		
+		panelNum[0].setBackground(Color.WHITE);
 		calPanel = new JPanel(new GridLayout(7,7));
 		calPanel.setBounds(200,110,400,400);
 		aNextButton = new JButton();
@@ -273,6 +273,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void Report(){
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
+		panelNum[1].setBackground(Color.WHITE);
 		labelNum[1] = new JLabel("報告書アップローダ");
 		labelNum[1].setBounds(0,10,800,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
@@ -315,9 +316,11 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void Plan(){
 		panelNum[2] = new JPanel();
 		panelNum[2].setLayout(null);
+		panelNum[2].setBackground(Color.WHITE);
 		planPanel = new JPanel();
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(10, 120, 400, 400);
+		planPanel.setBackground(Color.WHITE);
 		labelNum[2] = new JLabel("予定");
 		labelNum[2].setBounds(180,10,200,40);
 		labelNum[2].setFont(new Font(null, Font.BOLD, 18));
@@ -332,6 +335,8 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pTextArea.setBounds(450, 100, 300, 400);
 		pTextArea.setLineWrap(true);
 		pTextArea.setEditable(false);
+		LineBorder border = new LineBorder(Color.BLACK, 1, true);
+		pTextArea.setBorder(border);
 		pNextButton = new JButton();
 		pNextButton.setBounds(290,70,100,40);
 		pNextButton.setContentAreaFilled(false);
@@ -436,6 +441,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void Account(){
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
+		panelNum[3].setBackground(Color.WHITE);
 		labelNum[3] = new JLabel("アカウント");
 		labelNum[3].setBounds(0,10,800,40);
 		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
@@ -470,6 +476,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 
 	private void CardPanel(){
 		cardPanel = new JPanel();
+		cardPanel.setBackground(Color.WHITE);
 		cLayout = new CardLayout();
 		cardPanel.setLayout(cLayout);
 

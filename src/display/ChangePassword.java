@@ -42,9 +42,11 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 		accountFrame.setBounds(650, 300, 600, 500);
 		changePanel = new JPanel();
 		changePanel.setLayout(null);
+		changePanel.setBackground(Color.WHITE);
 		changeLabel = new JLabel("アカウント情報の変更");
 		changeLabel.setFont(new Font(null, Font.PLAIN, 18));
 		changeLabel.setBounds(200,10,200,40);
+		
 		//IDの表示
 		IDLabel = new JLabel("ID");
 		IDLabel.setBounds(170,80,200,40);

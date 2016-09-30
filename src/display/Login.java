@@ -83,6 +83,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 
 		/* フレームにパネルを追加 */
 		contentPane.add(panelMaster, BorderLayout.CENTER);
+		panelMaster.setBackground(Color.WHITE);
 		loginFrame.setVisible(true);
 
 		/*アイコンの設定*/

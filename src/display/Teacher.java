@@ -146,7 +146,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		/* フレームに追加 */
 		contentPane.add(panelButton, BorderLayout.NORTH);	//機能選択ボタンの追加
 		contentPane.add(cardPanel, BorderLayout.CENTER);	//パネルの追加
-
+		contentPane.setBackground(Color.WHITE);
 		mainFrame.setVisible(true);
 	}
 
@@ -164,6 +164,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void Attendance(){
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
+		panelNum[0].setBackground(Color.WHITE);
 		labelNum[0] = new JLabel("出席管理");
 		labelNum[0].setBounds(0,10,800,40);
 		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
@@ -217,7 +218,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		attScrollPanel.setBorder(border);
 		attScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		attScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-
+		
 		IDScrollPanel.getVerticalScrollBar().setModel(attScrollPanel.getVerticalScrollBar().getModel());
 		dayScrollPanel.getHorizontalScrollBar().setModel(attScrollPanel.getHorizontalScrollBar().getModel());
 
@@ -340,7 +341,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		IDPanel = new JPanel(attgLayout[0]);
 		attPanel = new JPanel(attgLayout[1]);
 		aDayPanel = new JPanel(attgLayout[2]);
-
+		IDPanel.setBackground(Color.WHITE);
+		attPanel.setBackground(Color.WHITE);
+		aDayPanel.setBackground(Color.WHITE);
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
@@ -429,6 +432,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void Report(){
 		panelNum[1] = new JPanel();
 		panelNum[1].setLayout(null);
+		panelNum[1].setBackground(Color.WHITE);
 		labelNum[1] = new JLabel("報告書管理");
 		labelNum[1].setBounds(0,10,800,40);
 		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
@@ -450,6 +454,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		GridBagLayout gLayout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		repoPanel = new JPanel(gLayout);
+		repoPanel.setBackground(Color.WHITE);
 		gbc.gridx = 0;
 		//gbc.ipadx = 0;
 		if(CheckOS.isWindows()){
@@ -512,6 +517,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void Plan(){
 		panelNum[2] = new JPanel();
 		panelNum[2].setLayout(null);
+		panelNum[2].setBackground(Color.WHITE);
 		labelNum[2] = new JLabel("予定確認");
 		labelNum[2].setBounds(0,10,800,40);
 		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
@@ -560,6 +566,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pTextArea = new JTextArea(20,24);
 		pTextArea.setBounds(450, 60, 300, 400);
 		pTextArea.setLineWrap(true);
+		LineBorder border = new LineBorder(Color.BLACK, 1, true);
+		pTextArea.setBorder(border);
 		addPlanButton = new JButton("予定追加");
 		addPlanButton.setBounds(500,470,200,40);
 		addPlanButton.setBackground(Color.WHITE);
@@ -642,6 +650,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void Account(){
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
+		panelNum[3].setBackground(Color.WHITE);
 		labelNum[3] = new JLabel("アカウント管理");
 		labelNum[3].setBounds(0,10,800,40);
 		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
@@ -673,6 +682,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		Border border = new EmptyBorder(0,0,0,0);
 		accScrollPanel = new JScrollPane();
 		accScrollPanel.setBounds(100,  80, 320, 400);
+		accScrollPanel.setBackground(Color.WHITE);
 		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		accScrollPanel.setBorder(border);
@@ -692,7 +702,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		GridBagConstraints gbc = new GridBagConstraints();
 		accPanel = new JPanel(gridBagLayout);
-
+		accPanel.setBackground(Color.WHITE);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		if(CheckOS.isWindows()){
@@ -724,6 +734,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		cardPanel = new JPanel();
 		cLayout = new CardLayout();
 		cardPanel.setLayout(cLayout);
+		cardPanel.setBackground(Color.WHITE);
 		for(int i=0;i<4;i++){//それぞれの機能名を入れる
 			String str = "Meth" + (i+1);
 			cardPanel.add(panelNum[i], str);
