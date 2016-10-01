@@ -202,22 +202,22 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 
 		Border border = new EmptyBorder(0,0,0,0);
-		dayScrollPanel = new JScrollPane();
-		dayScrollPanel.setBounds(80,130,683,31);
-		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		dayScrollPanel.setBorder(border);
 		IDScrollPanel = new JScrollPane();
 		IDScrollPanel.setBounds(10,161,70,300);
 		IDScrollPanel.setBorder(border);
 		IDScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		dayScrollPanel = new JScrollPane();
+		dayScrollPanel.setBounds(80,130,683,30);
+		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		dayScrollPanel.setBorder(border);
 		attScrollPanel = new JScrollPane();
 		attScrollPanel.setBounds(80,161,700,300);
 		attScrollPanel.setBorder(border);
 		attScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		attScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		
+
 		IDScrollPanel.getVerticalScrollBar().setModel(attScrollPanel.getVerticalScrollBar().getModel());
 		dayScrollPanel.getHorizontalScrollBar().setModel(attScrollPanel.getHorizontalScrollBar().getModel());
 
@@ -256,24 +256,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			}
 		}
 
-		attgbc[2].gridy = 0;
-		/*attgbc[2].ipadx = 32;		//+31ピクセル これで最小のXをでかくできる
+/*
 		if(CheckOS.isWindows()){
-			attgbc[2].ipady = 12;	//+12ピクセル これで最小のYをでかくできる
-		}*/
-		attgbc[2].fill = GridBagConstraints.BOTH;
-		for(int i=0;i<maxDate;i++){	// 日付表示
-			dayLabel[i].setText(String.format("%1$02d", i+1));
-			attgbc[2].gridx = i;
-			attgLayout[2].setConstraints(dayLabel[i], attgbc[2]);
-		}
-
-		if(CheckOS.isWindows()){
-			attgbc[1].ipadx = 1;	//+0ピクセル これで最小のXをでかくできる
+			attgbc[1].ipadx = 1;	// +0ピクセル これで最小のXをでかくできる
 		}else{// if(CheckOS.isLinux()){
 			attgbc[1].ipadx = 5;
 		}
-		attgbc[1].ipady = 6;	//+6ピクセル これで最小のYをでかくできる
+		attgbc[1].ipady = 6;	// +6ピクセル これで最小のYをでかくできる
+		*/
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				if(status[i][j] == AttendanceBook.ATTENDED){
@@ -300,16 +290,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 
 		if(maxDate < 31){
-			//attgbc[2].ipadx = 43;
-			//attgbc[2].ipady = 15;
-			if(CheckOS.isWindows()){
-				attgbc[2].ipadx = 43;
-				attgbc[2].ipady = 7;
-			}
 			for(int i=maxDate;i<31;i++){
 				dayLabel[i].setText("/");
-				attgbc[2].gridx = i;
-				attgLayout[2].setConstraints(dayLabel[i], attgbc[2]);
 			}
 
 			if(CheckOS.isWindows()){
@@ -332,7 +314,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	}
 
 	private void attReset(){
-		// アカウントの増減の時はattUpdate();を実行する
+		// アカウントの増減の時はattUpdate()を実行する
 		for(int i=0;i<3;i++){
 			attgLayout[i] = new GridBagLayout();
 			attgbc[i] = new GridBagConstraints();
@@ -340,14 +322,13 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		IDPanel = new JPanel(attgLayout[0]);
 		attPanel = new JPanel(attgLayout[1]);
 		aDayPanel = new JPanel(new GridLayout(1, 31));
-		aDayPanel.setPreferredSize(new Dimension(682,30));
+		aDayPanel.setMinimumSize(new Dimension(682,30));
 
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
 		attgbc[0].ipady = 14;
 		for(int i=0;i<numSize;i++){	// s12500
-			//idLabel[i] = new JLabel(slaves.get(i));
 			idLabel[i] = new JLabel(Controller.getName(slaves.get(i)));
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
@@ -360,7 +341,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
 			for(int j=0;j<31;j++){
 				attButton[i][j] = new JButton();
-				attButton[i][j].setBounds(0,0,50,40);
+				attButton[i][j].setPreferredSize(new Dimension(50,32));
 				attButton[i][j].setBackground(Color.WHITE);
 				attButton[i][j].addActionListener(this);
 				attButton[i][j].addKeyListener(this);
@@ -369,28 +350,30 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 
 		for(int i=0;i<dayLabel.length;i++){// 1 - 31
-			dayLabel[i] = new JLabel("00");
+			dayLabel[i] = new JLabel(String.format("%1$02d", i+1));
+			dayLabel[i].setPreferredSize(new Dimension(50,30));
 			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			dayLabel[i].setOpaque(true);
 			dayLabel[i].setBackground(new Color(254 ,205 ,21));
 			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
+			aDayPanel.add(dayLabel[i]);
 		}
 
-		attendCalendar();// カレンダー作成用
+		attendCalendar();	// カレンダー作成用
 
 		for(int i=0;i<numSize;i++){
 			IDPanel.add(idLabel[i]);
 			for(int j=0;j<31;j++){
-				attPanel.add(attButton[i][j]);/*カレンダーボタン追加*/
+				attPanel.add(attButton[i][j]);	// カレンダーボタン追加
 			}
-		}
-		for(int i=0;i<dayLabel.length;i++){
-			aDayPanel.add(dayLabel[i]);
 		}
 
 		IDScrollPanel.setViewportView(IDPanel);
+		IDScrollPanel.setPreferredSize(new Dimension(70,300));
 		dayScrollPanel.setViewportView(aDayPanel);
+		dayScrollPanel.setPreferredSize(new Dimension((50*31),30));
 		attScrollPanel.setViewportView(attPanel);
+		attScrollPanel.setPreferredSize(new Dimension((50*31),300));
 	}
 
 	/*	private ChangeListener cl = new ChangeListener() {
