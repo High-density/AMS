@@ -58,8 +58,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JPanel IDPanel;
 	private JPanel aDayPanel;
 	private JPanel attPanel;
-	private GridBagLayout attgLayout[] = new GridBagLayout[3];
-	private GridBagConstraints attgbc[] = new GridBagConstraints[3];
+	private GridBagLayout attgLayout[] = new GridBagLayout[2];
+	private GridBagConstraints attgbc[] = new GridBagConstraints[2];
 	private JScrollPane IDScrollPanel;
 	private JScrollPane dayScrollPanel;
 	private JScrollPane attScrollPanel;
@@ -256,7 +256,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			}
 		}
 
-/*
+		/*
 		if(CheckOS.isWindows()){
 			attgbc[1].ipadx = 1;	// +0ピクセル これで最小のXをでかくできる
 		}else{// if(CheckOS.isLinux()){
@@ -293,13 +293,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			for(int i=maxDate;i<31;i++){
 				dayLabel[i].setText("/");
 			}
-
-			if(CheckOS.isWindows()){
-				attgbc[1].ipadx = 11;
-			}else{// if(CheckOS.isLinux()){
-				attgbc[1].ipadx = 11;
-			}
-			attgbc[1].ipady = 6;
+			/*
+			  if(CheckOS.isWindows()){
+			  attgbc[1].ipadx = 11;
+			  }else{// if(CheckOS.isLinux()){
+			  attgbc[1].ipadx = 11;
+			  }
+			  attgbc[1].ipady = 6;
+			*/
 			for (int i=0;i<numSize;i++){
 				for(int j=maxDate;j<31;j++){
 					attButton[i][j].setText("/");
@@ -315,21 +316,20 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 	private void attReset(){
 		// アカウントの増減の時はattUpdate()を実行する
-		for(int i=0;i<3;i++){
+		for(int i=0;i<2;i++){
 			attgLayout[i] = new GridBagLayout();
 			attgbc[i] = new GridBagConstraints();
 		}
 		IDPanel = new JPanel(attgLayout[0]);
 		attPanel = new JPanel(attgLayout[1]);
 		aDayPanel = new JPanel(new GridLayout(1, 31));
-		aDayPanel.setMinimumSize(new Dimension(682,30));
 
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
-		attgbc[0].ipady = 14;
 		for(int i=0;i<numSize;i++){	// s12500
 			idLabel[i] = new JLabel(Controller.getName(slaves.get(i)));
+			idLabel[i].setPreferredSize(new Dimension(250,30));
 			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
@@ -337,11 +337,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			idLabel[i].setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
 			idLabel[i].setHorizontalAlignment(JLabel.LEFT);
 			attgbc[0].gridy = i;
-			attgbc[0].fill = GridBagConstraints.HORIZONTAL;
+			attgbc[0].fill = GridBagConstraints.BOTH;
 			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
 			for(int j=0;j<31;j++){
 				attButton[i][j] = new JButton();
-				attButton[i][j].setPreferredSize(new Dimension(50,32));
+				attButton[i][j].setPreferredSize(new Dimension(50,30));
 				attButton[i][j].setBackground(Color.WHITE);
 				attButton[i][j].addActionListener(this);
 				attButton[i][j].addKeyListener(this);
@@ -369,7 +369,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 
 		IDScrollPanel.setViewportView(IDPanel);
-		IDScrollPanel.setPreferredSize(new Dimension(70,300));
+		IDScrollPanel.setPreferredSize(new Dimension(250,(numSize*30)));
 		dayScrollPanel.setViewportView(aDayPanel);
 		dayScrollPanel.setPreferredSize(new Dimension((50*31),30));
 		attScrollPanel.setViewportView(attPanel);
