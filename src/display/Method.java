@@ -131,7 +131,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void PanelButton(){
 		panelButton = new JPanel(new GridLayout(1,5));
 		panelButton.setPreferredSize(new Dimension(800, 40));
-		numButton[0] = new JButton("出席管理");
+		numButton[0] = new JButton("出席確認");
 		numButton[1] = new JButton("報告書アップローダ");
 		numButton[2] = new JButton("予定確認");
 		numButton[3] = new JButton("アカウント情報");
@@ -178,13 +178,14 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		}
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
-		labelNum[0] = new JLabel("出席");
+		labelNum[0] = new JLabel("出席確認");
 		labelNum[0].setFont(new Font(null, Font.BOLD, 20));
-		labelNum[0].setBounds(380,10,200,40);
-		labelNum[0].setFont(new Font(null, Font.BOLD, 18));
+		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
+		labelNum[0].setBounds(0,10,800,40);
 
 		aMonthLabel = new JLabel(year+"年"+month+"月");
-		aMonthLabel.setBounds(340,60,200,40);
+		aMonthLabel.setBounds(0,60,800,40);
+		aMonthLabel.setHorizontalAlignment(JLabel.CENTER);
 		aMonthLabel.setFont(new Font(null, Font.BOLD, 24));
 		for(int i=0;i<7;i++){
 			weekLabel_att[i] = new JLabel(weekName[i]);
@@ -321,27 +322,28 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		panelNum[2].setLayout(null);
 		planPanel = new JPanel();
 		planPanel.setLayout(new GridLayout(7, 7));
-		planPanel.setBounds(10, 120, 400, 400);
-		labelNum[2] = new JLabel("予定");
-		labelNum[2].setBounds(180,10,200,40);
-		labelNum[2].setFont(new Font(null, Font.BOLD, 18));
+		planPanel.setBounds(20, 100, 400, 400);
+		labelNum[2] = new JLabel("予定確認");
+		labelNum[2].setBounds(0,10,800,40);
+		labelNum[2].setFont(new Font(null, Font.BOLD, 20));
+		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
 		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
-		pMonthLabel.setBounds(150,70,200,40);
-		pMonthLabel.setFont(new Font(null, Font.BOLD, 24));
+		pMonthLabel.setBounds(160,50,200,40);
+		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		planDate = new JLabel("指定された日付");
-		planDate.setBounds(520,40,200,40);
-		planDate.setFont(new Font(null, Font.BOLD, 24));
+		planDate.setBounds(520,50,200,40);
+		planDate.setFont(new Font(null, Font.PLAIN, 24));
 		planDate.setBackground(Color.WHITE);
 		pTextArea = new JTextArea(20,24);
 		pTextArea.setBounds(450, 100, 300, 400);
 		pTextArea.setLineWrap(true);
 		pTextArea.setEditable(false);
 		pNextButton = new JButton();
-		pNextButton.setBounds(290,70,100,40);
+		pNextButton.setBounds(300,50,100,40);
 		pNextButton.setContentAreaFilled(false);
 		pNextButton.setBorderPainted(false);
 		pBackButton = new JButton();
-		pBackButton.setBounds(030,70,100,40);
+		pBackButton.setBounds(040,50,100,40);
 		pBackButton.setContentAreaFilled(false);
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
@@ -440,7 +442,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void Account(){
 		panelNum[3] = new JPanel();
 		panelNum[3].setLayout(null);
-		labelNum[3] = new JLabel("アカウント");
+		labelNum[3] = new JLabel("アカウント情報");
 		labelNum[3].setBounds(0,10,800,40);
 		labelNum[3].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[3].setHorizontalAlignment(JLabel.CENTER);

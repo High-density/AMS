@@ -496,14 +496,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void Plan(){
 		panelNum[2] = new JPanel();
 		panelNum[2].setLayout(null);
-		labelNum[2] = new JLabel("予定確認");
+		labelNum[2] = new JLabel("予定管理");
 		labelNum[2].setBounds(0,10,800,40);
 		labelNum[2].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
 
 		ymd = new JLabel("日付を選択");
 		ymd.setBounds(500,20,200,40);
-		ymd.setFont(new Font(null, Font.BOLD, 20));
+		ymd.setFont(new Font(null, Font.PLAIN, 20));
 		ymd.setHorizontalAlignment(JLabel.CENTER);
 		pNextButton = new JButton();
 		pNextButton.setBounds(310,60,100,40);
@@ -545,7 +545,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pTextArea.setBounds(450, 60, 300, 400);
 		pTextArea.setLineWrap(true);
 		addPlanButton = new JButton("予定追加");
-		addPlanButton.setBounds(500,470,200,40);
+		addPlanButton.setBounds(500,410,200,40);
 		addPlanButton.setBackground(Color.WHITE);
 		for(int i=0;i<7;i++){
 			weekLabel[i] = new JLabel(weekName[i]);
