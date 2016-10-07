@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.time.YearMonth;
 import java.util.Calendar;
@@ -87,7 +86,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)}; // 年
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
 	private String myID; // ログインしたIDを引き継ぎ
-	private BufferedImage image = null;
+	
 	Method(system.Controller controller, String myID){
 		/* システム引き継ぎ */
 		this.controller = controller;
@@ -180,6 +179,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		labelNum[0] = new JLabel("出席");
+		labelNum[0].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[0].setBounds(380,10,200,40);
 		labelNum[0].setFont(new Font(null, Font.BOLD, 18));
 
@@ -279,7 +279,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		panelNum[1].setLayout(null);
 		labelNum[1] = new JLabel("報告書アップローダ");
 		labelNum[1].setBounds(0,10,800,40);
-		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[1].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
 		referButton  = new JButton("参照");
 		referButton.setBounds(500,100,150,50);
@@ -442,7 +442,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		panelNum[3].setLayout(null);
 		labelNum[3] = new JLabel("アカウント");
 		labelNum[3].setBounds(0,10,800,40);
-		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[3].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 		//IDの表示
 		IDLabel = new JLabel("ID");

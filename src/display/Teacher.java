@@ -166,7 +166,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[0].setLayout(null);
 		labelNum[0] = new JLabel("出席管理");
 		labelNum[0].setBounds(0,10,800,40);
-		labelNum[0].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[0].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
 
 		aNextButton = new JButton();
@@ -415,7 +415,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[1].setLayout(null);
 		labelNum[1] = new JLabel("報告書管理");
 		labelNum[1].setBounds(0,10,800,40);
-		labelNum[1].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[1].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
 		Border border = new EmptyBorder(0,0,0,0);
 		repoScrollPanel = new JScrollPane();
@@ -498,12 +498,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[2].setLayout(null);
 		labelNum[2] = new JLabel("予定確認");
 		labelNum[2].setBounds(0,10,800,40);
-		labelNum[2].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[2].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
 
 		ymd = new JLabel("日付を選択");
 		ymd.setBounds(500,20,200,40);
-		ymd.setFont(new Font(null, Font.PLAIN, 18));
+		ymd.setFont(new Font(null, Font.BOLD, 20));
 		ymd.setHorizontalAlignment(JLabel.CENTER);
 		pNextButton = new JButton();
 		pNextButton.setBounds(310,60,100,40);
@@ -628,7 +628,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[3].setLayout(null);
 		labelNum[3] = new JLabel("アカウント管理");
 		labelNum[3].setBounds(0,10,800,40);
-		labelNum[3].setFont(new Font(null, Font.PLAIN, 20));
+		labelNum[3].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 
 		stuNumLabel = new JLabel("編集したいIDを選択");
@@ -656,7 +656,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		rootButton.setFont(new Font(null, Font.PLAIN, 14));
 		Border border = new EmptyBorder(0,0,0,0);
 		accScrollPanel = new JScrollPane();
-		accScrollPanel.setBounds(100,  80, 320, 400);
+		accScrollPanel.setBounds(100,  65, 320, 400);
 		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		accScrollPanel.setBorder(border);
