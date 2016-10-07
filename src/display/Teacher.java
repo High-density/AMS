@@ -545,7 +545,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pTextArea.setBounds(450, 60, 300, 400);
 		pTextArea.setLineWrap(true);
 		addPlanButton = new JButton("予定追加");
-		addPlanButton.setBounds(500,410,200,40);
+		addPlanButton.setBounds(500,470,200,40);
 		addPlanButton.setBackground(Color.WHITE);
 		for(int i=0;i<7;i++){
 			weekLabel[i] = new JLabel(weekName[i]);
