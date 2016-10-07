@@ -94,7 +94,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		changePassword = new display.ChangePassword(controller);
 
 		/* メインフレーム設定 */
-		mainFrame = new JFrame("機能選択");
+		mainFrame = new JFrame("-学生- 機能選択");
 		mainFrame.setBounds(0, 0, 800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
