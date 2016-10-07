@@ -279,7 +279,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 					attButton[i][j].setBackground(new Color(203 ,249 ,83));
 					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}else if(status[i][j] == AttendanceBook.NO_MARK){
-					attButton[i][j].setText("â–¡");
+					attButton[i][j].setText("");
 					attButton[i][j].setBackground(new Color(255 ,255 ,255));
 					attButton[i][j].setForeground(Color.DARK_GRAY);
 				}
@@ -855,7 +855,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// å…
 						}else if(attButton[i][j].getText().equals("å…¬")){
 							controller.changeAttendance(LocalDate.parse(chengeDay)
 									, slaves.get(i), AttendanceBook.NO_MARK);
-						}else if(attButton[i][j].getText().equals("â–¡")){
+						}else if(attButton[i][j].getText().equals("")){
 							controller.changeAttendance(LocalDate.parse(chengeDay)
 									, slaves.get(i), AttendanceBook.ATTENDED);
 						}
