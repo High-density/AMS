@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
 public class Controller {
 	private User user; // ログインしているユーザ
 	// 予定ファイルの置き場所
-	public static final String homeDirName = "file";
+	public static final String homeDirName = "file"; // TODO: クリックしたjarファイルの絶対パスから変数を設定
 	public static final File masterDir = new File(homeDirName + "/root");
 	public static final File agendaDir = new File(homeDirName + "/root/agenda/");
 	public static final File logDir = new File(homeDirName + "/root/log/");
@@ -278,6 +278,7 @@ public class Controller {
 	 */
 	public static boolean copyFile(File in, File out) throws IOException {
 		try {
+			// TODO: eclipseで閉じられていないエラーがでてる
 			FileChannel inChannel = new FileInputStream(in).getChannel();
 			FileChannel outChannel = new FileOutputStream(out).getChannel();
 			inChannel.transferTo(0, inChannel.size(), outChannel);

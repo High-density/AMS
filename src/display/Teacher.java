@@ -436,7 +436,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			gbc.fill = GridBagConstraints.HORIZONTAL;
 			gLayout.setConstraints(rStudentsButton[i], gbc);
 			rStudentsButton[i].addActionListener(this);
-			rStudentsButton[i].addKeyListener(this);
+			rStudentsButton[i].addKeyListener(this);	// TODO: 効いてない
 			rStudentsButton[i].setActionCommand("rStudents"+i);
 		}
 
@@ -545,8 +545,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		weekLabel[6].setForeground(Color.BLUE);
 		weekLabel[6].setBorder(new LineBorder(Color.BLUE,1,true));
 
-		for(int i=0;i<pDayButton.length;i++)
+		for(int i=0;i<pDayButton.length;i++){
 			pDayButton[i] = new JButton();
+		}
 
 		planCalendar();/*カレンダーの表示*/
 
@@ -845,6 +846,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 						}
 						attendCalendar();
 						panelNum[0].repaint();
+						// TODO: iとjをnumSizeと31に書き換える処理を追加
 					}
 				}
 			}
@@ -879,6 +881,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 						ymd.setText("日付を選択");
 						pTextArea.setText("");
 					}
+					// TODO iをforから抜ける値に書き換える処理
 				}
 			}
 		}else if(e.getSource() == addPlanButton){//予定追加機能
@@ -915,6 +918,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 					memNum = i;
 					stuNumLabel.setText(aStudentsButton[memNum].getText());// + "を");
 				}
+				// TODO: forを抜ける値にiを更新
 			}
 		}else if(e.getSource() == addAccButton){//新規作成
 			member(-1);
@@ -973,7 +977,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	}
 
 	public void windowActivated(WindowEvent e) {	// ウィンドウがアクティブになったとき
-		UpdateAccount();
+		UpdateAccount(); // 再描画
 	}
 
 	public void windowDeactivated(WindowEvent e) {	// ウィンドウをアクティブでなくしたとき

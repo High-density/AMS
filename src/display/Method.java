@@ -86,7 +86,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private int year[] = {calendar.get(Calendar.YEAR),calendar.get(Calendar.YEAR)}; // 年
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
 	private String myID; // ログインしたIDを引き継ぎ
-	
+
 	Method(system.Controller controller, String myID){
 		/* システム引き継ぎ */
 		this.controller = controller;
@@ -149,7 +149,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void Attendance(){
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
-		
+
 		calPanel = new JPanel(new GridLayout(7,7));
 		calPanel.setBounds(200,110,400,400);
 		aNextButton = new JButton();
@@ -301,13 +301,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pathTextField.setFont(new Font(null, Font.PLAIN, 14));
 
 		File dir;
-		if(CheckOS.isWindows()){
-			dir = new File(System.getProperty("user.home") + "/Documents");
-		}else{
-			dir = new File(System.getProperty("user.home") + "/Documents");
-		}
+		dir = new File(System.getProperty("user.home") + "/Documents");
 		filechooser = new JFileChooser(dir);
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("ドキュメントファイル", "pdf", "docx", "doc");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("ドキュメントファイル(pdf,docx,doc)", "pdf", "docx", "doc");
 		filechooser.addChoosableFileFilter(filter); // ファイルのフィルタを設定
 		filechooser.setAcceptAllFileFilterUsed(true); // すべてのファイルを使うか
 
@@ -416,7 +412,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			dayButton_plan[i].setText("");
 			dayButton_plan[i].setBackground(Color.WHITE);
 		}
-		
+
 		int fontSize = 16;
 		if(CheckOS.isWindows()){
 			fontSize = 20;
@@ -450,7 +446,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		IDLabel = new JLabel("ID");
 		IDLabel.setBounds(280,130,200,40);
 		IDLabel.setFont(new Font(null, Font.PLAIN, 24));
-		ID_Mine = new JLabel(myID);
+		ID_Mine = new JLabel(myID); // TODO: from controller
 		ID_Mine.setBounds(380,130,200,40);
 		ID_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//ユーザ名の表示
