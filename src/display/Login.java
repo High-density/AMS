@@ -34,13 +34,14 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 	public Login(){
 		/* システム呼び出し */
 		controller = new system.Controller();
+		// TODO: Dialogクラスに変更
 		message = new display.Message();
 
 		/* 各種設定 */
 		loginFrame = new JFrame("ログインフォーム");
 		loginFrame.setBounds(0, 0, 400, 240);
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		loginFrame.setLocationRelativeTo(null);
+		loginFrame.setLocationRelativeTo(null); // 画面の中央に表示
 		contentPane = loginFrame.getContentPane();
 		panelMaster = new JPanel();
 		panelMaster.setLayout(null);
@@ -87,9 +88,9 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 
 		/*アイコンの設定*/
 		try{
-		ClassLoader cl = this.getClass().getClassLoader(); 
-		ImageIcon icon = new ImageIcon(cl.getResource("src/icon/icon.png"));
-		loginFrame.setIconImage(icon.getImage());
+			ClassLoader cl = this.getClass().getClassLoader();
+			ImageIcon icon = new ImageIcon(cl.getResource("src/icon/icon.png"));
+			loginFrame.setIconImage(icon.getImage());
 		}catch(Exception e){
 			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
 			loginFrame.setIconImage(icorn.getImage());
@@ -104,12 +105,13 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		String PA = new String(passField.getPassword());//パスワード
 		if(controller.login(ID, PA)){//IDとPassがそれぞれ一致したら
 			loginFrame.setVisible(false);
-			if(ID.equals("root"))
+			if(ID.equals("root")) // TODO: 教員かどうかの判定をcontrollerでできるように
 				new Teacher(controller, message);
 			else
 				new Method(controller, idField.getText());
-		}else
+		}else{
 			annouceLabel.setText("ログインできません\n");
+		}
 	}
 
 	public void actionPerformed(ActionEvent e){

@@ -112,7 +112,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	Teacher(system.Controller controller, display.Message message) {
 		/* システム引き継ぎ */
 		this.controller = controller;
-		//this.message = message;
 		newAccount = new NewAccount(this.controller);
 
 		/* メインフレーム設定 */
@@ -256,14 +255,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			}
 		}
 
-		/*
-		if(CheckOS.isWindows()){
-			attgbc[1].ipadx = 1;	// +0ピクセル これで最小のXをでかくできる
-		}else{// if(CheckOS.isLinux()){
-			attgbc[1].ipadx = 5;
-		}
-		attgbc[1].ipady = 6;	// +6ピクセル これで最小のYをでかくできる
-		*/
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				if(status[i][j] == AttendanceBook.ATTENDED){
@@ -293,14 +284,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			for(int i=maxDate;i<31;i++){
 				dayLabel[i].setText("/");
 			}
-			/*
-			  if(CheckOS.isWindows()){
-			  attgbc[1].ipadx = 11;
-			  }else{// if(CheckOS.isLinux()){
-			  attgbc[1].ipadx = 11;
-			  }
-			  attgbc[1].ipady = 6;
-			*/
+
 			for (int i=0;i<numSize;i++){
 				for(int j=maxDate;j<31;j++){
 					attButton[i][j].setText("/");
@@ -330,7 +314,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		for(int i=0;i<numSize;i++){	// s12500
 			idLabel[i] = new JLabel(Controller.getName(slaves.get(i)));
 			idLabel[i].setPreferredSize(new Dimension(250,30));
-			idLabel[i].setHorizontalAlignment(JLabel.CENTER);
+			//idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
 			idLabel[i].setBackground(Color.GRAY);
@@ -353,7 +337,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			dayLabel[i] = new JLabel(String.format("%1$02d", i+1));
 			dayLabel[i].setPreferredSize(new Dimension(50,30));
 			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
-			dayLabel[i].setOpaque(true);
+			dayLabel[i].setOpaque(true);// TODO: 不明
 			dayLabel[i].setBackground(new Color(254 ,205 ,21));
 			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
 			aDayPanel.add(dayLabel[i]);

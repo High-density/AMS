@@ -1,23 +1,20 @@
 package system;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.FileNotFoundException;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.nio.channels.FileChannel;
-import java.time.LocalDate;
-import java.time.YearMonth;
 
 /**
  * 内部の動作を一括で管理するクラス<br>
@@ -50,14 +47,16 @@ public class Controller {
 	 * @return ログイン成功時true，失敗時false
 	 */
 	public boolean login(String id, String passwd) {
+		// TODO: 初めてログインするときにマックアドレスを登録するようにする
+		// TODO: ひとりが複数のパソコンを保持してる時に、1台しか登録できないのをどうするか聞く
 		user = User.login(id, passwd);
 		if (user == null) {
 			// ログイン失敗
 			return false;
 		} else {
 			// ログイン成功したら出席チェック
-			attend();
-			user.popNotification();
+			attend(); // TODO: falseが返ってきたら教員に確認を促すようにする
+			user.popNotification(); // TODO: 同じ日付を書き換えたのに表示される
 			return true;
 		}
 	}

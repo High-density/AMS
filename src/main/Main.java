@@ -4,6 +4,7 @@ import javax.swing.UIManager.LookAndFeelInfo;
 
 class Main{ /* スタータークラス */
 	public static void main(String args[]){
+		// TODO : 削除
 		try {
 			for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 				if ("Metal".equals(info.getName())) {

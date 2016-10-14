@@ -4,17 +4,15 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.NetworkInterface;
-import java.time.LocalTime;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,7 +27,7 @@ public abstract class User {
 	public static final String notificationDirName = "notification/";
 
 	protected String id = null; // ID
-	private String passwd = null; // パスワード
+	private String passwd = null; // TODO: パスワード-削除
 	protected String attribute = null; // 属性
 
 	public User(String id, String passwd) {
@@ -92,10 +90,10 @@ public abstract class User {
 			Log.error(new Throwable(), "属性読み込みエラー: attribute = null");
 			return null;
 		} else if (attribute.equals(Master.class.getSimpleName())) {
-			// 学生のIDで一致したとき
+			// 教員のIDで一致したとき
 			return new Master(id, passwd);
 		} else if (attribute.equals(Slave.class.getSimpleName())) {
-			// 教員のIDで一致したとき
+			// 学生のIDで一致したとき
 			return new Slave(id, passwd);
 		} else {
 			// 登録されていない属性が見つかったとき
