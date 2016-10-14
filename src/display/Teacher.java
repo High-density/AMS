@@ -123,7 +123,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 
 		/*アイコンの設定*/
 		try{
-			java.net.URL url = getClass().getClassLoader().getResource("icon/icon.png");
+			java.net.URL url = getClass().getClassLoader().getResource("src/icon/icon.png");
 			ImageIcon icon = new ImageIcon(url);
 			mainFrame.setIconImage(icon.getImage());
 		}catch(Exception e){
@@ -175,7 +175,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		//ボタンへのiconの設置
 		try{
-			java.net.URL url = getClass().getClassLoader().getResource("icon/right.png");
+			java.net.URL url = getClass().getClassLoader().getResource("src/icon/right.png");
 			ImageIcon right = new ImageIcon(url);
 			aNextButton.setIcon(right);
 		}catch(Exception e){
@@ -189,7 +189,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
 		try{
-			java.net.URL url = getClass().getClassLoader().getResource("icon/left.png");
+			java.net.URL url = getClass().getClassLoader().getResource("src/icon/left.png");
 			ImageIcon left = new ImageIcon(url);
 			aBackButton.setIcon(left);
 		}catch(Exception e){
@@ -499,7 +499,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
 		try{
-			java.net.URL url = getClass().getClassLoader().getResource("icon/right_mini.png");
+			java.net.URL url = getClass().getClassLoader().getResource("src/icon/right_mini.png");
 			ImageIcon right = new ImageIcon(url);
 			pNextButton.setIcon(right);
 		}catch(Exception e){
@@ -507,7 +507,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			pNextButton.setIcon(right);
 		}
 		try{
-			java.net.URL url = getClass().getClassLoader().getResource("icon/left_mini.png");
+			java.net.URL url = getClass().getClassLoader().getResource("src/icon/left_mini.png");
 			ImageIcon left = new ImageIcon(url);
 			pBackButton.setIcon(left);
 		}catch(Exception e){
