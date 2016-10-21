@@ -3,12 +3,21 @@ package system;
 /**
  * アカウントに必要な情報一式を保持するクラス
  * @author Shinichi Yanagido
- * @version 1.0
+ * @version 1.1
  */
 public class AccountInformation {
-	private String id; // ID
-	private String name; // 名前
-	private String passwd; // パスワード
+	/**
+	 * ID
+	 */
+	private String id;
+	/**
+	 * 名前
+	 */
+	private String name;
+	/**
+	 * パスワード
+	 */
+	private String passwd;
 
 	/**
 	 * コンストラクタ
@@ -50,7 +59,12 @@ public class AccountInformation {
 		return new AccountInformation(id, null, passwd);
 	}
 
-	// IDと名前が登録されたAccountInformationのインスタンス
+	/**
+	 * IDと名前が登録されたAccountInformationのインスタンス
+	 * @param id 対象者のID
+	 * @param name 対象者の名前
+	 * @return IDと名前が設定されたインスタンス
+	 */
 	public static AccountInformation ofIdName(String id, String name) {
 		return new AccountInformation(id, name, null);
 	}

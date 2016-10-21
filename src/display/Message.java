@@ -63,7 +63,7 @@ public class Message extends KeyAdapter implements ActionListener{
 
 	/**
 	 * ユーザに向けてメッセージを表示
-	 * @param メッセージ内容
+	 * @param textMessage メッセージ内容
 	 */
 	public void showMessage(String textMessage){
 		messageArea.setText(textMessage);//ここでメッセージを入れるための関数を実行

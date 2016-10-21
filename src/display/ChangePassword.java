@@ -95,7 +95,7 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 
 	/**
 	 * 学生自身がパスワードを変更したい場合に使用
-	 * @param id 対象者のID
+	 * @param myID 対象者のID
 	 */
 	public void showChangePassword(String myID){
 		oldID = myID;
