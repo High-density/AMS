@@ -391,4 +391,12 @@ public class Controller {
 			f.delete();
 		}
 	}
+
+	/**
+	 * Slaveの一覧を取得する
+	 * @return ユーザのIDをListで返す
+	 */
+	public static ArrayList<String> getSlaves() {
+		return Slave.getSlaves();
+	}
 }
