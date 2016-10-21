@@ -87,10 +87,12 @@ public class Controller {
 
 	/**
 	 * ログアウトを行う
-	 * @return ログアウト成功時true，失敗時false
+	 * @return ログアウト成功時true，ログインしてない時false
 	 */
 	public boolean logout() {
-		// TODO: falseを返す状況を作る
+		if (user == null) {
+			return false;
+		}
 		user = null;
 		return true;
 	}

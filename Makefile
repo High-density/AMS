@@ -23,7 +23,7 @@ jar:
 	jar cfm ../AMS.jar Main.mf *;\
 	cd ../;\
 	chmod +x AMS.jar;\
-	echo "finish making AMS.jar"
+	# finish making AMS.jar
 
 .PHONY: dojar
 dojar:
