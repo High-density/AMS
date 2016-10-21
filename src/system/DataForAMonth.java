@@ -6,12 +6,22 @@ import java.util.ArrayList;
 /**
  * 一月分のデータを扱うクラス
  * @author Shinichi Yanagido
- * @version 1.1
+ * @version 1.2
  */
 abstract public class DataForAMonth<T> {
-	protected YearMonth yearMonth; // いつの情報を取得しているのか
-	protected ArrayList<T> data; // その日のデータを格納
+	/**
+	 * いつの情報を取得しているのか
+	 */
+	protected YearMonth yearMonth;
+	/**
+	 * その日のデータを格納
+	 */
+	protected ArrayList<T> data;
 
+	/**
+	 * 使用する日付の指定されたコンストラクタ
+	 * @param ym 保持しておきたい年月
+	 */
 	public DataForAMonth(YearMonth ym) {
 		yearMonth = ym;
 		data = new ArrayList<T>(getMaxDate());
@@ -20,7 +30,11 @@ abstract public class DataForAMonth<T> {
 		}
 	}
 
-	// 指定された日付にデータがあるかどうか
+	/**
+	 * 指定された日付にデータがあるかどうか
+	 * @param day 確認したい日付-1
+	 * @return データが入っていればtrue，入っていなければfalse
+	 */
 	public boolean hasData(int day) {
 		if (0 <= day && day < getMaxDate() && data.get(day) != null) {
 			return true;
@@ -31,7 +45,8 @@ abstract public class DataForAMonth<T> {
 
 	/**
 	 * 特定の日付のデータを取得する
-	 * @param day 取得したい日付
+	 * @param day 取得したい日付-1
+	 * @return その日のデータ，データが入ってなければnull
 	 */
 	public T getData(int day) {
 		if (0 <= day && day < getMaxDate()) {

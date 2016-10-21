@@ -12,7 +12,7 @@ import java.time.YearMonth;
 /**
  * 各月の予定を一月分保持するクラス
  * @author Shinichi Yanagido
- * @version 1.2
+ * @version 1.3
  */
 public class Agenda extends DataForAMonth<String> {
 	private File dir;
@@ -76,10 +76,13 @@ public class Agenda extends DataForAMonth<String> {
 		}
 	}
 
-	// 予定を削除する
+	/**
+	 * 予定を削除する
+	 * @param day 削除したい日付-1
+	 */
 	public void unsetData(int day) {
 		super.setData(day, null);
-		
+
 		File file = new File(dir + "/" + yearMonth.toString() + "-" + String.format("%02d", day));
 		Controller.deleteFile(file);
 	}

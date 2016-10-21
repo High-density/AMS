@@ -7,7 +7,7 @@ import java.time.YearMonth;
  * 出席簿クラス<br>
  * 各Slaveの出欠を一月分保持する
  * @author Shinichi Yanagido
- * @version 1.1
+ * @version 1.2
 */
 public class AttendanceBook extends DataForAMonth<Integer> {
 	/**
@@ -31,9 +31,18 @@ public class AttendanceBook extends DataForAMonth<Integer> {
 	 */
 	public static final int NO_MARK = 3;
 
-	private LocalTime attendedTime[]; // 出席時刻
-	private LocalTime returnTime[]; // 下校時刻
-	private String id; // Slaveのid
+	/**
+	 * 出席時刻
+	 */
+	private LocalTime attendedTime[];
+	/**
+	 * 下校時刻
+	 */
+	private LocalTime returnTime[];
+	/**
+	 * 管理対象のid
+	 */
+	private String id;
 
 	/**
 	 * コンストラクタ
@@ -81,6 +90,8 @@ public class AttendanceBook extends DataForAMonth<Integer> {
 
 	/**
 	 * 特定の日付の帰宅時間を取得する
+	 * @param day 取得したい日付-1
+	 * @return 帰宅時間
 	 */
 	public LocalTime getReturnTime(int day) {
 		return returnTime[day];

@@ -7,7 +7,7 @@ class:
 
 .PHONY: javadoc
 javadoc:
-	javadoc -private -d doc/ -windowtitle 研究管理支援システム src/*/*.java
+	javadoc -docencoding "utf-8" -version -private -d doc/ -windowtitle 研究管理支援システム src/*/*.java
 
 .PHONY: do
 do:
@@ -22,9 +22,8 @@ jar:
 	jar cfm ../AMS.jar Main.mf * ../src/icon/*;\
 	cd ../;\
 	chmod +x AMS.jar;\
-	echo "finish making AMS.jar"
+	# finish making AMS.jar
 
 .PHONY: dojar
 dojar:
 	make jar;java -jar AMS.jar
-

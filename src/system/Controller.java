@@ -20,17 +20,40 @@ import java.util.regex.Pattern;
  * 内部の動作を一括で管理するクラス<br>
  * GUIとのやりとりはここを通して行う
  * @author Shinichi Yanagido
- * @version 1.6
+ * @version 1.7
  */
 public class Controller {
-	private User user; // ログインしているユーザ
-	// 予定ファイルの置き場所
+	/**
+	 * ログインしているユーザを格納
+	 */
+	private User user;
+	/**
+	 * 全てのファイルを入れるディレクトリの名前
+	 */
 	public static final String homeDirName = "file"; // TODO: クリックしたjarファイルの絶対パスから変数を設定
+	/**
+	 * 教員のディレクトリ
+	 */
 	public static final File masterDir = new File(homeDirName + "/root");
+	/**
+	 * 予定を格納するディレクトリ
+	 */
 	public static final File agendaDir = new File(homeDirName + "/root/agenda/");
+	/**
+	 * ログを保存するディレクトリ
+	 */
 	public static final File logDir = new File(homeDirName + "/root/log/");
+	/**
+	 * 基本的なログを保存するファイル
+	 */
 	public static final File logFile = new File(logDir.toString() + "/log.txt");
+	/**
+	 * エラーログを保存するファイル
+	 */
 	public static final File errorFile = new File(logDir.toString() + "/error.txt");
+	/**
+	 * 不正ログインの情報を記入するディレクトリ
+	 */
 	public static final File incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
 
 	public Controller() {
@@ -41,7 +64,7 @@ public class Controller {
 
 	/**
 	 * ログインを行う<br>
-	 * IDに沿ったインスタンスを作成する
+	 * IDに沿った権限を持つユーザを作成する
 	 * @param id ユーザID
 	 * @param passwd パスワード
 	 * @return ログイン成功時true，失敗時false
@@ -63,9 +86,12 @@ public class Controller {
 
 	/**
 	 * ログアウトを行う
-	 * @return ログアウト成功時true，失敗時false
+	 * @return ログアウト成功時true，ログインしてない時false
 	 */
 	public boolean logout() {
+		if (user == null) {
+			return false;
+		}
 		user = null;
 		return true;
 	}
@@ -73,7 +99,7 @@ public class Controller {
 	/**
 	 * 報告書の提出を行う
 	 * @param file 提出対象へのファイルパス
-	 * @return 提出成功時true，失敗時false
+	 * @return 提出成功時true，失敗時false，教員は常にfalse
 	 */
 	public boolean submitReport(String file) {
 		return user.submitReport(file);
@@ -82,14 +108,15 @@ public class Controller {
 	/**
 	 * 報告書の入ったディレクトリをファイルマネージャで開く<br>
 	 * どのディレクトリを開けばいいかをログイン中のIDから判断して開く
-	 * @return ディレクトリが開けた時true，どのディレクトリを開いたらいいか判断がつかない等で開けない時false
+	 * @return ディレクトリが開けた時true，どのディレクトリを開いたらいいか判断がつかない等で開けない時false，教員は常にfalse
 	 */
 	public boolean showReport() {
 		return user.showReport();
 	}
 
 	/**
-	 * 報告書の入ったディレクトリをファイルマネージャで開く
+	 * 報告書の入ったディレクトリをファイルマネージャで開く<br>
+	 * どのディレクトリを開くかを引数に指定する
 	 * @param id 開きたいディレクトリの所有者ID
 	 * @return ディレクトリが開けた時true，開けなかった時false
 	 */
@@ -97,7 +124,11 @@ public class Controller {
 		return user.showReport(id);
 	}
 
-	// 最終更新日の取得
+	/**
+	 * 最終更新日を取得する
+	 * @param id 最終更新日を取得したい学生のID
+	 * @return 最終更新日
+	 */
 	public LocalDate getLastUploadDate(String id) {
 		File fileDir = new File(homeDirName + "/" + id + "/" + User.reportDirName);
 		String reports[] = fileDir.list();
@@ -121,6 +152,11 @@ public class Controller {
 
 	/**
 	 * 出席の手動変更を行う
+	 * @param ld 出席情報を変えたい日付
+	 * @param id 変更したい学生ID
+	 * @param status 出席情報
+	 * @return 変更が完了したらtrue，できなかったらfalse，学生は常にfalse
+	 * @see AttendanceBook
 	 */
 	public boolean changeAttendance(LocalDate ld, String id, int status) {
 		return user.changeAttendance(ld, id, status);
@@ -129,7 +165,7 @@ public class Controller {
 	/**
 	 * 出席状況の取得を行う
 	 * @param ym 取得したい年月
-	 * @return 取得した各学生の一月分の出席簿配列<br>
+	 * @return 取得した各学生の一月分の出席簿配列(教員は全学生分，学生は自分のみ)
 	 * @see AttendanceBook
 	 */
 	public AttendanceBook[] getAttendance(YearMonth ym) {
@@ -138,18 +174,32 @@ public class Controller {
 
 	/**
 	 * アカウントの更新を行う
-	 * @param oldAccount 現在のアカウント情報
-	 * @param newAccount 更新したいアカウント情報
+	 * @param oldAccount 現在のアカウント情報<br>
+	 * 教員の場合: 必須項目:ID<br>
+	 * 学生の場合: 必須項目:なし
+	 * @param newAccount 更新したいアカウント情報<br>
+	 * 教員の場合: 必須項目:ID，名前，任意項目:パスワード<br>
+	 * 学生の場合: 必須項目:パスワード
 	 * @return 更新成功時true，失敗時false
 	 */
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
 		return user.setAccount(oldAccount, newAccount);
 	}
 
+	/**
+	 * 学生アカウントの作成を行う
+	 * @param account 作成するアカウントの情報(必須項目:ID，名前，パスワード)
+	 * @return 作成成功時true，失敗時false，学生は常にfalse
+	 */
 	public boolean createUser(AccountInformation account) {
 		return user.createUser(account);
 	}
 
+	/**
+	 * アカウントの削除を行う．教員も消すことができる
+	 * @param id
+	 * @return 削除成功時true，失敗時false，学生は常にfalse
+	 */
 	public boolean deleteUser(String id) {
 		return user.deleteUser(id);
 	}
@@ -160,7 +210,6 @@ public class Controller {
 	 * @return 予定が入ったAgendaクラス
 	 */
 	public Agenda getAgenda(YearMonth ym) {
-		// 予定格納先
 		return new Agenda(ym, agendaDir);
 	}
 
@@ -169,6 +218,7 @@ public class Controller {
 	 * @param agenda 予定を更新したいAgendaクラス
 	 * @param date 予定を更新したい日付
 	 * @param content 予定内容
+	 * @return 新しく作成した予定．更新できない場合は引数で渡したものと同じのを返す
 	 */
 	public Agenda setAgenda(Agenda agenda, int date, String content) {
 		// 予定の設定
@@ -176,7 +226,12 @@ public class Controller {
 		return newAgenda;
 	}
 
-	// 特定の予定を削除する
+	/**
+	 * 特定の予定を削除する
+	 * @param agenda 削除したい予定の入ったAgendaクラス
+	 * @param date 削除したい日付
+	 * @return 予定削除後のAgendaクラス．削除できない場合は引数で渡したものと同じのを返す
+	 */
 	public Agenda deleteAgenda(Agenda agenda, int date) {
 		return user.deleteAgenda(agenda, date);
 	}
@@ -219,7 +274,11 @@ public class Controller {
 		return null;
 	}
 
-	// 拡張子とディレクトリ名を削除する
+	/**
+	 * ディレクトリと拡張子を除いたファイル名を返す
+	 * @param fileName ファイルのパス
+	 * @return ディレクトリと拡張子を除いたファイル名
+	 */
 	public static String getFileNameWithoutSuffix(String fileName) {
 		if (fileName == null) return null;
 		int point = fileName.lastIndexOf(".");
@@ -229,7 +288,10 @@ public class Controller {
 		return fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length());
 	}
 
-	// MACアドレスからその所有者を特定する
+	/**
+	 * MACアドレスからその所有者を特定する
+	 * @return MACアドレスに対応した登録されているユーザ
+	 */
 	public static String getComputerHolder() {
 		String nicName = null; // 登録されているNICの表示名
 		String macAddress = null; // 登録されているMACアドレス
