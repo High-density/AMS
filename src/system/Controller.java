@@ -28,9 +28,14 @@ public class Controller {
 	 */
 	private User user;
 	/**
+	 * jarが入っているディレクトリの名前
+	 */
+	public static final String jarDirName
+		= getDirName((new File(System.getProperty("java.class.path"))).getAbsolutePath());
+	/**
 	 * 全てのファイルを入れるディレクトリの名前
 	 */
-	public static final String homeDirName = "file"; // TODO: クリックしたjarファイルの絶対パスから変数を設定
+	public static final String homeDirName = jarDirName + "/file";
 	/**
 	 * 教員のディレクトリ
 	 */
@@ -286,6 +291,20 @@ public class Controller {
 			return fileName.substring(fileName.lastIndexOf("/") + 1, point);
 		}
 		return fileName.substring(fileName.lastIndexOf("/") + 1, fileName.length());
+	}
+
+	/**
+	 * パスからディレクトリ名の取得
+	 * @param path ファイルのパス
+	 * @return ファイルパスからファイルを除いたディレクトリ部分
+	 */
+	public static String getDirName(String path) {
+		if (path == null) return null;
+		int slash = path.lastIndexOf("/");
+		if (slash != -1) {
+			return path.substring(0, slash);
+		}
+		return null;
 	}
 
 	/**

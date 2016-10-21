@@ -25,5 +25,5 @@ jar:
 	# finish making AMS.jar
 
 .PHONY: dojar
-dojar:
-	make jar;java -jar AMS.jar
+dojar: jar
+	java -jar AMS.jar
