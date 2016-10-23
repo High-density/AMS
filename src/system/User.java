@@ -15,6 +15,7 @@ import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 public abstract class User {
 	// ファイルの場所管理
@@ -130,10 +131,10 @@ public abstract class User {
 					return false;
 				}
 			}
+			message = message.trim();
 
 			// 実際の表示処理
-			display.Message popup = new display.Message();
-			popup.showMessage(message.trim());
+			JOptionPane.showMessageDialog(null, message, "WARNING", JOptionPane.WARNING_MESSAGE);
 		}
 
 		return true;

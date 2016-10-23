@@ -12,13 +12,11 @@ import java.lang.Throwable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.time.LocalDateTime;
-import display.Message;
+import javax.swing.JOptionPane;
 
 class Log {
 	// 改行コード
 	public static final String br = System.getProperty("line.separator");
-	private static final Message dialog = new Message();
-	private static final Message writeLogDialog = new Message();
 
 	// ログファイル
 	static File logDir;
@@ -72,27 +70,24 @@ class Log {
 		try {
 			file.createNewFile();
 		} catch(IOException e) {
-			popup("ファイル作成エラー: " + file.toString(), writeLogDialog);
+			popup("ファイル作成エラー: " + file.toString());
 		}
 
 		// ファイルに書き込み
-		if (file.canWrite() == false) popup("ファイル書き込みエラー: file.canWrite() = false", writeLogDialog);
+		if (file.canWrite() == false) {
+			popup("ファイル書き込みエラー: file.canWrite() = false");
+		}
 		try {
 			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
 			pw.println(message);
 			pw.close();
 		} catch(IOException e) {
-			popup("ファイル書き込みエラー: " + file.toString(), writeLogDialog);
+			popup("ファイル書き込みエラー: " + file.toString());
 		}
 	}
 
 	// ポップアップ表示
 	public static void popup(String message) {
-		popup(message, dialog);
-	}
-
-	// ポップアップ表示（ダイアログ指定）
-	private static void popup(String message, Message pop) {
-		pop.showMessage(message);
+		JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);
 	}
 }

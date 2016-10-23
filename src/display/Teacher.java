@@ -109,7 +109,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private int numSize = Slave.getSlaves().size();//アカウント数
 	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
 
-	Teacher(system.Controller controller, display.Message message) {
+	Teacher(system.Controller controller) {
 		/* システム引き継ぎ */
 		this.controller = controller;
 		newAccount = new NewAccount(this.controller);
