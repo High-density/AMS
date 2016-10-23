@@ -105,7 +105,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		String PA = new String(passField.getPassword());//パスワード
 		if(controller.login(ID, PA)){//IDとPassがそれぞれ一致したら
 			loginFrame.setVisible(false);
-			if(ID.equals("root")) // TODO: 教員かどうかの判定をcontrollerでできるように
+			if(controller.getLoginUserAttribute().equals(system.Master.class.getSimpleName()))
 				new Teacher(controller, message);
 			else
 				new Method(controller, idField.getText());

@@ -39,6 +39,7 @@ public abstract class User {
 	public static User login(String id, String passwd) {
 		String attribute = null; // 属性
 
+		// TODO: ユーザがいない状態でログインした際に，そのパソコンを教員用に設定するかどうか
 		// パスワードとMACアドレスの検証
 		if (!isCorrectPasswd(id, passwd)) {
 			return null;

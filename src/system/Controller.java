@@ -242,6 +242,22 @@ public class Controller {
 	}
 
 	/**
+	 * ログイン中のユーザのIDを取得する
+	 * @return ID，ログインされていない時はnull
+	 */
+	public String getLoginUserId() {
+		return user.getId();
+	}
+
+	/**
+	 * ログイン中のユーザの属性を取得する
+	 * @return 属性，ログインされていない時はnull
+	 */
+	public String getLoginUserAttribute() {
+		return user.getAttribute();
+	}
+
+	/**
 	 * idからユーザの名前を取得する
 	 * @param id 名前を取得したいID
 	 * @return idに対応する名前

@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Master extends User {
+public class Master extends User {
 	public Master(String id, String passwd) {
 		super(id, passwd);
 		attribute = this.getClass().getSimpleName();
@@ -172,6 +172,7 @@ class Master extends User {
 			pw.println(account.getPasswd());
 			pw.close();
 
+			// TODO: MACアドレスを設定しない
 			// MACアドレスファイル作成
 			String gotNicName = null;
 			String gotMacAddress = "";
