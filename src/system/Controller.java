@@ -83,6 +83,7 @@ public class Controller {
 			return false;
 		} else {
 			// ログイン成功したら出席チェック
+			if (!user.register()) return false; // 初めてログインした時には登録を行う
 			attend(); // TODO: falseが返ってきたら教員に確認を促すようにする
 			user.popNotification(); // TODO: 同じ日付を書き換えたのに表示される
 			return true;

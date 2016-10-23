@@ -22,6 +22,10 @@ public class Master extends User {
 		attribute = this.getClass().getSimpleName();
 	}
 
+	public boolean register() {
+		return false; // TODO:
+	}
+
 	// Masterは出席不可
 	public boolean setAttendance() {
 		return false;

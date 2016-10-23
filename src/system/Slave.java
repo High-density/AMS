@@ -7,14 +7,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.NetworkInterface;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  * 学生用クラス
@@ -25,6 +29,45 @@ public class Slave extends User {
 	public Slave(String id, String passwd) {
 		super(id, passwd);
 		attribute = this.getClass().getSimpleName();
+	}
+
+	public boolean register() {
+		// 作成後初めてのログインであれば，MACアドレスを登録する
+		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
+
+		if (!file.exists()) {
+			int option = JOptionPane.showConfirmDialog(null, "このコンピュータを登録しますか？");
+			if (option != JOptionPane.YES_OPTION) return false;
+
+			try {
+				// MACアドレスファイル作成
+				String gotNicName = null;
+				String gotMacAddress = "";
+				// 全NICを取得
+				Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
+
+				// 一番最初に取得したNICを登録する
+				NetworkInterface gotNic = gotNics.nextElement();
+				byte[] hardwareAddress = gotNic.getHardwareAddress();
+				if (hardwareAddress != null) {
+					for (byte b : hardwareAddress) {
+						gotMacAddress += String.format("%02X:", b);
+					}
+					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
+				}
+				gotNicName = gotNic.getName();
+
+				// ファイルへの書き込み
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println(gotNicName + ":[" + gotMacAddress + "]");
+				pw.close();
+			} catch(IOException | NoSuchElementException e) {
+				Log.error(e);
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	// 出席

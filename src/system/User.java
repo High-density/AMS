@@ -28,13 +28,14 @@ public abstract class User {
 	public static final String notificationDirName = "notification/";
 
 	protected String id = null; // ID
-	private String passwd = null; // TODO: パスワード-削除
 	protected String attribute = null; // 属性
 
 	public User(String id, String passwd) {
 		this.id = id;
-		this.passwd = passwd;
 	}
+
+	// 初期登録が必要なら登録を行う
+	public abstract boolean register();
 
 	// パスワードによる認証
 	public static User login(String id, String passwd) {
@@ -318,10 +319,6 @@ public abstract class User {
 	// setter
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	public void setPasswd(String passwd) {
-		this.passwd = passwd;
 	}
 
 	// gettter
