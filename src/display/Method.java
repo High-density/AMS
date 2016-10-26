@@ -87,10 +87,10 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)}; // 月
 	private String myID; // ログインしたIDを引き継ぎ
 
-	Method(system.Controller controller, String myID){
+	Method(system.Controller controller){
 		/* システム引き継ぎ */
 		this.controller = controller;
-		this.myID = myID;
+		myID = controller.getLoginUserId();
 		changePassword = new display.ChangePassword(controller);
 
 		/* メインフレーム設定 */
@@ -446,7 +446,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		IDLabel = new JLabel("ID");
 		IDLabel.setBounds(280,130,200,40);
 		IDLabel.setFont(new Font(null, Font.PLAIN, 24));
-		ID_Mine = new JLabel(myID); // TODO: from controller
+		ID_Mine = new JLabel(myID);
 		ID_Mine.setBounds(380,130,200,40);
 		ID_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//ユーザ名の表示

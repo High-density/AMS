@@ -105,7 +105,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 			if(controller.getLoginUserAttribute().equals(system.Master.class.getSimpleName()))
 				new Teacher(controller);
 			else
-				new Method(controller, idField.getText());
+				new Method(controller);
 		}else{
 			annouceLabel.setText("ログインできません\n");
 		}
