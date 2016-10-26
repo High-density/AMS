@@ -22,10 +22,6 @@ public class Master extends User {
 		attribute = this.getClass().getSimpleName();
 	}
 
-	public boolean register() {
-		return false; // TODO:
-	}
-
 	// Masterは出席不可
 	public boolean setAttendance() {
 		return false;
@@ -175,31 +171,6 @@ public class Master extends User {
 			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(account.getPasswd());
 			pw.close();
-
-			// TODO: MACアドレスを設定しない
-			// MACアドレスファイル作成
-			String gotNicName = null;
-			String gotMacAddress = "";
-			// 全NICを取得
-			Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
-
-			// 一番最初に取得したNICを登録する
-			NetworkInterface gotNic = gotNics.nextElement();
-			byte[] hardwareAddress = gotNic.getHardwareAddress();
-			if (hardwareAddress != null) {
-				for (byte b : hardwareAddress) {
-					gotMacAddress += String.format("%02X:", b);
-				}
-				gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
-			}
-			gotNicName = gotNic.getName();
-
-			// ファイルへの書き込み
-			file = new File(userDirName + "/" + nicFileName);
-			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-			pw.println(gotNicName + ":[" + gotMacAddress + "]");
-			pw.close();
-
 		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
 			return false;

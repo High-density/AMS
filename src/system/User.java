@@ -8,16 +8,22 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.NetworkInterface;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
 public abstract class User {
+	// 改行コード
+	public static final String br = System.getProperty("line.separator");
+
 	// ファイルの場所管理
 	public static final String attributeFileName = "attribute";
 	public static final String nameFileName = "name";
@@ -34,14 +40,82 @@ public abstract class User {
 		this.id = id;
 	}
 
+	// 初期化
+	public static boolean init() {
+		File file;
+		PrintWriter pw;
+
+		try {
+			// 教員用ディレクトリの作成
+			Controller.mkdirs(Controller.masterDir.toString());
+
+			// 属性情報の登録
+			file = new File(Controller.masterDir + "/" + attributeFileName);
+			if (!file.exists()) {
+				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println(Master.class.getSimpleName());
+				pw.close();
+			}
+
+			// パスワードの登録
+			file = new File(Controller.masterDir + "/" + passwdFileName);
+			if (!file.exists()) {
+				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println("root");
+				pw.close();
+			}
+		} catch (IOException e) {
+			return false;
+		}
+
+		return true;
+	}
+
 	// 初期登録が必要なら登録を行う
-	public abstract boolean register();
+	public boolean register() {
+		// 作成後初めてのログインであれば，MACアドレスを登録する
+		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
+
+		if (!file.exists()) {
+			String message = id + "(" + Controller.getName(id) + ")として" + br  +  "このコンピュータを登録しますか？";
+			int option = JOptionPane.showConfirmDialog(null, message);
+			if (option != JOptionPane.YES_OPTION) return false;
+
+			try {
+				// MACアドレスファイル作成
+				String gotNicName = null;
+				String gotMacAddress = "";
+				// 全NICを取得
+				Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
+
+				// 一番最初に取得したNICを登録する
+				NetworkInterface gotNic = gotNics.nextElement();
+				byte[] hardwareAddress = gotNic.getHardwareAddress();
+				if (hardwareAddress != null) {
+					for (byte b : hardwareAddress) {
+						gotMacAddress += String.format("%02X:", b);
+					}
+					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
+				}
+				gotNicName = gotNic.getName();
+
+				// ファイルへの書き込み
+				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println(gotNicName + ":[" + gotMacAddress + "]");
+				pw.close();
+			} catch(IOException | NoSuchElementException e) {
+				Log.error(e);
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 	// パスワードによる認証
 	public static User login(String id, String passwd) {
 		String attribute = null; // 属性
 
-		// TODO: ユーザがいない状態でログインした際に，そのパソコンを教員用に設定するかどうか
 		// パスワードとMACアドレスの検証
 		if (!isCorrectPasswd(id, passwd)) {
 			return null;
@@ -159,6 +233,7 @@ public abstract class User {
 			return false;
 		}
 
+		if (pw == null) pw = "";
 		return pw.equals(passwd);
 	}
 

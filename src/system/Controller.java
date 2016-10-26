@@ -65,6 +65,7 @@ public class Controller {
 		Log.logDir = logDir;
 		Log.logFile = logFile;
 		Log.errorFile = errorFile;
+		User.init();
 	}
 
 	/**
@@ -75,7 +76,6 @@ public class Controller {
 	 * @return ログイン成功時true，失敗時false
 	 */
 	public boolean login(String id, String passwd) {
-		// TODO: 初めてログインするときにマックアドレスを登録するようにする
 		// TODO: ひとりが複数のパソコンを保持してる時に、1台しか登録できないのをどうするか聞く
 		user = User.login(id, passwd);
 		if (user == null) {
