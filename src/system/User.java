@@ -49,6 +49,14 @@ public abstract class User {
 			// 教員用ディレクトリの作成
 			Controller.mkdirs(Controller.masterDir.toString());
 
+			// 教員の初期名の登録
+			file = new File(Controller.masterDir + "/" + nameFileName);
+			if (!file.exists()) {
+				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+				pw.println("管理者");
+				pw.close();
+			}
+
 			// 属性情報の登録
 			file = new File(Controller.masterDir + "/" + attributeFileName);
 			if (!file.exists()) {
@@ -77,7 +85,7 @@ public abstract class User {
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
 
 		if (!file.exists()) {
-			String message = id + "(" + Controller.getName(id) + ")として" + br  +  "このコンピュータを登録しますか？";
+			String message = Controller.getName(id) + "(" + id + ")として" + br  +  "このコンピュータを登録しますか？";
 			int option = JOptionPane.showConfirmDialog(null, message);
 			if (option != JOptionPane.YES_OPTION) return false;
 

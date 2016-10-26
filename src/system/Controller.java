@@ -82,8 +82,10 @@ public class Controller {
 			// ログイン失敗
 			return false;
 		} else {
+			// 初めてログインした時には登録を行う
+			// 登録できなかったらログイン失敗
+			if (!user.register()) return false;
 			// ログイン成功したら出席チェック
-			if (!user.register()) return false; // 初めてログインした時には登録を行う
 			attend(); // TODO: falseが返ってきたら教員に確認を促すようにする
 			user.popNotification(); // TODO: 同じ日付を書き換えたのに表示される
 			return true;
@@ -146,7 +148,7 @@ public class Controller {
 
 	/**
 	 * 出席の登録を行う
-	 * @return 登録が完了したらtrue，できなかったらfalse
+	 * @return 登録が完了したらtrue，できなかったらfalse，教員は常にfalse
 	 */
 	private boolean attend() {
 		// 属性がSlaveなら出席
