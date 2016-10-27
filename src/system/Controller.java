@@ -88,12 +88,10 @@ public class Controller {
 	public static Properties loadProperties() {
 		// 設定ファイル読み込み
 		Properties p = new Properties();
-		try {
-			InputStream is = Controller.class.getResourceAsStream("/src/properties/ams.properties");
+		try (InputStream is = Controller.class.getResourceAsStream("/src/properties/ams.properties")) {
 			InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 			BufferedReader reader = new BufferedReader(isr);
 			p.load(reader);
-			is.close();
 		} catch(IOException | NullPointerException e) {
 			Log.error(e);
 		}
@@ -123,7 +121,7 @@ public class Controller {
 				String title = props.getProperty("ttl.attended");
 				JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 			}
-			user.popNotification(); // TODO: 同じ日付を書き換えたのに表示される
+			user.popNotification();
 			return true;
 		}
 	}
@@ -374,9 +372,8 @@ public class Controller {
 
 		// ファイルからMACアドレスNIC表示名の読み込み
 		for(String slave : slaves) {
-			try {
-				File file = new File(Controller.homeDirName + "/" + slave + "/nics");
-				BufferedReader br = new BufferedReader(new FileReader(file));
+			File file = new File(Controller.homeDirName + "/" + slave + "/nics");
+			try (BufferedReader br = new BufferedReader(new FileReader(file));) {
 				String line = br.readLine();
 				Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 				Matcher m = p.matcher(line);
@@ -391,8 +388,6 @@ public class Controller {
 						}
 					}
 				}
-
-				br.close();
 			} catch (FileNotFoundException e) {
 				// ID未登録時
 				return null;
@@ -413,13 +408,10 @@ public class Controller {
 	 * @throws IOException コピー失敗
 	 */
 	public static boolean copyFile(File in, File out) throws IOException {
-		try {
-			// TODO: eclipseで閉じられていないエラーがでてる
-			FileChannel inChannel = new FileInputStream(in).getChannel();
-			FileChannel outChannel = new FileOutputStream(out).getChannel();
+		try (FileChannel inChannel = new FileInputStream(in).getChannel();
+			 FileChannel outChannel = new FileOutputStream(out).getChannel();
+) {
 			inChannel.transferTo(0, inChannel.size(), outChannel);
-			inChannel.close();
-			outChannel.close();
 			return true;
 		} catch (FileNotFoundException e) {
 			return false;

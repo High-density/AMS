@@ -63,14 +63,15 @@ public class Agenda extends DataForAMonth<String> {
 	public void setData(int day, String d) {
 		super.setData(day, d);
 
+		String fileName = dir + "/" + yearMonth.toString() + "-" + String.format("%02d", day);
+		File file = new File(fileName);
 		try {
-			String fileName = dir + "/" + yearMonth.toString() + "-" + String.format("%02d", day);
-			File file = new File(fileName);
 			if (!file.exists()) file.createNewFile();
-
-			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		} catch (IOException e) {
+			Log.error(e);
+		}
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			pw.println(d);
-			pw.close();
 		} catch (IOException e) {
 			Log.error(e);
 		}

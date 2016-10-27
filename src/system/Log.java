@@ -77,10 +77,8 @@ class Log {
 		if (file.canWrite() == false) {
 			popup("ファイル書き込みエラー: file.canWrite() = false");
 		}
-		try {
-			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));) {
 			pw.println(message);
-			pw.close();
 		} catch(IOException e) {
 			popup("ファイル書き込みエラー: " + file.toString());
 		}

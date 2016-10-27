@@ -34,19 +34,17 @@ public class Slave extends User {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		// 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
-		try {
+		String dirName = Controller.homeDirName + "/" + getId() + "/" + attendanceDirName;
+		File file = new File(dirName + ldt.format(formatter));
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			// 出席ディレクトリの作成
-			String dirName = Controller.homeDirName + "/" + getId() + "/" + attendanceDirName;
 			if (!Controller.mkdirs(dirName)) return false;
 
-			File file = new File(dirName + ldt.format(formatter));
 			// 未出席時のみ記録
 			if (!file.exists()) {
 				file.createNewFile();
-				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 				formatter = DateTimeFormatter.ofPattern("HHmm");
 				pw.println(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED);
-				pw.close();
 				return true;
 			}
 		} catch (IOException e) {
@@ -124,11 +122,9 @@ public class Slave extends User {
 
 		// ファイルを更新する
 		// 更新対象はパスワードのみ
-		try {
-			File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
-			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			pw.println(newAccount.getPasswd());
-			pw.close();
 		} catch (IOException | NullPointerException e) {
 			Log.error(e);
 			return false;

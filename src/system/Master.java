@@ -35,15 +35,13 @@ public class Master extends User {
 		File file = new File(dir.toString() + "/" + ld.toString());
 		if (file.exists()) {
 			// ファイルがあるときは中のデータのみを更新
-			try {
-				BufferedReader br = new BufferedReader(new FileReader(file));
+			try (BufferedReader br = new BufferedReader(new FileReader(file));
+				 PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))){
 				String line = br.readLine();
 				Pattern p = Pattern.compile("^([0-9]{4}:)");
 				Matcher m = p.matcher(line);
 				if (m.find()) {
-					PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 					pw.println(m.group(1) + String.valueOf(status));
-					pw.close();
 				} else {
 					Log.error(new Throwable(), file.toString() + "の内容が不正です");
 					return false;
@@ -55,12 +53,10 @@ public class Master extends User {
 
 		} else {
 			// ファイルがないときは新たに作成する
-			try {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 				Controller.mkdirs(dir.toString());
 				file.createNewFile();
-				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 				pw.println(temporaryTime + ":" + String.valueOf(status));
-				pw.close();
 			} catch (IOException e) {
 				Log.error(e);
 				return false;
@@ -108,19 +104,20 @@ public class Master extends User {
 		}
 
 		// ユーザ情報を更新する
-		try {
+		File file = new File(Controller.homeDirName + "/" + target + "/" + nameFileName);
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			// 名前の更新
-			File file = new File(Controller.homeDirName + "/" + target + "/" + nameFileName);
-			PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 			pw.println(newAccount.getName());
-			pw.close();
+		} catch (NullPointerException | IOException e) {
+			Log.error(e);
+			return false;
+		}
 
+		file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			// パスワードの更新
 			if (newAccount.getPasswd() != null) {
-				file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
-				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 				pw.println(newAccount.getPasswd());
-				pw.close();
 			}
 
 			// ディレクトリの変更
@@ -138,7 +135,6 @@ public class Master extends User {
 	// ユーザの作成
 	public boolean createUser(AccountInformation account) {
 		File file; // 作成するファイル用
-		PrintWriter pw; // ファイルへの書き込み用
 
 		// 必要な要素が抜けてたらエラー
 		if (account.getId() == null ||
@@ -153,24 +149,28 @@ public class Master extends User {
 		Controller.mkdirs(userDirName + attendanceDirName);
 		Controller.mkdirs(userDirName + reportDirName);
 
-		try {
-			// 属性ファイル作成
-			file = new File(userDirName + "/" + attributeFileName);
-			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		// 属性ファイル作成
+		file = new File(userDirName + "/" + attributeFileName);
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			pw.println(Slave.class.getSimpleName());
-			pw.close();
+		} catch(IOException | NoSuchElementException e) {
+			Log.error(e);
+			return false;
+		}
 
-			// 名前ファイル作成
-			file = new File(userDirName + "/" + nameFileName);
-			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		// 名前ファイル作成
+		file = new File(userDirName + "/" + nameFileName);
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			pw.println(account.getName());
-			pw.close();
+		} catch(IOException | NoSuchElementException e) {
+			Log.error(e);
+			return false;
+		}
 
-			// パスワードファイル作成
-			file = new File(userDirName + "/" + passwdFileName);
-			pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		// パスワードファイル作成
+		file = new File(userDirName + "/" + passwdFileName);
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			pw.println(account.getPasswd());
-			pw.close();
 		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
 			return false;
@@ -199,9 +199,12 @@ public class Master extends User {
 			File file = new File(dir.toString() + "/" + ld.toString());
 			try {
 				file.createNewFile();
-				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+			} catch(IOException e) {
+				Log.error(e);
+				return null;
+			}
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 				pw.println(content);
-				pw.close();
 			} catch(IOException e) {
 				Log.error(e);
 				return null;

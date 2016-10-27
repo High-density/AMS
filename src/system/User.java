@@ -16,6 +16,7 @@ import java.time.YearMonth;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
@@ -35,6 +36,7 @@ public abstract class User {
 
 	protected String id = null; // ID
 	protected String attribute = null; // 属性
+	private static Properties props; // 設定ファイル
 
 	public User(String id, String passwd) {
 		this.id = id;
@@ -43,37 +45,41 @@ public abstract class User {
 	// 初期化
 	public static boolean init() {
 		File file;
-		PrintWriter pw;
 
-		try {
-			// 教員用ディレクトリの作成
-			Controller.mkdirs(Controller.masterDir.toString());
+		// 設定ファイル読み込み
+		props = Controller.loadProperties();
 
-			// 教員の初期名の登録
-			file = new File(Controller.masterDir + "/" + nameFileName);
-			if (!file.exists()) {
-				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-				pw.println("管理者");
-				pw.close();
+		// 教員用ディレクトリの作成
+		Controller.mkdirs(Controller.masterDir.toString());
+
+		// 教員の初期名の登録
+		file = new File(Controller.masterDir + "/" + nameFileName);
+		if (!file.exists()) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+				pw.println(props.getProperty("root.name.default"));
+			} catch (IOException e) {
+				return false;
 			}
+		}
 
-			// 属性情報の登録
-			file = new File(Controller.masterDir + "/" + attributeFileName);
-			if (!file.exists()) {
-				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		// 属性情報の登録
+		file = new File(Controller.masterDir + "/" + attributeFileName);
+		if (!file.exists()) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 				pw.println(Master.class.getSimpleName());
-				pw.close();
+			} catch (IOException e) {
+				return false;
 			}
+		}
 
-			// パスワードの登録
-			file = new File(Controller.masterDir + "/" + passwdFileName);
-			if (!file.exists()) {
-				pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+		// パスワードの登録
+		file = new File(Controller.masterDir + "/" + passwdFileName);
+		if (!file.exists()) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 				pw.println("root");
-				pw.close();
+			} catch (IOException e) {
+				return false;
 			}
-		} catch (IOException e) {
-			return false;
 		}
 
 		return true;
@@ -89,7 +95,7 @@ public abstract class User {
 			int option = JOptionPane.showConfirmDialog(null, message);
 			if (option != JOptionPane.YES_OPTION) return false;
 
-			try {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 				// MACアドレスファイル作成
 				String gotNicName = null;
 				String gotMacAddress = "";
@@ -108,9 +114,7 @@ public abstract class User {
 				gotNicName = gotNic.getName();
 
 				// ファイルへの書き込み
-				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 				pw.println(gotNicName + ":[" + gotMacAddress + "]");
-				pw.close();
 			} catch(IOException | NoSuchElementException e) {
 				Log.error(e);
 				return false;
@@ -123,6 +127,7 @@ public abstract class User {
 	// パスワードによる認証
 	public static User login(String id, String passwd) {
 		String attribute = null; // 属性
+		File file;
 
 		// パスワードとMACアドレスの検証
 		if (!isCorrectPasswd(id, passwd)) {
@@ -131,11 +136,10 @@ public abstract class User {
 		if (false /*!hasCertifiedMacAddress(id)*/) {
 			// 不正ログインを試みた場合はMasterに報告
 			File dir = new File(Controller.masterDir + "/" + notificationDirName);
-			File file = Controller.incorrectLoginFile;
+			file = Controller.incorrectLoginFile;
 			if(!Controller.mkdirs(dir.toString())) return null;
-			try {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)))) {
 				file.createNewFile();
-				PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)));
 				pw.println("[" + LocalDateTime.now() + "]");
 				String operator = Controller.getComputerHolder();
 				String content;
@@ -149,7 +153,6 @@ public abstract class User {
 				content += Controller.getName(id) + "(" + id + ")";
 				content += "へのログインが試みられました．";
 				pw.println(content + "\n");
-				pw.close();
 			} catch(IOException e) {
 				Log.error(e);
 				return null;
@@ -159,11 +162,9 @@ public abstract class User {
 		}
 
 		// ファイルから属性の読み込み
-		try {
-			File file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
-			BufferedReader br = new BufferedReader(new FileReader(file));
+		file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			attribute = br.readLine(); // Fileから読み取った行
-			br.close();
 		} catch (IOException | NullPointerException e) {
 			Log.error(e);
 			return null;
@@ -198,8 +199,7 @@ public abstract class User {
 			Arrays.sort(fileNames);
 			for (String fileName : fileNames) {
 				File file = new File(dir.toString() + "/" + fileName);
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(file));
+				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 					message += "***** " + fileName + " *****\n";
 					String line;
 					while ((line = br.readLine()) != null) {
@@ -207,7 +207,6 @@ public abstract class User {
 					}
 					message += "\n";
 
-					br.close();
 					Controller.deleteFile(file); // 通知した情報の削除
 				} catch (IOException e) {
 					Log.error(e);
@@ -228,11 +227,9 @@ public abstract class User {
 		String pw = null; // パスワード
 
 		// ファイルからパスワードの読み込み
-		try {
-			File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
-			BufferedReader br = new BufferedReader(new FileReader(file));
+		File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			pw = br.readLine();
-			br.close();
 		} catch (FileNotFoundException e) {
 			// 入力されたidを持つユーザがいない
 			return false;
@@ -251,9 +248,8 @@ public abstract class User {
 		String macAddress = null; // 登録されているMACアドレス
 
 		// ファイルからMACアドレスNIC表示名の読み込み
-		try {
-			File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
-			BufferedReader br = new BufferedReader(new FileReader(file));
+		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line = br.readLine();
 			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 			Matcher m = p.matcher(line);
@@ -261,8 +257,6 @@ public abstract class User {
 				nicName = m.group(1);
 				macAddress = m.group(2);
 			}
-
-			br.close();
 		} catch (FileNotFoundException e) {
 			// ID未登録時
 			return false;
@@ -290,10 +284,8 @@ public abstract class User {
 
 		String name;
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nameFileName);
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(file));
+		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			name = br.readLine(); // Fileから読み取った行
-			br.close();
 		} catch (IOException | NullPointerException e) {
 			Log.error(e);
 			return null;
@@ -316,11 +308,10 @@ public abstract class User {
 			// ファイルから出席情報の読み込み
 			String day = String.format("%02d", d + 1);
 			String fileName = year + "-" + month + "-" + day;
-			try {
+			String dirName = Controller.homeDirName + "/" + id + "/" + attendanceDirName;
+			File file = new File(dirName + fileName);
+			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 				// 出席のとき
-				String dirName = Controller.homeDirName + "/" + id + "/" + attendanceDirName;
-				File file = new File(dirName + fileName);
-				BufferedReader br = new BufferedReader(new FileReader(file));
 				String line = br.readLine();
 				Pattern p = Pattern.compile("([0-9]{2})([0-9]{2}):([0-9]+)$");
 				Matcher m = p.matcher(line);
@@ -332,8 +323,6 @@ public abstract class User {
 					// 出席簿に記入
 					book.setData(d, Integer.parseInt(m.group(3)), lt);
 				}
-
-				br.close();
 			} catch (FileNotFoundException e) {
 				// 出席もしてなく，ファイルを作成してないとき
 				book.setData(d, AttendanceBook.NO_MARK);
