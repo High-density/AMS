@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
@@ -13,8 +15,10 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
 
 /**
  * 内部の動作を一括で管理するクラス<br>
@@ -60,12 +64,40 @@ public class Controller {
 	 * 不正ログインの情報を記入するディレクトリ
 	 */
 	public static final File incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
+	/**
+	 * 設定ファイル
+	 */
+	public static final File propertiesFile = new File(jarDirName + "/src/properties/ams.properties");
+	/**
+	 * 設定ファイル
+	 */
+	private Properties props;
 
 	public Controller() {
 		Log.logDir = logDir;
 		Log.logFile = logFile;
 		Log.errorFile = errorFile;
 		User.init();
+		props = Controller.loadProperties();
+	}
+
+	/**
+	 * 設定ファイルの読み込み
+	 * @return 設定ファイル
+	 */
+	public static Properties loadProperties() {
+		// 設定ファイル読み込み
+		Properties p = new Properties();
+		try {
+			InputStream is = Controller.class.getResourceAsStream("/src/properties/ams.properties");
+			InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+			BufferedReader reader = new BufferedReader(isr);
+			p.load(reader);
+			is.close();
+		} catch(IOException | NullPointerException e) {
+			Log.error(e);
+		}
+		return p;
 	}
 
 	/**
@@ -86,7 +118,11 @@ public class Controller {
 			// 登録できなかったらログイン失敗
 			if (!user.register()) return false;
 			// ログイン成功したら出席チェック
-			attend(); // TODO: falseが返ってきたら教員に確認を促すようにする
+			if (attend()) {
+				String message = props.getProperty("msg.attended");
+				String title = props.getProperty("ttl.attended");
+				JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+			}
 			user.popNotification(); // TODO: 同じ日付を書き換えたのに表示される
 			return true;
 		}

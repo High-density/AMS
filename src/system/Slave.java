@@ -47,12 +47,13 @@ public class Slave extends User {
 				formatter = DateTimeFormatter.ofPattern("HHmm");
 				pw.println(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED);
 				pw.close();
+				return true;
 			}
 		} catch (IOException e) {
-			Log.error(e);
+			Log.error(e, "出席登録に失敗しました．教員に報告し，手動による登録を行ってください.");
 			return false;
 		}
-		return true;
+		return false;
 	}
 
 	// 学生は出席変更不可
