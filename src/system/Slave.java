@@ -36,10 +36,11 @@ public class Slave extends User {
 		// 各自のフォルダに日付ごとにファイルを作り，出席状況を格納する
 		String dirName = Controller.homeDirName + "/" + getId() + "/" + attendanceDirName;
 		File file = new File(dirName + ldt.format(formatter));
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-			// 出席ディレクトリの作成
-			if (!Controller.mkdirs(dirName)) return false;
 
+		// 出席ディレクトリの作成
+		if (!Controller.mkdirs(dirName)) return false;
+
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 			// 未出席時のみ記録
 			if (!file.exists()) {
 				file.createNewFile();

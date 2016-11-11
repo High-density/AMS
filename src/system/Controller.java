@@ -67,7 +67,7 @@ public class Controller {
 	/**
 	 * 設定ファイル
 	 */
-	public static final File propertiesFile = new File(jarDirName + "/src/properties/ams.properties");
+	public static final String propertiesFilePath = "/src/properties/ams.properties";
 	/**
 	 * 設定ファイル
 	 */
@@ -88,12 +88,16 @@ public class Controller {
 	public static Properties loadProperties() {
 		// 設定ファイル読み込み
 		Properties p = new Properties();
-		try (InputStream is = Controller.class.getResourceAsStream("/src/properties/ams.properties")) {
+		try (InputStream is = Controller.class.getResourceAsStream(propertiesFilePath)) {
 			InputStreamReader isr = new InputStreamReader(is, "UTF-8");
 			BufferedReader reader = new BufferedReader(isr);
 			p.load(reader);
 		} catch(IOException | NullPointerException e) {
-			Log.error(e);
+			try (InputStream is = new FileInputStream(jarDirName + "/" + propertiesFilePath)) {
+				p.load(is);
+			} catch(IOException | NullPointerException ex) {
+				Log.error(ex);
+			}
 		}
 		return p;
 	}
