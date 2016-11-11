@@ -38,26 +38,35 @@ public class ChangePassword extends KeyAdapter implements ActionListener{
 		// システム引き継ぎ
 		this.controller = controller;
 
+        int horizon = 450;
 		accountFrame = new JFrame("アカウント情報の変更");
-		accountFrame.setBounds(650, 300, 600, 500);
+		accountFrame.setSize(horizon, 400);
+        accountFrame.setLocationRelativeTo(null);
+        accountFrame.setResizable(false);
 		changePanel = new JPanel();
 		changePanel.setLayout(null);
 		changeLabel = new JLabel("アカウント情報の変更");
 		changeLabel.setFont(new Font(null, Font.PLAIN, 18));
-		changeLabel.setBounds(200,10,200,40);
+		changeLabel.setBounds(0,10,horizon,40);
+        changeLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        int x1 = 80, x2 = 250;
+        int y1 = 70, y2 = 120;
 		//IDの表示
 		IDLabel = new JLabel("ID");
-		IDLabel.setBounds(170,80,200,40);
+		IDLabel.setBounds(x1,y1,100,40);
 		IDLabel.setFont(new Font(null, Font.PLAIN, 18));
+        IDLabel.setHorizontalAlignment(JLabel.RIGHT);
 		ID_Mine = new JLabel("ID_Null");
-		ID_Mine.setBounds(170,120,200,40);
+		ID_Mine.setBounds(x2,y1,200,40);
 		ID_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//ユーザ名の表示
 		usrLabel = new JLabel("ユーザ名");
-		usrLabel.setBounds(300,80,200,40);
+		usrLabel.setBounds(x1,y2,100,40);
 		usrLabel.setFont(new Font(null, Font.PLAIN, 18));
+        usrLabel.setHorizontalAlignment(JLabel.RIGHT);
 		usr_Mine = new JLabel("Name_Null");
-		usr_Mine.setBounds(300,120,200,40);
+		usr_Mine.setBounds(x2,y2,200,40);
 		usr_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//pwの表示
 		newPassLabel = new JLabel("新しいパスワード");
