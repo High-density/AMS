@@ -6,9 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -18,6 +18,7 @@ import java.util.Comparator;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.swing.JOptionPane;
 
 /**
@@ -34,46 +35,60 @@ public class Controller {
 	/**
 	 * jarが入っているディレクトリの名前
 	 */
-	public static final String jarDirName
-		= getDirName((new File(System.getProperty("java.class.path"))).getAbsolutePath());
+	public static String jarDirName;
 	/**
 	 * 全てのファイルを入れるディレクトリの名前
 	 */
-	public static final String homeDirName = jarDirName + "/file";
+	public static String homeDirName;
 	/**
 	 * 教員のディレクトリ
 	 */
-	public static final File masterDir = new File(homeDirName + "/root");
+	public static File masterDir;
 	/**
 	 * 予定を格納するディレクトリ
 	 */
-	public static final File agendaDir = new File(homeDirName + "/root/agenda/");
+	public static File agendaDir;
 	/**
 	 * ログを保存するディレクトリ
 	 */
-	public static final File logDir = new File(homeDirName + "/root/log/");
+	public static File logDir;
 	/**
 	 * 基本的なログを保存するファイル
 	 */
-	public static final File logFile = new File(logDir.toString() + "/log.txt");
+	public static File logFile;
 	/**
 	 * エラーログを保存するファイル
 	 */
-	public static final File errorFile = new File(logDir.toString() + "/error.txt");
+	public static File errorFile;
 	/**
 	 * 不正ログインの情報を記入するディレクトリ
 	 */
-	public static final File incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
+	public static File incorrectLoginFile;
 	/**
 	 * 設定ファイル
 	 */
-	public static final String propertiesFilePath = "/src/properties/ams.properties";
+	public static String propertiesFilePath;
 	/**
 	 * 設定ファイル
 	 */
 	private Properties props;
 
 	public Controller() {
+		// ディレクトリの各種設定
+		jarDirName = getDirName((new File(System.getProperty("java.class.path"))).getAbsolutePath());
+		if (jarDirName == null) {
+			jarDirName = "./";
+		}
+		homeDirName = jarDirName + "/file";
+		masterDir = new File(homeDirName + "/root");
+		agendaDir = new File(homeDirName + "/root/agenda/");
+		logDir = new File(homeDirName + "/root/log/");
+		logFile = new File(logDir.toString() + "/log.txt");
+		errorFile = new File(logDir.toString() + "/error.txt");
+		incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
+		propertiesFilePath = "/src/properties/ams.properties";
+
+		// ログ用ディレクトリ
 		Log.logDir = logDir;
 		Log.logFile = logFile;
 		Log.errorFile = errorFile;
