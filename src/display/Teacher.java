@@ -44,7 +44,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	/*main*/
 	private Controller controller;	// 内部動作用
 	private NewAccount newAccount;	// アカウント用
-    private SetAdmin setAdmin; // 教員アカウント用
+	private SetAdmin setAdmin; // 教員アカウント用
 	private JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
@@ -52,8 +52,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JPanel panelNum[] = new JPanel[4];
 	private JButton numButton[] = new JButton[5];
 	private JLabel labelNum[] = new JLabel[4];
-	private final String[] funcName = {"出席管理","報告書管理","予定管理",
-			"アカウント管理", "ログアウト"};
+	private final String[] funcName = {"出席管理","報告書管理",
+			"予定管理","アカウント管理", "ログアウト"};
 
 	/*attend*/
 	private JPanel IDPanel;
@@ -109,21 +109,21 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private int month[] = {calendar.get(Calendar.MONTH),calendar.get(Calendar.MONTH)};
 	private int numSize = Slave.getSlaves().size();//アカウント数
 	private ArrayList<String> slaves = Slave.getSlaves(); //アカウントのID
-    private String myID;
+	private String myID;
 
 	Teacher(system.Controller controller) {
 		/* システム引き継ぎ */
 		this.controller = controller;
 		newAccount = new NewAccount(this.controller);
-        setAdmin = new SetAdmin(this.controller);
-        myID = controller.getLoginUserId(); // ログインID
+		setAdmin = new SetAdmin(this.controller);
+		myID = controller.getLoginUserId(); // ログインID
 
 		/* メインフレーム設定 */
 		mainFrame = new JFrame("-教員- 機能選択");
 		mainFrame.setSize(800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
-        mainFrame.setResizable(false);
+		mainFrame.setResizable(false);
 		contentPane = mainFrame.getContentPane();
 
 		/*アイコンの設定*/
@@ -714,10 +714,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 	}
 
-    private void settingAdmin(){
-        String slaveName = Controller.getName(myID);
-        setAdmin.showSetAdmin(myID, slaveName);
-    }
+	private void settingAdmin(){
+		String slaveName = Controller.getName(myID);
+		setAdmin.showSetAdmin(myID, slaveName);
+	}
 
 	/**
 	 * slaveとnumSizeを更新する
@@ -957,8 +957,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				JOptionPane.showMessageDialog(mainFrame, "学生を選択してください");
 			}
 		}else if(e.getSource() == rootButton){
-            settingAdmin();
-        }
+			settingAdmin();
+		}
 	}
 
 	public void keyPressed(KeyEvent e){

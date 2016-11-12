@@ -23,28 +23,28 @@ import system.Controller;
 public class SetAdmin extends KeyAdapter implements ActionListener{
 	private Controller controller;
 	private JFrame setAdminFrame;
-    private Container contentPane;
+	private Container contentPane;
 	private JLabel subLabel;
 	private JTextField idField;
 	private JTextField nameField;
-    private JTextField passField;
+	private JTextField passField;
 	private JButton saveButton;
 	private JButton returnButton;
 	private String oldId;
-    private JCheckBox checkPass;
-    
-	public SetAdmin(Controller controller){
-        // 引き継ぎ
-        this.controller = controller;
+	private JCheckBox checkPass;
 
-        // パネル
+	public SetAdmin(Controller controller){
+		// 引き継ぎ
+		this.controller = controller;
+
+		// パネル
 		JPanel panelMaster;
 
 		/* 各種設定 */
 		setAdminFrame = new JFrame("教員用アカウント管理");
-		setAdminFrame.setSize(400, 320);
+		setAdminFrame.setSize(400, 370);
 		setAdminFrame.setLocationRelativeTo(null);
-        setAdminFrame.setResizable(false);
+		setAdminFrame.setResizable(false);
 		contentPane = setAdminFrame.getContentPane();
 		panelMaster = new JPanel();
 		panelMaster.setLayout(null);
@@ -63,7 +63,7 @@ public class SetAdmin extends KeyAdapter implements ActionListener{
 		nameLabel.setBounds(50,110,wid,hei);
 		nameLabel.setFont(new Font(null, Font.PLAIN, 12));
 		nameLabel.setHorizontalAlignment(JLabel.RIGHT);
-        JLabel passLabel = new JLabel("新しいパスワード");
+		JLabel passLabel = new JLabel("新しいパスワード");
 		passLabel.setBounds(50,210,wid,hei);
 		passLabel.setFont(new Font(null, Font.PLAIN, 12));
 		passLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -72,10 +72,10 @@ public class SetAdmin extends KeyAdapter implements ActionListener{
 		idField.setBounds(180,65,wid,30);
 		nameField = new JTextField();
 		nameField.setBounds(180,115,wid,30);
-        passField = new JTextField();
+		passField = new JTextField();
 		passField.setBounds(180,215,wid,30);
 
-        checkPass = new JCheckBox("パスワードを設定");
+		checkPass = new JCheckBox("パスワードを設定");
 		checkPass.setBounds(120, 160, 200, 40);
 		checkPass.setOpaque(false);
 		checkPass.setMnemonic(KeyEvent.VK_P);
@@ -100,16 +100,16 @@ public class SetAdmin extends KeyAdapter implements ActionListener{
 		panelMaster.add(idField);
 		panelMaster.add(nameLabel);
 		panelMaster.add(nameField);
-        panelMaster.add(checkPass);
-        panelMaster.add(passLabel);
-        panelMaster.add(passField);
+		panelMaster.add(checkPass);
+		panelMaster.add(passLabel);
+		panelMaster.add(passField);
 		panelMaster.add(saveButton);
 		panelMaster.add(returnButton);
 
 		contentPane.add(panelMaster, BorderLayout.CENTER);
 		setAdminFrame.setVisible(false);
 	}
-    
+
 	public void showSetAdmin(String Id, String Name){
 		oldId = Id;
 		subLabel.setText("変更");
@@ -121,27 +121,27 @@ public class SetAdmin extends KeyAdapter implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 		if(e.getSource() == saveButton){
 			AccountInformation oldAccount = AccountInformation.ofId(oldId);
-            String newId = idField.getText();
-            String newName = nameField.getText();
-            String newPass = passField.getText();
-            AccountInformation newAccount;
-            if(checkPass.isSelected()){
-                newAccount = AccountInformation.ofAll(newId, newName, newPass);
-                //System.out.println("チェック有り");
-            }else{
-                newAccount = AccountInformation.ofIdName(newId, newName);
-                //System.out.println("チェック無し");
-            }
-            newAccount = AccountInformation.ofAll(newId, newName, newPass);
-            controller.setAccount(oldAccount, newAccount);
-            setAdminFrame.setVisible(false);
-            setAdminFrame.dispose();
-        }else if(e.getSource() == returnButton){
-            setAdminFrame.setVisible(false);
-            setAdminFrame.dispose();
-        }
-    }
-    
+			String newId = idField.getText();
+			String newName = nameField.getText();
+			String newPass = passField.getText();
+			AccountInformation newAccount;
+			if(checkPass.isSelected()){
+				newAccount = AccountInformation.ofAll(newId, newName, newPass);
+				//System.out.println("チェック有り");
+			}else{
+				newAccount = AccountInformation.ofIdName(newId, newName);
+				//System.out.println("チェック無し");
+			}
+			newAccount = AccountInformation.ofAll(newId, newName, newPass);
+			controller.setAccount(oldAccount, newAccount);
+			setAdminFrame.setVisible(false);
+			setAdminFrame.dispose();
+		}else if(e.getSource() == returnButton){
+			setAdminFrame.setVisible(false);
+			setAdminFrame.dispose();
+		}
+	}
+
 	public void keyPressed(KeyEvent e){
 		if(KeyEvent.VK_ENTER == e.getKeyCode()){/*actionevebtを呼び出し*/
 			ActionEvent actionEvents = new ActionEvent(e.getComponent(),ActionEvent.ACTION_PERFORMED,"");
