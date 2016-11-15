@@ -108,8 +108,10 @@ public class Controller {
 			BufferedReader reader = new BufferedReader(isr);
 			p.load(reader);
 		} catch(IOException | NullPointerException e) {
-			try (InputStream is = new FileInputStream(jarDirName + "/" + propertiesFilePath)) {
-				p.load(is);
+			try (InputStream is = new FileInputStream(jarDirName + propertiesFilePath)) {
+				InputStreamReader isr = new InputStreamReader(is, "UTF-8");
+				BufferedReader reader = new BufferedReader(isr);
+				p.load(reader);
 			} catch(IOException | NullPointerException ex) {
 				Log.error(ex);
 			}

@@ -121,6 +121,7 @@ public class Master extends User {
 			}
 
 			// ディレクトリの変更
+			// TODO: うまく変更できていない
 			File oldFile = new File(Controller.homeDirName + "/" + target);
 			File newFile = new File(Controller.homeDirName + "/" + newAccount.getId());
 			oldFile.renameTo(newFile);
