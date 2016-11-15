@@ -23,3 +23,7 @@ jar:
 .PHONY: dojar
 dojar: jar
 	java -jar AMS.jar
+
+.PHONY: clean-file
+clean-file:
+	rm -rf file

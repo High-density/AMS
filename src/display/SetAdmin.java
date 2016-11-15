@@ -132,7 +132,6 @@ public class SetAdmin extends KeyAdapter implements ActionListener{
 				newAccount = AccountInformation.ofIdName(newId, newName);
 				//System.out.println("チェック無し");
 			}
-			newAccount = AccountInformation.ofAll(newId, newName, newPass);
 			controller.setAccount(oldAccount, newAccount);
 			setAdminFrame.setVisible(false);
 			setAdminFrame.dispose();

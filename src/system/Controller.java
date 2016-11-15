@@ -79,10 +79,24 @@ public class Controller {
 		if (jarDirName == null) {
 			jarDirName = "./";
 		}
+
+		init();
+	}
+
+	/**
+	 * 初期化処理
+	 */
+	public void init() {
+		// 諸ディレクトリ
 		homeDirName = jarDirName + "/file";
-		masterDir = new File(homeDirName + "/root");
-		agendaDir = new File(homeDirName + "/root/agenda/");
-		logDir = new File(homeDirName + "/root/log/");
+		ArrayList<String> masters = getMasters();
+		if (masters == null) {
+			masterDir = new File(homeDirName + "/root");
+		} else {
+			masterDir = new File(homeDirName + "/" + masters.get(0));
+		}
+		agendaDir = new File(masterDir + "/agenda/");
+		logDir = new File(masterDir + "/log/");
 		logFile = new File(logDir.toString() + "/log.txt");
 		errorFile = new File(logDir.toString() + "/error.txt");
 		incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
@@ -244,7 +258,9 @@ public class Controller {
 	 * @return 更新成功時true，失敗時false
 	 */
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
-		return user.setAccount(oldAccount, newAccount);
+		boolean result = user.setAccount(oldAccount, newAccount);
+		init();
+		return result;
 	}
 
 	/**
@@ -464,5 +480,13 @@ public class Controller {
 	 */
 	public static ArrayList<String> getSlaves() {
 		return Slave.getSlaves();
+	}
+
+	/**
+	 * Masterの一覧を取得する
+	 * @return 教員のIDをListで返す
+	 */
+	public static ArrayList<String> getMasters() {
+		return Master.getMasters();
 	}
 }
