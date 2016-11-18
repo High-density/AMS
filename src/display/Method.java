@@ -428,6 +428,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 				dayButton_plan[i].setForeground(Color.BLUE);
 			else
 				dayButton_plan[i].setForeground(Color.BLACK);
+            if(agenda.hasData(day-1)){
+                dayButton_plan[i].setBackground(Color.ORANGE);
+            }
 		}
 		for (int i=dayOfWeek+maxDate;i<42;i++){
 			dayButton_plan[i].setText("");
