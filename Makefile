@@ -3,7 +3,7 @@ all: class javadoc
 
 .PHONY: class
 class:
-	javac src/*/*.java
+	mkdir -p bin; javac src/*/*.java -d bin/;
 
 .PHONY: javadoc
 javadoc:
@@ -11,19 +11,19 @@ javadoc:
 
 .PHONY: do
 do:
-	javac src/*/*.java && java -cp src main.Main
+	mkdir -p bin; javac src/*/*.java -d bin/ && java -cp bin main.Main
 
 .PHONY: jar
 jar:
-	mkdir -p bin;\
-	javac src/*/*.java -d bin/;\
-	cp Main.mf bin/Main.mf;\
-	cd bin/;\
+	mkdir -p bin; javac src/*/*.java -d bin/;\
+	cp Main.mf bin/Main.mf; cd bin/;\
 	jar cfm ../AMS.jar Main.mf * ../src/icon/* ../src/properties/*;\
-	cd ../;\
-	chmod +x AMS.jar;\
-	# finish making AMS.jar
+	cd ../; chmod +x AMS.jar;\
 
 .PHONY: dojar
 dojar: jar
 	java -jar AMS.jar
+
+.PHONY: clean-file
+clean-file:
+	rm -rf file
