@@ -45,7 +45,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private Controller controller;	// 内部動作用
 	private NewAccount newAccount;	// アカウント用
 	private SetAdmin setAdmin; // 教員アカウント用
-	private JFrame mainFrame;
+	static JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
 	private JPanel cardPanel;private CardLayout cLayout;

@@ -123,9 +123,9 @@ public class SetAdmin extends KeyAdapter implements ActionListener{
 			AccountInformation oldAccount = AccountInformation.ofId(oldId);
 			String newId = idField.getText();
 			String newName = nameField.getText();
-			String newPass = passField.getText();
 			AccountInformation newAccount;
 			if(checkPass.isSelected()){
+				String newPass = passField.getText();
 				newAccount = AccountInformation.ofAll(newId, newName, newPass);
 				//System.out.println("チェック有り");
 			}else{
@@ -133,8 +133,10 @@ public class SetAdmin extends KeyAdapter implements ActionListener{
 				//System.out.println("チェック無し");
 			}
 			controller.setAccount(oldAccount, newAccount);
+			controller.logout();
 			setAdminFrame.setVisible(false);
-			setAdminFrame.dispose();
+			Teacher.mainFrame.setVisible(false);
+			Login.loginFrame.setVisible(true);
 		}else if(e.getSource() == returnButton){
 			setAdminFrame.setVisible(false);
 			setAdminFrame.dispose();
