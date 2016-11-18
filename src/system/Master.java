@@ -117,22 +117,28 @@ public class Master extends User {
 			Log.error(e);
 			return false;
 		}
-
-		file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-			// パスワードの更新
-			if (newAccount.getPasswd() != null) {
+		
+		// パスワードの更新
+		if (newAccount.getPasswd() != null) {
+			file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 				pw.println(newAccount.getPasswd());
+			} catch (NullPointerException | IOException e) {
+				Log.error(e);
+				return false;
 			}
+		}
 
-			// ディレクトリの変更
-			// TODO: うまく変更できていない
-			File oldFile = new File(Controller.homeDirName + "/" + target);
-			File newFile = new File(Controller.homeDirName + "/" + newAccount.getId());
-			oldFile.renameTo(newFile);
-		} catch (NullPointerException | IOException e) {
-			Log.error(e);
-			return false;
+		// ディレクトリの変更
+		if (!target.equals(newAccount.getId())) {
+			try {
+				File oldFile = new File(Controller.homeDirName + "/" + target);
+				File newFile = new File(Controller.homeDirName + "/" + newAccount.getId());
+				oldFile.renameTo(newFile);
+			} catch (NullPointerException e) {
+				Log.error(e);
+				return false;
+			}
 		}
 
 		return true;
