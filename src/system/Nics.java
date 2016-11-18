@@ -47,6 +47,18 @@ public class Nics {
 	// MACアドレスのみを管理するインナークラス
 	public class MacAddress {
 		public byte data[];
+		
+		// MACアドレスを数値で返す
+		public Long get() {
+			String str = ""; // 文字列型で数字を格納
+			if (data != null) {
+				for (byte b : data) {
+					str += String.format("%02X", b);
+				}
+				return Long.parseLong(str, 16);
+			}
+			return null;
+		}
 
 		@Override
 		public String toString() {

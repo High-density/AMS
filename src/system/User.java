@@ -8,18 +8,18 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.NetworkInterface;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
 import java.util.Arrays;
-import java.util.Enumeration;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
+
+import system.Nics.MacAddress;
 
 public abstract class User {
 	// 改行コード
@@ -36,7 +36,7 @@ public abstract class User {
 
 	protected String id = null; // ID
 	protected String attribute = null; // 属性
-	private static Properties props; // 設定ファイル
+	protected static Properties props; // 設定ファイル
 
 	public User(String id, String passwd) {
 		this.id = id;
@@ -96,25 +96,15 @@ public abstract class User {
 			if (option != JOptionPane.YES_OPTION) return false;
 
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				// MACアドレスファイル作成
-				String gotNicName = null;
-				String gotMacAddress = "";
-				// 全NICを取得
-				Enumeration<NetworkInterface> gotNics = NetworkInterface.getNetworkInterfaces();
-
-				// 一番最初に取得したNICを登録する
-				NetworkInterface gotNic = gotNics.nextElement();
-				byte[] hardwareAddress = gotNic.getHardwareAddress();
-				if (hardwareAddress != null) {
-					for (byte b : hardwareAddress) {
-						gotMacAddress += String.format("%02X:", b);
+				Nics nics = new Nics();
+				for (int n = 0; n < nics.length(); n++) {
+					MacAddress mac = nics.getMacAddress(n);
+					if (mac.get() != null && mac.get() > 0) {
+						// ファイルへの書き込み
+						pw.println(nics.getName(n) + ":[" + nics.getMacAddress(n) + "]");
+						n = nics.length();
 					}
-					gotMacAddress = gotMacAddress.substring(0, gotMacAddress.length() - 1);
 				}
-				gotNicName = gotNic.getName();
-
-				// ファイルへの書き込み
-				pw.println(gotNicName + ":[" + gotMacAddress + "]");
 			} catch(IOException | NoSuchElementException e) {
 				Log.error(e);
 				return false;
@@ -133,7 +123,7 @@ public abstract class User {
 		if (!isCorrectPasswd(id, passwd)) {
 			return null;
 		}
-		if (false /*!hasCertifiedMacAddress(id)*/) {
+		if (!hasCertifiedMacAddress(id)) {
 			// 不正ログインを試みた場合はMasterに報告
 			File dir = new File(Controller.masterDir + "/" + notificationDirName);
 			file = Controller.incorrectLoginFile;
@@ -251,15 +241,17 @@ public abstract class User {
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 			String line = br.readLine();
-			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
+			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]*)\\]");
 			Matcher m = p.matcher(line);
 			if (m.find()) {
 				nicName = m.group(1);
 				macAddress = m.group(2);
+			} else {
+				return false;
 			}
 		} catch (FileNotFoundException e) {
 			// ID未登録時
-			return false;
+			return true;
 		} catch (IOException | NullPointerException e) {
 			Log.error(e);
 			return false;

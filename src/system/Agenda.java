@@ -35,8 +35,7 @@ public class Agenda extends DataForAMonth<String> {
 			File file = new File(fileName + String.format("%02d", day));
 			if (file.exists()) {
 				// ファイルが存在したら，ファイル内のデータを全て読み込む
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(file));
+				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 					String line, content = null;
 					if ((line = br.readLine()) != null) {
 						content = line;
