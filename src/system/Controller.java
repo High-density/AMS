@@ -141,7 +141,6 @@ public class Controller {
 	 * @return ログイン成功時true，失敗時false
 	 */
 	public boolean login(String id, String passwd) {
-		// TODO: ひとりが複数のパソコンを保持してる時に、1台しか登録できないのをどうするか聞く
 		user = User.login(id, passwd);
 		if (user == null) {
 			// ログイン失敗
@@ -462,12 +461,10 @@ public class Controller {
 	 * @param f 削除対象
 	 */
 	public static void deleteFile(File f) {
-		if (f.exists() == false) {
-			return;
-		}
-		if(f.isFile()) {
-			f.delete();
-		} else if(f.isDirectory()) {
+		if (!f.exists()) return;
+		if (f.isFile()) {
+			Log.popup(String.valueOf(f.delete()));
+		} else if (f.isDirectory()) {
 			File files[] = f.listFiles();
 			for(int i = 0; i < files.length; i++) {
 				deleteFile(files[i]);

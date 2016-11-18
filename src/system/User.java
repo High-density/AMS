@@ -196,12 +196,11 @@ public abstract class User {
 						message += line + "\n";
 					}
 					message += "\n";
-
-					Controller.deleteFile(file); // 通知した情報の削除
 				} catch (IOException e) {
 					Log.error(e);
 					return false;
 				}
+				Controller.deleteFile(file); // 通知した情報の削除
 			}
 			message = message.trim();
 
