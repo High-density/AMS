@@ -7,10 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
-import java.net.NetworkInterface;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.Enumeration;
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
@@ -29,19 +27,21 @@ public class Master extends User {
 
 	// 出席状況の手動変更
 	public boolean changeAttendance(LocalDate ld, String id, int status) {
-		String temporaryTime = "0000";
-
+		String temporaryTime = "0000"; // 書き込む時間
+		String content = ""; // 書き込む内容
+		// 対象ディレクトリ
 		File dir = new File(Controller.homeDirName + "/" + id + "/" + attendanceDirName);
+		// 対象ファイル
 		File file = new File(dir.toString() + "/" + ld.toString());
+
 		if (file.exists()) {
 			// ファイルがあるときは中のデータのみを更新
-			try (BufferedReader br = new BufferedReader(new FileReader(file));
-				 PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))){
+			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 				String line = br.readLine();
 				Pattern p = Pattern.compile("^([0-9]{4}:)");
 				Matcher m = p.matcher(line);
 				if (m.find()) {
-					pw.println(m.group(1) + String.valueOf(status));
+					content = m.group(1) + String.valueOf(status);
 				} else {
 					Log.error(new Throwable(), file.toString() + "の内容が不正です");
 					return false;
@@ -50,12 +50,17 @@ public class Master extends User {
 				Log.error(e);
 				return false;
 			}
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))){
+				pw.println(content);
+			} catch (IOException | NullPointerException e) {
+				Log.error(e);
+				return false;
+			}
 
 		} else {
 			// ファイルがないときは新たに作成する
+			Controller.mkdirs(dir.toString());
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				Controller.mkdirs(dir.toString());
-				file.createNewFile();
 				pw.println(temporaryTime + ":" + String.valueOf(status));
 			} catch (IOException e) {
 				Log.error(e);
@@ -112,22 +117,28 @@ public class Master extends User {
 			Log.error(e);
 			return false;
 		}
-
-		file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-			// パスワードの更新
-			if (newAccount.getPasswd() != null) {
+		
+		// パスワードの更新
+		if (newAccount.getPasswd() != null) {
+			file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
 				pw.println(newAccount.getPasswd());
+			} catch (NullPointerException | IOException e) {
+				Log.error(e);
+				return false;
 			}
+		}
 
-			// ディレクトリの変更
-			// TODO: うまく変更できていない
-			File oldFile = new File(Controller.homeDirName + "/" + target);
-			File newFile = new File(Controller.homeDirName + "/" + newAccount.getId());
-			oldFile.renameTo(newFile);
-		} catch (NullPointerException | IOException e) {
-			Log.error(e);
-			return false;
+		// ディレクトリの変更
+		if (!target.equals(newAccount.getId())) {
+			try {
+				File oldFile = new File(Controller.homeDirName + "/" + target);
+				File newFile = new File(Controller.homeDirName + "/" + newAccount.getId());
+				oldFile.renameTo(newFile);
+			} catch (NullPointerException e) {
+				Log.error(e);
+				return false;
+			}
 		}
 
 		return true;
@@ -205,6 +216,7 @@ public class Master extends User {
 				return null;
 			}
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+				// pw.println(props.getProperty("notice.agenda"));
 				pw.println(content);
 			} catch(IOException e) {
 				Log.error(e);
