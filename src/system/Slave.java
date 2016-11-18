@@ -162,6 +162,7 @@ public class Slave extends User {
 		ArrayList<String> slaves = new ArrayList<String>();
 
 		File fileDir = new File(Controller.homeDirName);
+		if (fileDir.list() == null) return null;
 		for (String userDirName: fileDir.list()) {
 			File file = new File(Controller.homeDirName + "/" + userDirName + "/" + attributeFileName);
 			if (file.exists()) {

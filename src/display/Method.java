@@ -98,6 +98,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		mainFrame.setBounds(0, 0, 800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
+        mainFrame.setResizable(false);
 		contentPane = mainFrame.getContentPane();
 
 		/* 各種設定*/
@@ -445,26 +446,30 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		labelNum[3].setBounds(0,10,800,40);
 		labelNum[3].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
+
+        int x1 = 270, x2 = 430;
 		//IDの表示
 		IDLabel = new JLabel("ID");
-		IDLabel.setBounds(280,130,200,40);
+		IDLabel.setBounds(x1,100,100,40);
 		IDLabel.setFont(new Font(null, Font.PLAIN, 24));
+        IDLabel.setHorizontalAlignment(JLabel.RIGHT);
 		ID_Mine = new JLabel(myID);
-		ID_Mine.setBounds(380,130,200,40);
+		ID_Mine.setBounds(x2,100,200,40);
 		ID_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//ユーザ名の表示
 		usrLabel = new JLabel("ユーザ名");
-		usrLabel.setBounds(250,200,200,40);
+		usrLabel.setBounds(x1,150,100,40);
 		usrLabel.setFont(new Font(null, Font.PLAIN, 24));
+        usrLabel.setHorizontalAlignment(JLabel.RIGHT);
 		usr_Mine = new JLabel(Controller.getName(myID));
-		usr_Mine.setBounds(380,200,200,40);
+		usr_Mine.setBounds(x2,150,200,40);
 		usr_Mine.setFont(new Font(null, Font.PLAIN, 24));
 		//アカウント情報変更ボタン
 		ChangeButton = new JButton("アカウント情報の変更");
 		ChangeButton.setFont(new Font(null, Font.PLAIN, 24));
-		ChangeButton.setBounds(380,270,300,40);
+		ChangeButton.setBounds(200,250,400,40);
 		ChangeButton.setBackground(Color.WHITE);
-
+        
 		panelNum[3].add(labelNum[3]);
 		panelNum[3].add(IDLabel);
 		panelNum[3].add(ID_Mine);

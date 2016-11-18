@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -140,7 +141,6 @@ public class Master extends User {
 				return false;
 			}
 		}
-
 		return true;
 	}
 
@@ -231,5 +231,29 @@ public class Master extends User {
 	public Agenda deleteAgenda(Agenda agenda, int date) {
 		agenda.unsetData(date);
 		return agenda;
+	}
+
+	// Masterの一覧を取得する
+	public static ArrayList<String> getMasters() {
+		// Masterのid格納
+		ArrayList<String> masters = new ArrayList<String>();
+
+		File fileDir = new File(Controller.homeDirName);
+		if (fileDir.list() == null) return null;
+		for (String userDirName: fileDir.list()) {
+			File file = new File(Controller.homeDirName + "/" + userDirName + "/" + attributeFileName);
+			if (file.exists()) {
+				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+					if (br.readLine().equals(Master.class.getSimpleName())) {
+						masters.add(userDirName);
+					}
+				} catch (IOException | NullPointerException e) {
+					Log.error(e);
+				}
+			}
+		}
+		Collections.sort(masters);
+
+		return masters;
 	}
 }

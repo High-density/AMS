@@ -43,8 +43,9 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 
 		/* 各種設定 */
 		newAccFrame = new JFrame("アカウント管理");
-		newAccFrame.setBounds(0, 0, 400, 320);
+		newAccFrame.setSize(400, 320);
 		newAccFrame.setLocationRelativeTo(null);
+        newAccFrame.setResizable(false);
 		contentPane = newAccFrame.getContentPane();
 		panelMaster = new JPanel();
 		panelMaster.setLayout(null);
