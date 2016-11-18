@@ -99,7 +99,7 @@ public class Controller {
 		logDir = new File(masterDir + "/log/");
 		logFile = new File(logDir.toString() + "/log.txt");
 		errorFile = new File(logDir.toString() + "/error.txt");
-		incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
+		incorrectLoginFile = new File(masterDir + "/notification/不正ログイン");
 		propertiesFilePath = "/src/properties/ams.properties";
 
 		// ログ用ディレクトリ
@@ -463,7 +463,7 @@ public class Controller {
 	public static void deleteFile(File f) {
 		if (!f.exists()) return;
 		if (f.isFile()) {
-			Log.popup(String.valueOf(f.delete()));
+			f.delete();
 		} else if (f.isDirectory()) {
 			File files[] = f.listFiles();
 			for(int i = 0; i < files.length; i++) {
