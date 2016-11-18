@@ -14,8 +14,6 @@ public class Nics {
 
 	public Nics() {
 		// MACアドレスファイル作成
-		String nicName = null;
-		String macAddress = "";
 		try {
 			// 全NICを取得
 			Enumeration<NetworkInterface> nics = NetworkInterface.getNetworkInterfaces();

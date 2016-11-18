@@ -77,7 +77,7 @@ public class Controller {
 		// ディレクトリの各種設定
 		jarDirName = getDirName((new File(System.getProperty("java.class.path"))).getAbsolutePath());
 		if (jarDirName == null) {
-			jarDirName = "./";
+			jarDirName = ".";
 		}
 		homeDirName = jarDirName + "/file";
 		masterDir = new File(homeDirName + "/root");

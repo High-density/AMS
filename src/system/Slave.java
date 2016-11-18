@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.swing.JOptionPane;
 
 /**
  * 学生用クラス
@@ -166,8 +165,7 @@ public class Slave extends User {
 		for (String userDirName: fileDir.list()) {
 			File file = new File(Controller.homeDirName + "/" + userDirName + "/" + attributeFileName);
 			if (file.exists()) {
-				try {
-					BufferedReader br = new BufferedReader(new FileReader(file));
+				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 					if (br.readLine().equals(Slave.class.getSimpleName())) {
 						slaves.add(userDirName);
 					}
