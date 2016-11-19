@@ -9,6 +9,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -260,6 +261,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			}
 		}
 
+		int bottom = 283 - (30 * numSize);
 		for(int i=0;i<numSize;i++){
 			for(int j=0;j<maxDate;j++){
 				if(status[i][j] == AttendanceBook.ATTENDED){
@@ -281,6 +283,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				}
 				attgbc[1].gridx = j;
 				attgbc[1].gridy = i;
+				if(i==numSize-1 && bottom >= 0){
+					attgbc[1].insets = new Insets(0, 0, bottom, 0);
+				}else{
+					attgbc[1].insets = new Insets(0, 0, 0, 0);
+				}
 				attgLayout[1].setConstraints(attButton[i][j], attgbc[1]);
 			}
 		}
@@ -297,6 +304,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 					attButton[i][j].setBackground(Color.WHITE);
 					attgbc[1].gridx = j;
 					attgbc[1].gridy = i;
+					if(i==numSize-1){
+						attgbc[1].insets = new Insets(0, 0, bottom, 0);
+					}else{
+						attgbc[1].insets = new Insets(0, 0, 0, 0);
+					}
 					attgLayout[1].setConstraints(attButton[i][j], attgbc[1]);
 				}
 			}
@@ -316,6 +328,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		idLabel = new JLabel[numSize];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
+		int bottom = 300 - (30 * numSize);
 		for(int i=0;i<numSize;i++){	// s12500
 			idLabel[i] = new JLabel(Controller.getName(slaves.get(i)));
 			idLabel[i].setPreferredSize(new Dimension(250,30));
@@ -327,6 +340,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			idLabel[i].setHorizontalAlignment(JLabel.LEFT);
 			attgbc[0].gridy = i;
 			attgbc[0].fill = GridBagConstraints.BOTH;
+			if(i==numSize-1 && bottom >= 0){
+				attgbc[0].insets = new Insets(0, 0, bottom, 0);
+			}
 			attgLayout[0].setConstraints(idLabel[i], attgbc[0]);
 			for(int j=0;j<31;j++){
 				attButton[i][j] = new JButton();
@@ -342,7 +358,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			dayLabel[i] = new JLabel(String.format("%1$02d", i+1));
 			dayLabel[i].setPreferredSize(new Dimension(50,30));
 			dayLabel[i].setHorizontalAlignment(JLabel.CENTER);
-			dayLabel[i].setOpaque(true);// TODO: 不明
+			dayLabel[i].setOpaque(true);// 背景色を表示
 			dayLabel[i].setBackground(new Color(254 ,205 ,21));
 			dayLabel[i].setBorder(new LineBorder(Color.GRAY, 1, true));
 			aDayPanel.add(dayLabel[i]);
@@ -408,7 +424,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		labelNum[1].setHorizontalAlignment(JLabel.CENTER);
 		Border border = new EmptyBorder(0,0,0,0);
 		repoScrollPanel = new JScrollPane();
-		repoScrollPanel.setBounds(80, 100, 650, 300);
+		repoScrollPanel.setBounds(80, 100, 650, 400);
 		repoScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		repoScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		repoScrollPanel.setBorder(border);
@@ -431,6 +447,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			gbc.ipady = 13;
 		}
 		rStudentsButton = new JButton[numSize];
+		int bottom = 400 - (50 * numSize);
 		for(int i=0;i<numSize;i++){
 			gbc.gridy = i;
 			rStudentsButton[i] = new JButton();
@@ -439,9 +456,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			rStudentsButton[i].setText(Controller.getName(slaves.get(i)));
 			rStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
 			gbc.fill = GridBagConstraints.HORIZONTAL;
+			if(i == numSize-1 && bottom >= 0){
+				gbc.insets = new Insets(0, 0, bottom, 0);
+			}else{
+				gbc.insets = new Insets(0, 0, 0, 0);
+			}
 			gLayout.setConstraints(rStudentsButton[i], gbc);
 			rStudentsButton[i].addActionListener(this);
-			rStudentsButton[i].addKeyListener(this);	// TODO: 効いてない
+			// rStudentsButton[i].addKeyListener(this);	// 効いてない
 			rStudentsButton[i].setActionCommand("rStudents"+i);
 		}
 
@@ -472,6 +494,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				updateLabel[i].setText(update);
 			}
 			gbc.fill = GridBagConstraints.BOTH;
+			if(i == numSize-1 && bottom >= 0){
+				gbc.insets = new Insets(0, 0, bottom, 0);
+			}else{
+				gbc.insets = new Insets(0, 0, 0, 0);
+			}
 			gLayout.setConstraints(updateLabel[i], gbc);
 		}
 
@@ -677,12 +704,16 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			gbc.ipady = 16;
 		}
 		aStudentsButton  = new JButton[numSize];
+		int bottom = 400 - (50 * numSize); // 空白の計算
 		for(int i=0;i<numSize;i++){
 			aStudentsButton[i] = new JButton(Controller.getName(slaves.get(i)));
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
 			aStudentsButton[i].setBackground(Color.WHITE);
 			aStudentsButton[i].setFont(new Font(null, Font.PLAIN, 14));
 			gbc.gridy = i;
+			if(i==numSize-1 && bottom >= 0){
+				gbc.insets = new Insets(0, 0, bottom, 0);
+			}
 			gridBagLayout.setConstraints(aStudentsButton[i], gbc);
 			accPanel.add(aStudentsButton[i]);
 			// set listener
@@ -856,7 +887,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 						}
 						attendCalendar();
 						panelNum[0].repaint();
-						// TODO: iとjをnumSizeと31に書き換える処理を追加
+						i = numSize;
+						j = 31;	// iとjをnumSizeと31に書き換える処理を追加
 					}
 				}
 			}
@@ -891,7 +923,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 						ymd.setText("日付を選択");
 						pTextArea.setText("");
 					}
-					// TODO iをforから抜ける値に書き換える処理
+					i = pDayButton.length;	// iをforから抜ける値に書き換える処理
 				}
 			}
 		}else if(e.getSource() == addPlanButton){//予定追加機能
@@ -927,8 +959,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 				if(e.getSource() == aStudentsButton[i]){
 					memNum = i;
 					stuNumLabel.setText(aStudentsButton[memNum].getText());// + "を");
+					i = numSize;	// forを抜ける値にiを更新
 				}
-				// TODO: forを抜ける値にiを更新
 			}
 		}else if(e.getSource() == addAccButton){//新規作成
 			member(-1);

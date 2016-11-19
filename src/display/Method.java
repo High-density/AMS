@@ -98,7 +98,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		mainFrame.setBounds(0, 0, 800, 600);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setLocationRelativeTo(null);
-        mainFrame.setResizable(false);
+		mainFrame.setResizable(false);
 		contentPane = mainFrame.getContentPane();
 
 		/* 各種設定*/
@@ -119,9 +119,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 
 		/*アイコンの設定*/
 		try{
-		java.net.URL url = getClass().getClassLoader().getResource("src/icon/icon.png");
-		ImageIcon icon = new ImageIcon(url);
-		mainFrame.setIconImage(icon.getImage());
+			java.net.URL url = getClass().getClassLoader().getResource("src/icon/icon.png");
+			ImageIcon icon = new ImageIcon(url);
+			mainFrame.setIconImage(icon.getImage());
 		}catch(Exception e){
 			ImageIcon icorn = new ImageIcon("src/icon/icon.png");
 			mainFrame.setIconImage(icorn.getImage());
@@ -164,7 +164,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		try{
 			java.net.URL url = getClass().getClassLoader().getResource("src/icon/right.png");
 			ImageIcon right = new ImageIcon(url);
-		aNextButton.setIcon(right);
+			aNextButton.setIcon(right);
 		}catch(Exception e){
 			ImageIcon right = new ImageIcon("src/icon/right.png");
 			aNextButton.setIcon(right);
@@ -259,9 +259,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 				attDayLabel[i].setForeground(Color.DARK_GRAY);
 				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}else if(status[j] == AttendanceBook.NO_MARK){
-			    attDayLabel[i].setBackground(Color.WHITE);
-			    attDayLabel[i].setForeground(Color.DARK_GRAY);
-			    attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
+				attDayLabel[i].setBackground(Color.WHITE);
+				attDayLabel[i].setForeground(Color.DARK_GRAY);
+				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}
 			if(i % 7 == 0)
 				attDayLabel[i].setForeground(Color.RED);
@@ -293,10 +293,10 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			java.net.URL url = getClass().getClassLoader().getResource("src/icon/upload.png");
 			ImageIcon upload = new ImageIcon(url);
 			upButton.setIcon(upload);
-			}catch(Exception e){
-				ImageIcon upload = new ImageIcon("src/icon/upload.png");
-				upButton.setIcon(upload);
-			}
+		}catch(Exception e){
+			ImageIcon upload = new ImageIcon("src/icon/upload.png");
+			upButton.setIcon(upload);
+		}
 		pathTextField = new JTextField("ファイルを参照してください");
 		pathTextField.setBounds(200,100,300,51);
 		pathTextField.setFont(new Font(null, Font.PLAIN, 14));
@@ -429,9 +429,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 				dayButton_plan[i].setForeground(Color.BLUE);
 			else
 				dayButton_plan[i].setForeground(Color.BLACK);
-            if(agenda.hasData(day-1)){
-                dayButton_plan[i].setBackground(Color.ORANGE);
-            }
+			if(agenda.hasData(day-1)){
+				dayButton_plan[i].setBackground(Color.ORANGE);
+			}
 		}
 		for (int i=dayOfWeek+maxDate;i<42;i++){
 			dayButton_plan[i].setText("");
@@ -447,12 +447,12 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		labelNum[3].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[3].setHorizontalAlignment(JLabel.CENTER);
 
-        int x1 = 270, x2 = 430;
+		int x1 = 270, x2 = 430;
 		//IDの表示
 		IDLabel = new JLabel("ID");
 		IDLabel.setBounds(x1,100,100,40);
 		IDLabel.setFont(new Font(null, Font.PLAIN, 24));
-        IDLabel.setHorizontalAlignment(JLabel.RIGHT);
+		IDLabel.setHorizontalAlignment(JLabel.RIGHT);
 		ID_Mine = new JLabel(myID);
 		ID_Mine.setBounds(x2,100,200,40);
 		ID_Mine.setFont(new Font(null, Font.PLAIN, 24));
@@ -460,7 +460,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		usrLabel = new JLabel("ユーザ名");
 		usrLabel.setBounds(x1,150,100,40);
 		usrLabel.setFont(new Font(null, Font.PLAIN, 24));
-        usrLabel.setHorizontalAlignment(JLabel.RIGHT);
+		usrLabel.setHorizontalAlignment(JLabel.RIGHT);
 		usr_Mine = new JLabel(Controller.getName(myID));
 		usr_Mine.setBounds(x2,150,200,40);
 		usr_Mine.setFont(new Font(null, Font.PLAIN, 24));
@@ -469,7 +469,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		ChangeButton.setFont(new Font(null, Font.PLAIN, 24));
 		ChangeButton.setBounds(200,250,400,40);
 		ChangeButton.setBackground(Color.WHITE);
-        
+
 		panelNum[3].add(labelNum[3]);
 		panelNum[3].add(IDLabel);
 		panelNum[3].add(ID_Mine);

@@ -39,7 +39,7 @@ public class Login extends KeyAdapter implements ActionListener{/*ログイン�
 		loginFrame.setBounds(0, 0, 400, 240);
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginFrame.setLocationRelativeTo(null); // 画面の中央に表示
-        loginFrame.setResizable(false);
+		loginFrame.setResizable(false);
 		contentPane = loginFrame.getContentPane();
 		panelMaster = new JPanel();
 		panelMaster.setLayout(null);
