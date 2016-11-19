@@ -444,9 +444,10 @@ public class Controller {
 	 * @throws IOException コピー失敗
 	 */
 	public static boolean copyFile(File in, File out) throws IOException {
-		try (FileChannel inChannel = new FileInputStream(in).getChannel();
-			 FileChannel outChannel = new FileOutputStream(out).getChannel();
-) {
+		try (FileInputStream fis = new FileInputStream(in);
+				FileOutputStream fos = new FileOutputStream(out);
+				FileChannel inChannel = fis.getChannel();
+				FileChannel outChannel = fos.getChannel()) {
 			inChannel.transferTo(0, inChannel.size(), outChannel);
 			return true;
 		} catch (FileNotFoundException e) {
