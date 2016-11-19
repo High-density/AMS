@@ -447,7 +447,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			gbc.ipady = 13;
 		}
 		rStudentsButton = new JButton[numSize];
-		int bottom = 400 - (50 * numSize);
+		int bottom = 400 - (45 * numSize);
 		for(int i=0;i<numSize;i++){
 			gbc.gridy = i;
 			rStudentsButton[i] = new JButton();
@@ -654,26 +654,26 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		stuNumLabel.setHorizontalAlignment(JLabel.CENTER);
 		stuNumLabel.setBackground(Color.LIGHT_GRAY);
 
-		int wid=100, hig=60;
+		int hig=60;
 		addAccButton = new JButton("新規作成");
-		addAccButton.setBounds(500, 80,200,60);
+		addAccButton.setBounds(450, 80,250,hig);
 		addAccButton.setFont(new Font(null, Font.PLAIN, 14));
 		addAccButton.setBackground(Color.WHITE);
 		cheAccButton = new JButton("変更");
-		cheAccButton.setBounds(500,230,wid,hig);
+		cheAccButton.setBounds(450,230,170,hig);
 		cheAccButton.setFont(new Font(null, Font.PLAIN, 14));
 		cheAccButton.setBackground(Color.WHITE);
 		delAccButton = new JButton("削除");
-		delAccButton.setBounds(600,230,wid,hig);
+		delAccButton.setBounds(620,230,80,hig);
 		delAccButton.setFont(new Font(null, Font.PLAIN, 14));
 		delAccButton.setBackground(Color.WHITE);
 		rootButton = new JButton("教員用アカウントの編集");
-		rootButton.setBounds(500,350,200,80);
+		rootButton.setBounds(450,380,250,80);
 		rootButton.setBackground(Color.WHITE);
 		rootButton.setFont(new Font(null, Font.PLAIN, 14));
 		Border border = new EmptyBorder(0,0,0,0);
 		accScrollPanel = new JScrollPane();
-		accScrollPanel.setBounds(100,  65, 320, 400);
+		accScrollPanel.setBounds(80, 80, 320, 400);
 		accScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 		accScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		accScrollPanel.setBorder(border);
@@ -704,7 +704,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			gbc.ipady = 16;
 		}
 		aStudentsButton  = new JButton[numSize];
-		int bottom = 400 - (50 * numSize); // 空白の計算
+		int bottom = 400 - (46 * numSize); // 空白の計算
 		for(int i=0;i<numSize;i++){
 			aStudentsButton[i] = new JButton(Controller.getName(slaves.get(i)));
 			aStudentsButton[i].setPreferredSize(new Dimension(300, 30));
