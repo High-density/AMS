@@ -19,6 +19,7 @@ import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.swing.JOptionPane;
 
 import system.Nics.MacAddress;
@@ -78,7 +79,7 @@ public abstract class User {
 		file = new File(Controller.masterDir + "/" + passwdFileName);
 		if (!file.exists()) {
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println("root");
+				pw.println(props.getProperty("root.pw.default"));
 			} catch (IOException e) {
 				return false;
 			}
