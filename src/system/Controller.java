@@ -98,7 +98,7 @@ public class Controller {
 		logDir = new File(masterDir + "/log/");
 		logFile = new File(logDir.toString() + "/log.txt");
 		errorFile = new File(logDir.toString() + "/error.txt");
-		incorrectLoginFile = new File(homeDirName + "/root/notification/不正ログイン");
+		incorrectLoginFile = new File(masterDir + "/notification/不正ログイン");
 		propertiesFilePath = "/src/properties/ams.properties";
 
 		// ログ用ディレクトリ
@@ -443,9 +443,10 @@ public class Controller {
 	 * @throws IOException コピー失敗
 	 */
 	public static boolean copyFile(File in, File out) throws IOException {
-		try (FileChannel inChannel = new FileInputStream(in).getChannel();
-			 FileChannel outChannel = new FileOutputStream(out).getChannel();
-) {
+		try (FileInputStream fis = new FileInputStream(in);
+				FileOutputStream fos = new FileOutputStream(out);
+				FileChannel inChannel = fis.getChannel();
+				FileChannel outChannel = fos.getChannel()) {
 			inChannel.transferTo(0, inChannel.size(), outChannel);
 			return true;
 		} catch (FileNotFoundException e) {
@@ -460,12 +461,10 @@ public class Controller {
 	 * @param f 削除対象
 	 */
 	public static void deleteFile(File f) {
-		if (f.exists() == false) {
-			return;
-		}
-		if(f.isFile()) {
+		if (!f.exists()) return;
+		if (f.isFile()) {
 			f.delete();
-		} else if(f.isDirectory()) {
+		} else if (f.isDirectory()) {
 			File files[] = f.listFiles();
 			for(int i = 0; i < files.length; i++) {
 				deleteFile(files[i]);

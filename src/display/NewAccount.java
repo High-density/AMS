@@ -45,7 +45,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		newAccFrame = new JFrame("アカウント管理");
 		newAccFrame.setSize(400, 320);
 		newAccFrame.setLocationRelativeTo(null);
-        newAccFrame.setResizable(false);
+		newAccFrame.setResizable(false);
 		contentPane = newAccFrame.getContentPane();
 		panelMaster = new JPanel();
 		panelMaster.setLayout(null);
@@ -56,7 +56,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		subLabel.setFont(new Font(null, Font.PLAIN, 18));
 		subLabel.setHorizontalAlignment(JLabel.CENTER);
 
-		idLabel = new JLabel("新しいID");
+		idLabel = new JLabel("ID");
 		idLabel.setBounds(50,60,wid,hei);
 		idLabel.setFont(new Font(null, Font.PLAIN, 12));
 		idLabel.setHorizontalAlignment(JLabel.RIGHT);
@@ -118,6 +118,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 		oldId = Id;
 		subLabel.setText("変更");
 		idField.setText(Id);
+		idField.setEditable(false);
 		nameField.setText(Name);
 		checkPass.setSelected(false);
 		checkPass.setEnabled(true);
@@ -145,8 +146,8 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newId);
 				controller.createUser(newAccount);
 			}
-				newAccFrame.setVisible(false);
-				newAccFrame.dispose();
+			newAccFrame.setVisible(false);
+			newAccFrame.dispose();
 		}else if(e.getSource() == returnButton){
 			newAccFrame.setVisible(false);
 			newAccFrame.dispose();

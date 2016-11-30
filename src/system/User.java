@@ -12,11 +12,14 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.swing.JOptionPane;
 
 import system.Nics.MacAddress;
@@ -76,7 +79,7 @@ public abstract class User {
 		file = new File(Controller.masterDir + "/" + passwdFileName);
 		if (!file.exists()) {
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println("root");
+				pw.println(props.getProperty("root.pw.default"));
 			} catch (IOException e) {
 				return false;
 			}
@@ -126,11 +129,11 @@ public abstract class User {
 		if (!hasCertifiedMacAddress(id)) {
 			// 不正ログインを試みた場合はMasterに報告
 			File dir = new File(Controller.masterDir + "/" + notificationDirName);
-			file = Controller.incorrectLoginFile;
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH時mm分ss秒");
+			file = new File(Controller.masterDir + "/notification/" + LocalDateTime.now().format(formatter));
 			if(!Controller.mkdirs(dir.toString())) return null;
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, true)))) {
-				file.createNewFile();
-				pw.println("[" + LocalDateTime.now() + "]");
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+				pw.println(props.getProperty("ttl.illegal"));
 				String operator = Controller.getComputerHolder();
 				String content;
 
@@ -180,6 +183,8 @@ public abstract class User {
 
 	// 通知を表示する
 	public boolean popNotification() {
+		// タイトルと内容を結ぶmap
+		HashMap<String, String> ttlToContent = new HashMap<String, String>();
 		String message = ""; // 通知内容
 
 		// 更新された通知を全て取得
@@ -191,22 +196,34 @@ public abstract class User {
 				File file = new File(dir.toString() + "/" + fileName);
 				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 					message += "***** " + fileName + " *****\n";
+					String ttl = br. readLine(); // 先頭の行はフレームタイトル
+					if (ttlToContent.get(ttl) == null) ttlToContent.put(ttl, "");
 					String line;
 					while ((line = br.readLine()) != null) {
 						message += line + "\n";
 					}
 					message += "\n";
-
-					Controller.deleteFile(file); // 通知した情報の削除
+					ttlToContent.put(ttl, ttlToContent.get(ttl) + message);
 				} catch (IOException e) {
 					Log.error(e);
 					return false;
 				}
+				Controller.deleteFile(file); // 通知した情報の削除
 			}
-			message = message.trim();
+			// message = message.trim();
 
 			// 実際の表示処理
-			JOptionPane.showMessageDialog(null, message, "WARNING", JOptionPane.WARNING_MESSAGE);
+			for (String ttl : ttlToContent.keySet()) {
+				int style;
+				if (ttl.equals(props.getProperty("ttl.agenda"))) {
+					style = JOptionPane.INFORMATION_MESSAGE;
+				} else if (ttl.equals(props.getProperty("ttl.illegal"))) {
+					style = JOptionPane.WARNING_MESSAGE;
+				} else {
+					style = JOptionPane.WARNING_MESSAGE;
+				}
+				JOptionPane.showMessageDialog(null, ttlToContent.get(ttl).trim(), ttl, style);
+			}
 		}
 
 		return true;

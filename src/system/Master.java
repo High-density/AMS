@@ -216,7 +216,7 @@ public class Master extends User {
 				return null;
 			}
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				// pw.println(props.getProperty("notice.agenda"));
+				pw.println(props.getProperty("ttl.agenda"));
 				pw.println(content);
 			} catch(IOException e) {
 				Log.error(e);
