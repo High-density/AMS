@@ -1,5 +1,7 @@
+make: dojar
+
 .PHONY: all
-all: class javadoc
+all: class jar javadoc
 
 .PHONY: class
 class:

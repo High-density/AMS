@@ -18,7 +18,6 @@ import java.util.Comparator;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JOptionPane;
 
 /**
@@ -141,7 +140,6 @@ public class Controller {
 	 * @return ログイン成功時true，失敗時false
 	 */
 	public boolean login(String id, String passwd) {
-		// TODO: ひとりが複数のパソコンを保持してる時に、1台しか登録できないのをどうするか聞く
 		user = User.login(id, passwd);
 		if (user == null) {
 			// ログイン失敗
@@ -490,5 +488,25 @@ public class Controller {
 	 */
 	public static ArrayList<String> getMasters() {
 		return Master.getMasters();
+	}
+
+	/**
+	 * 指定された文字列の暗号化を行う
+	 * @param text 暗号化したい文字列
+	 * @param passwd 暗号化に用いるパスワード
+	 * @return 暗号文
+	 */
+	public static String encrypt(String text, String passwd) {
+		return Cryptography.encrypt("This is a text.", passwd);
+	}
+
+	/**
+	 * 指定された暗号の復号を行う
+	 * @param cipher 暗号文
+	 * @param passwd 復号に用いるパスワード
+	 * @return 平文
+	 */
+	public static String decrypt(String cipher, String passwd) {
+		return Cryptography.decrypt(cipher, passwd);
 	}
 }
