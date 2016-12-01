@@ -71,6 +71,10 @@ public class Controller {
 	 * 設定ファイル
 	 */
 	private Properties props;
+	/**
+	 * 暗号化用パスワード
+	 */
+	private static String passwd = "LA-zmr!)NqCf+J.i~B/OcVOOo/*m)S!n,KZr4VpL";
 
 	public Controller() {
 		// ディレクトリの各種設定
@@ -495,8 +499,8 @@ public class Controller {
 	 * @param passwd 暗号化に用いるパスワード
 	 * @return 暗号文
 	 */
-	public static String encrypt(String text, String passwd) {
-		return Cryptography.encrypt("This is a text.", passwd);
+	public static String encrypt(String text) {
+		return Cryptography.encrypt(text, passwd);
 	}
 
 	/**
@@ -505,7 +509,7 @@ public class Controller {
 	 * @param passwd 復号に用いるパスワード
 	 * @return 平文
 	 */
-	public static String decrypt(String cipher, String passwd) {
+	public static String decrypt(String cipher) {
 		return Cryptography.decrypt(cipher, passwd);
 	}
 }
