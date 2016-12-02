@@ -106,6 +106,7 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 	public void showNewAccount(){
 		na = 0;
 		subLabel.setText("新規作成");
+		idField.setEditable(true);
 		idField.setText("");
 		nameField.setText("");
 		checkPass.setSelected(true);
