@@ -88,6 +88,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JButton addPlanButton;
 	private JButton pNextButton;
 	private JButton pBackButton;
+	private JScrollPane planScrollPane;
 	private JTextArea pTextArea;
 	private Agenda agenda; // 予定
 	private int planday = -1; // ボタンから取得した日
@@ -558,8 +559,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pMonthLabel.setBounds(160,60,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		pTextArea = new JTextArea(20,24);
-		pTextArea.setBounds(450, 60, 300, 400);
+		//pTextArea.setBounds(450, 60, 300, 400);
 		pTextArea.setLineWrap(true);
+		planScrollPane = new JScrollPane(pTextArea);
+		planScrollPane.setBounds(450, 60, 320, 400);
+		planScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		planScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		addPlanButton = new JButton("予定追加");
 		addPlanButton.setBounds(500,470,200,40);
 		addPlanButton.setBackground(Color.WHITE);
@@ -596,7 +601,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[2].add(pNextButton);
 		panelNum[2].add(pBackButton);
 		panelNum[2].add(planPanel);
-		panelNum[2].add(pTextArea);
+		//panelNum[2].add(pTextArea);
+		panelNum[2].add(planScrollPane);
 	}
 
 	private void planCalendar(){

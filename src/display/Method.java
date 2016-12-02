@@ -22,6 +22,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -68,6 +69,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private JLabel weekLabel_plan[] = new JLabel[7];
 	private JButton dayButton_plan[] = new JButton[42];
 	private JLabel planDate; 		// 予定取得日
+	private JScrollPane planScrollPane;
 	private JTextArea pTextArea; 	// 予定表示
 	private Agenda agenda;
 	private int pday = -1; 		// ボタンを押した時の数字から日付
@@ -332,9 +334,13 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		planDate.setFont(new Font(null, Font.PLAIN, 24));
 		planDate.setBackground(Color.WHITE);
 		pTextArea = new JTextArea(20,24);
-		pTextArea.setBounds(450, 100, 300, 400);
+		//pTextArea.setBounds(450, 100, 300, 400);
 		pTextArea.setLineWrap(true);
 		pTextArea.setEditable(false);
+		planScrollPane = new JScrollPane(pTextArea);
+		planScrollPane.setBounds(450, 100, 320, 400);
+		planScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		planScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		pNextButton = new JButton();
 		pNextButton.setBounds(300,50,100,40);
 		pNextButton.setContentAreaFilled(false);
@@ -396,7 +402,8 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		panelNum[2].add(pNextButton);
 		panelNum[2].add(pBackButton);
 		panelNum[2].add(planPanel);
-		panelNum[2].add(pTextArea);
+		panelNum[2].add(planScrollPane);
+		//panelNum[2].add(pTextArea);
 	}
 
 	private void planCalendar(){
