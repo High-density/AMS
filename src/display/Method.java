@@ -251,11 +251,11 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 				attDayLabel[i].setForeground(Color.DARK_GRAY);
 				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}else if(status[j] == AttendanceBook.ABSENCE){
-				attDayLabel[i].setBackground(new Color(254 ,200 ,199));;
+				attDayLabel[i].setBackground(new Color(254 ,200 ,199));
 				attDayLabel[i].setForeground(Color.DARK_GRAY);
 				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}else if(status[j] == AttendanceBook.AUTHORIZED_ABSENCE){
-				attDayLabel[i].setBackground(Color.GREEN);
+				attDayLabel[i].setBackground(new Color(203 ,249 ,83));
 				attDayLabel[i].setForeground(Color.DARK_GRAY);
 				attDayLabel[i].setFont(new Font(null, Font.BOLD, 20));
 			}else if(status[j] == AttendanceBook.NO_MARK){
