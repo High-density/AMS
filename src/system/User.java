@@ -78,11 +78,7 @@ public abstract class User {
 		// パスワードの登録
 		file = new File(Controller.masterDir + "/" + passwdFileName);
 		if (!file.exists()) {
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println(props.getProperty("root.pw.default"));
-			} catch (IOException e) {
-				return false;
-			}
+			if (!Log.writeInCipher(file, props.getProperty("root.pw.default"), false)) return false;
 		}
 
 		return true;
@@ -104,7 +100,11 @@ public abstract class User {
 					MacAddress mac = nics.getMacAddress(n);
 					if (mac.get() != null && mac.get() > 0) {
 						// ファイルへの書き込み
-						pw.println(nics.getName(n) + ":[" + nics.getMacAddress(n) + "]");
+						if (!Log.writeInCipher(file,
+											   nics.getName(n) + ":[" + nics.getMacAddress(n) + "]",
+											   false)) {
+							return false;
+						}
 						n = nics.length();
 					}
 				}
@@ -196,7 +196,7 @@ public abstract class User {
 				File file = new File(dir.toString() + "/" + fileName);
 				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
 					message += "***** " + fileName + " *****\n";
-					String ttl = br. readLine(); // 先頭の行はフレームタイトル
+					String ttl = br.readLine(); // 先頭の行はフレームタイトル
 					if (ttlToContent.get(ttl) == null) ttlToContent.put(ttl, "");
 					String line;
 					while ((line = br.readLine()) != null) {
@@ -236,7 +236,7 @@ public abstract class User {
 		// ファイルからパスワードの読み込み
 		File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			pw = br.readLine();
+			pw = Cryptography.decrypt(br.readLine());
 		} catch (FileNotFoundException e) {
 			// 入力されたidを持つユーザがいない
 			return false;
@@ -257,7 +257,7 @@ public abstract class User {
 		// ファイルからMACアドレスNIC表示名の読み込み
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
 		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			String line = br.readLine();
+			String line = Cryptography.decrypt(br.readLine());
 			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]*)\\]");
 			Matcher m = p.matcher(line);
 			if (m.find()) {

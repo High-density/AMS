@@ -118,16 +118,11 @@ public class Master extends User {
 			Log.error(e);
 			return false;
 		}
-		
+
 		// パスワードの更新
 		if (newAccount.getPasswd() != null) {
 			file = new File(Controller.homeDirName + "/" + target + "/" + passwdFileName);
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println(newAccount.getPasswd());
-			} catch (NullPointerException | IOException e) {
-				Log.error(e);
-				return false;
-			}
+			if (!Log.writeInCipher(file, newAccount.getPasswd(), false)) return false;
 		}
 
 		// ディレクトリの変更
@@ -181,12 +176,7 @@ public class Master extends User {
 
 		// パスワードファイル作成
 		file = new File(userDirName + "/" + passwdFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-			pw.println(account.getPasswd());
-		} catch(IOException | NoSuchElementException e) {
-			Log.error(e);
-			return false;
-		}
+		if (!Log.writeInCipher(file, account.getPasswd(), false)) return false;
 
 		return true;
 	}

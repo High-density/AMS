@@ -2,7 +2,9 @@ package system;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.io.FileReader;
 import java.io.BufferedWriter;
+import java.io.BufferedReader;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.lang.Exception;
@@ -26,6 +28,8 @@ class Log {
 	// 出力時の接頭語・接尾語
 	private static final String placePrefix = "  at ";
 	private static final String suffix = "エラーが発生しました．この事象はシステム改善のために記録されます．";
+	// 暗号化用パスワード
+	private static final String passwd = "LA-zmr!)NqCf+J.i~B/OcVOOo/*m)S!n,KZr4VpL";
 
 	// エラー処理（例外が投げられるとき）
 	public static void error(Exception e) {
@@ -82,6 +86,36 @@ class Log {
 		} catch(IOException e) {
 			popup("ファイル書き込みエラー: " + file.toString());
 		}
+	}
+
+	// 指定したファイルに指定された文字列を暗号化して記述する
+	public static boolean writeInCipher(File file, String message, boolean add) {
+		(new File(file.getParent())).mkdirs(); // ディレクトリがない場合に作成
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file, add)))) {
+			pw.println(Cryptography.encrypt(message, passwd));
+			return true;
+		} catch(IOException e) {
+			error(e);
+			return false;
+		}
+	}
+
+	// 暗号化した文字列をファイルから読み込む
+	public static String readInPlainText(File file) {
+		String text = ""; // ファイルに記述されているテキストの平文
+
+		// 各行をデコードして格納
+		String line;
+		try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+			while ((line = reader.readLine()) != null) {
+				text += Cryptography.decrypt(line, passwd) + System.getProperty("line.separator");
+			}
+		} catch(IOException e) {
+			Log.error(e);
+			return null;
+		}
+
+		return text.trim();
 	}
 
 	// ポップアップ表示

@@ -123,12 +123,7 @@ public class Slave extends User {
 		// ファイルを更新する
 		// 更新対象はパスワードのみ
 		File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-			pw.println(newAccount.getPasswd());
-		} catch (IOException | NullPointerException e) {
-			Log.error(e);
-			return false;
-		}
+		if (!Log.writeInCipher(file, newAccount.getPasswd(), false)) return false;
 
 		return true;
 	}

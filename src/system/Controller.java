@@ -343,7 +343,7 @@ public class Controller {
 	}
 
 	/**
-	 * ディレクトリの作成を行う
+	 * ディレクトリの作成を行う(非推奨)
 	 * @param dir 作成したいディレクトリのパス
 	 * @return 作成成功時true，失敗時false
 	 */
@@ -413,7 +413,7 @@ public class Controller {
 		for(String slave : slaves) {
 			File file = new File(Controller.homeDirName + "/" + slave + "/nics");
 			try (BufferedReader br = new BufferedReader(new FileReader(file));) {
-				String line = br.readLine();
+				String line = Cryptography.decrypt(br.readLine());
 				Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 				Matcher m = p.matcher(line);
 				if (m.find()) {
@@ -491,25 +491,5 @@ public class Controller {
 	 */
 	public static ArrayList<String> getMasters() {
 		return Master.getMasters();
-	}
-
-	/**
-	 * 指定された文字列の暗号化を行う
-	 * @param text 暗号化したい文字列
-	 * @param passwd 暗号化に用いるパスワード
-	 * @return 暗号文
-	 */
-	public static String encrypt(String text) {
-		return Cryptography.encrypt(text, passwd);
-	}
-
-	/**
-	 * 指定された暗号の復号を行う
-	 * @param cipher 暗号文
-	 * @param passwd 復号に用いるパスワード
-	 * @return 平文
-	 */
-	public static String decrypt(String cipher) {
-		return Cryptography.decrypt(cipher, passwd);
 	}
 }
