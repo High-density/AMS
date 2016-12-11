@@ -1,12 +1,6 @@
 package system;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.BufferedWriter;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -37,7 +31,7 @@ public class Master extends User {
 
 		if (file.exists()) {
 			// ファイルがあるときは中のデータのみを更新
-			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 				String line = br.readLine();
 				Pattern p = Pattern.compile("^([0-9]{4}:)");
 				Matcher m = p.matcher(line);
@@ -51,7 +45,7 @@ public class Master extends User {
 				Log.error(e);
 				return false;
 			}
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))){
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))){
 				pw.println(content);
 			} catch (IOException | NullPointerException e) {
 				Log.error(e);
@@ -61,7 +55,7 @@ public class Master extends User {
 		} else {
 			// ファイルがないときは新たに作成する
 			Controller.mkdirs(dir.toString());
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 				pw.println(temporaryTime + ":" + String.valueOf(status));
 			} catch (IOException e) {
 				Log.error(e);
@@ -111,7 +105,7 @@ public class Master extends User {
 
 		// ユーザ情報を更新する
 		File file = new File(Controller.homeDirName + "/" + target + "/" + nameFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 			// 名前の更新
 			pw.println(newAccount.getName());
 		} catch (NullPointerException | IOException e) {
@@ -158,7 +152,7 @@ public class Master extends User {
 
 		// 属性ファイル作成
 		file = new File(userDirName + "/" + attributeFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 			pw.println(Slave.class.getSimpleName());
 		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
@@ -167,7 +161,7 @@ public class Master extends User {
 
 		// 名前ファイル作成
 		file = new File(userDirName + "/" + nameFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 			pw.println(account.getName());
 		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
@@ -205,7 +199,7 @@ public class Master extends User {
 				Log.error(e);
 				return null;
 			}
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 				pw.println(props.getProperty("ttl.agenda"));
 				pw.println(content);
 			} catch(IOException e) {
@@ -233,7 +227,7 @@ public class Master extends User {
 		for (String userDirName: fileDir.list()) {
 			File file = new File(Controller.homeDirName + "/" + userDirName + "/" + attributeFileName);
 			if (file.exists()) {
-				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+				try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 					if (br.readLine().equals(Master.class.getSimpleName())) {
 						masters.add(userDirName);
 					}

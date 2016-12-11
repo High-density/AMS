@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -412,7 +411,7 @@ public class Controller {
 		// ファイルからMACアドレスNIC表示名の読み込み
 		for(String slave : slaves) {
 			File file = new File(Controller.homeDirName + "/" + slave + "/nics");
-			try (BufferedReader br = new BufferedReader(new FileReader(file));) {
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 				String line = Cryptography.decrypt(br.readLine());
 				Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 				Matcher m = p.matcher(line);

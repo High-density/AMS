@@ -3,9 +3,11 @@ package system;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,7 +42,7 @@ public class Slave extends User {
 		if (!Controller.mkdirs(dirName)) return false;
 
 		if (!file.exists()) {
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 				// 未出席時のみ記録
 				file.createNewFile();
 				formatter = DateTimeFormatter.ofPattern("HHmm");
@@ -161,7 +163,7 @@ public class Slave extends User {
 		for (String userDirName: fileDir.list()) {
 			File file = new File(Controller.homeDirName + "/" + userDirName + "/" + attributeFileName);
 			if (file.exists()) {
-				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+				try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 					if (br.readLine().equals(Slave.class.getSimpleName())) {
 						slaves.add(userDirName);
 					}
