@@ -220,6 +220,29 @@ public class Master extends User {
 	// 予定の削除
 	public Agenda deleteAgenda(Agenda agenda, int date) {
 		agenda.unsetData(date);
+
+		// 各学生について，更新情報の通知を残す
+		ArrayList<String> slaves =  Slave.getSlaves();
+		for (String slave : slaves) {
+			File dir = new File(Controller.homeDirName + "/" + slave + "/" + notificationDirName);
+			if (!Controller.mkdirs(dir.toString())) return null;
+			LocalDate ld = LocalDate.of(agenda.getYear(), agenda.getMonth(), date + 1);
+			File file = new File(dir.toString() + "/" + ld.toString());
+			try {
+				file.createNewFile();
+			} catch(IOException e) {
+				Log.error(e);
+				return null;
+			}
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
+				pw.print(props.getProperty("ttl.agenda") + "\n");
+				pw.print("予定が削除されました\n");
+			} catch(IOException e) {
+				Log.error(e);
+				return null;
+			}
+		}
+
 		return agenda;
 	}
 
