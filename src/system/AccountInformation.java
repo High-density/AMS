@@ -37,6 +37,7 @@ public class AccountInformation {
 	 * @return パスワードが設定されたインスタンス
 	 */
 	public static AccountInformation ofPasswd(String passwd) {
+		if (!isHalfWidth(passwd)) return null;
 		return new AccountInformation(null, null, passwd);
 	}
 
@@ -46,6 +47,7 @@ public class AccountInformation {
 	 * @return IDが設定されたインスタンス
 	 */
 	public static AccountInformation ofId(String id) {
+		if (!isHalfWidth(id)) return null;
 		return new AccountInformation(id, null, null);
 	}
 
@@ -56,6 +58,7 @@ public class AccountInformation {
 	 * @return IDとパスワードが設定されたインスタンス
 	 */
 	public static AccountInformation ofIdPasswd(String id, String passwd) {
+		if (!isHalfWidth(id) || !isHalfWidth(passwd)) return null;
 		return new AccountInformation(id, null, passwd);
 	}
 
@@ -66,6 +69,7 @@ public class AccountInformation {
 	 * @return IDと名前が設定されたインスタンス
 	 */
 	public static AccountInformation ofIdName(String id, String name) {
+		if (!isHalfWidth(id)) return null;
 		return new AccountInformation(id, name, null);
 	}
 
@@ -77,6 +81,7 @@ public class AccountInformation {
 	 * @return 全てのフィールドが設定されたインスタンス
 	 */
 	public static AccountInformation ofAll(String id, String name, String passwd) {
+		if (!isHalfWidth(id) || !isHalfWidth(passwd)) return null;
 		return new AccountInformation(id, name, passwd);
 	}
 
@@ -102,5 +107,20 @@ public class AccountInformation {
 	 */
 	public String getPasswd() {
 		return passwd;
+	}
+
+	/**
+	 * 含まれる文字が全部半角で構成されているかチェック
+	 * @param str チェックしたい文字列
+	 * @return 文字列がすべて半角で構成されていたらtrue，それ以外ならfalse
+	 */
+	public static boolean isHalfWidth(String str) {
+		char[] chars = str.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			if (String.valueOf(chars[i]).getBytes().length >= 2) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
