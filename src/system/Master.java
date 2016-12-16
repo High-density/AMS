@@ -46,7 +46,7 @@ public class Master extends User {
 				return false;
 			}
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))){
-				pw.println(content);
+				pw.print(content + "\n");
 			} catch (IOException | NullPointerException e) {
 				Log.error(e);
 				return false;
@@ -56,7 +56,7 @@ public class Master extends User {
 			// ファイルがないときは新たに作成する
 			Controller.mkdirs(dir.toString());
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-				pw.println(temporaryTime + ":" + String.valueOf(status));
+				pw.print(temporaryTime + ":" + String.valueOf(status) + "\n");
 			} catch (IOException e) {
 				Log.error(e);
 				return false;
@@ -107,7 +107,7 @@ public class Master extends User {
 		File file = new File(Controller.homeDirName + "/" + target + "/" + nameFileName);
 		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 			// 名前の更新
-			pw.println(newAccount.getName());
+			pw.print(newAccount.getName() + "\n");
 		} catch (NullPointerException | IOException e) {
 			Log.error(e);
 			return false;
@@ -153,7 +153,7 @@ public class Master extends User {
 		// 属性ファイル作成
 		file = new File(userDirName + "/" + attributeFileName);
 		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-			pw.println(Slave.class.getSimpleName());
+			pw.print(Slave.class.getSimpleName() + "\n");
 		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
 			return false;
@@ -162,7 +162,7 @@ public class Master extends User {
 		// 名前ファイル作成
 		file = new File(userDirName + "/" + nameFileName);
 		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-			pw.println(account.getName());
+			pw.print(account.getName() + "\n");
 		} catch(IOException | NoSuchElementException e) {
 			Log.error(e);
 			return false;
@@ -200,8 +200,8 @@ public class Master extends User {
 				return null;
 			}
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-				pw.println(props.getProperty("ttl.agenda"));
-				pw.println(content);
+				pw.print(props.getProperty("ttl.agenda") + "\n");
+				pw.print(content + "\n");
 			} catch(IOException e) {
 				Log.error(e);
 				return null;

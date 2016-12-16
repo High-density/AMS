@@ -52,7 +52,7 @@ public abstract class User {
 		file = new File(Controller.masterDir + "/" + nameFileName);
 		if (!file.exists()) {
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-				pw.println(props.getProperty("root.name.default"));
+				pw.print(props.getProperty("root.name.default") + "\n");
 			} catch (IOException e) {
 				return false;
 			}
@@ -62,7 +62,7 @@ public abstract class User {
 		file = new File(Controller.masterDir + "/" + attributeFileName);
 		if (!file.exists()) {
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-				pw.println(Master.class.getSimpleName());
+				pw.print(Master.class.getSimpleName() + "\n");
 			} catch (IOException e) {
 				return false;
 			}
@@ -126,7 +126,7 @@ public abstract class User {
 			file = new File(Controller.masterDir + "/notification/" + LocalDateTime.now().format(formatter));
 			if(!Controller.mkdirs(dir.toString())) return null;
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-				pw.println(props.getProperty("ttl.illegal"));
+				pw.print(props.getProperty("ttl.illegal") + "\n");
 				String operator = Controller.getComputerHolder();
 				String content;
 
@@ -138,7 +138,7 @@ public abstract class User {
 				content += "コンピュータで";
 				content += Controller.getName(id) + "(" + id + ")";
 				content += "へのログインが試みられました．";
-				pw.println(content + "\n");
+				pw.print(content + "\n\n");
 			} catch(IOException e) {
 				Log.error(e);
 				return null;

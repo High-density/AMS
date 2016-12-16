@@ -76,7 +76,7 @@ class Log {
 			popup("ファイル書き込みエラー: file.canWrite() = false");
 		}
 		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-			pw.println(message);
+			pw.print(message + "\n");
 		} catch(IOException e) {
 			popup("ファイル書き込みエラー: " + file.toString());
 		}
@@ -86,7 +86,7 @@ class Log {
 	public static boolean writeInCipher(File file, String message, boolean add) {
 		(new File(file.getParent())).mkdirs(); // ディレクトリがない場合に作成
 		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "UTF-8")))) {
-			pw.println(Cryptography.encrypt(message, passwd));
+			pw.print(Cryptography.encrypt(message, passwd) + "\n");
 			return true;
 		} catch(IOException e) {
 			error(e);

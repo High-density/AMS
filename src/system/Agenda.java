@@ -64,7 +64,7 @@ public class Agenda extends DataForAMonth<String> {
 			Log.error(e);
 		}
 		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
-			pw.println(d);
+			pw.print(d + "\n");
 		} catch (IOException e) {
 			Log.error(e);
 		}

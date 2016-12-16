@@ -46,7 +46,7 @@ public class Slave extends User {
 				// 未出席時のみ記録
 				file.createNewFile();
 				formatter = DateTimeFormatter.ofPattern("HHmm");
-				pw.println(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED);
+				pw.print(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED + "\n");
 				return true;
 			} catch (IOException e) {
 				Log.error(e, "出席登録に失敗しました．教員に報告し，手動による登録を行ってください.");
