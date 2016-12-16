@@ -116,6 +116,9 @@ public class Slave extends User {
 
 	// アカウント管理
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
+		// 指定されたAccountInformationが有効なものか
+		if (!oldAccount.isValid() || !newAccount.isValid()) return false;
+
 		// 必要な要素が抜けてたらエラー
 		if (newAccount.getPasswd() == null) {
 			Log.error(new Throwable(), "要素がnull");

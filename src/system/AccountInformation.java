@@ -37,7 +37,6 @@ public class AccountInformation {
 	 * @return パスワードが設定されたインスタンス
 	 */
 	public static AccountInformation ofPasswd(String passwd) {
-		if (!isHalfWidth(passwd)) return null;
 		return new AccountInformation(null, null, passwd);
 	}
 
@@ -47,7 +46,6 @@ public class AccountInformation {
 	 * @return IDが設定されたインスタンス
 	 */
 	public static AccountInformation ofId(String id) {
-		if (!isHalfWidth(id)) return null;
 		return new AccountInformation(id, null, null);
 	}
 
@@ -58,7 +56,6 @@ public class AccountInformation {
 	 * @return IDとパスワードが設定されたインスタンス
 	 */
 	public static AccountInformation ofIdPasswd(String id, String passwd) {
-		if (!isHalfWidth(id) || !isHalfWidth(passwd)) return null;
 		return new AccountInformation(id, null, passwd);
 	}
 
@@ -69,7 +66,6 @@ public class AccountInformation {
 	 * @return IDと名前が設定されたインスタンス
 	 */
 	public static AccountInformation ofIdName(String id, String name) {
-		if (!isHalfWidth(id)) return null;
 		return new AccountInformation(id, name, null);
 	}
 
@@ -81,7 +77,6 @@ public class AccountInformation {
 	 * @return 全てのフィールドが設定されたインスタンス
 	 */
 	public static AccountInformation ofAll(String id, String name, String passwd) {
-		if (!isHalfWidth(id) || !isHalfWidth(passwd)) return null;
 		return new AccountInformation(id, name, passwd);
 	}
 
@@ -107,6 +102,19 @@ public class AccountInformation {
 	 */
 	public String getPasswd() {
 		return passwd;
+	}
+
+	/**
+	 * 設定されたアカウント情報が有効なものかどうか
+	 * 半角全角チェックを行う
+     * @return 有効であればtrue，無効ならfalse
+	 */
+	public boolean isValid() {
+		if (id != null && !isHalfWidth(id) ||
+			passwd != null && !isHalfWidth(passwd)) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

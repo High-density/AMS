@@ -94,6 +94,9 @@ public class Master extends User {
 
 	// アカウント管理
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount) {
+		// 指定されたAccountInformationが有効なものか
+		if (!oldAccount.isValid() || !newAccount.isValid()) return false;
+
 		String target = oldAccount.getId(); // 変更対象のユーザID
 
 		// 必要な要素が抜けてたらエラー
@@ -136,6 +139,9 @@ public class Master extends User {
 	// ユーザの作成
 	public boolean createUser(AccountInformation account) {
 		File file; // 作成するファイル用
+
+		// 指定されたAccountInformationが有効なものか
+		if (!account.isValid()) return false;
 
 		// 必要な要素が抜けてたらエラー
 		if (account.getId() == null ||
