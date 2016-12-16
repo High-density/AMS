@@ -30,13 +30,11 @@ public class Agenda extends DataForAMonth<String> {
 			if (file.exists()) {
 				// ファイルが存在したら，ファイル内のデータを全て読み込む
 				try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
-					String line, content = null;
-					if ((line = br.readLine()) != null) {
-						content = line;
-						while ((line = br.readLine()) != null) {
-							content = System.getProperty("line.separator") + line;
-						}
+					String line, content = "";
+					while ((line = br.readLine()) != null) {
+						content += line + System.getProperty("line.separator");
 					}
+					content = content.trim();
 					set(day, content);
 				} catch (IOException e) {
 					Log.error(e);

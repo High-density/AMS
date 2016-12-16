@@ -559,7 +559,7 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 					if(bool){
 						mess = "アップロードしました";
 					}else{
-						mess = "本日分の報告書は提出済みです．\n更新したい場合は管理者に問い合わせてください．";
+						mess = "ファイルの提出に失敗しました";
 					}
 				}else{
 					mess = "操作を取り消しました";

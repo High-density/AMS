@@ -101,12 +101,11 @@ public class Slave extends User {
 		File inFile = new File(file);
 		File outFile = new File(outFileName);
 		try {
-			Controller.copyFile(inFile, outFile);
+			return Controller.copyFile(inFile, outFile);
 		} catch (IOException e) {
 			Log.error(e);
 		}
-
-		return true;
+		return false;
 	}
 
 	// 報告書閲覧
