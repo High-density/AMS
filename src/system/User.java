@@ -1,13 +1,6 @@
 package system;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -58,8 +51,8 @@ public abstract class User {
 		// 教員の初期名の登録
 		file = new File(Controller.masterDir + "/" + nameFileName);
 		if (!file.exists()) {
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println(props.getProperty("root.name.default"));
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
+				pw.print(props.getProperty("root.name.default") + "\n");
 			} catch (IOException e) {
 				return false;
 			}
@@ -68,8 +61,8 @@ public abstract class User {
 		// 属性情報の登録
 		file = new File(Controller.masterDir + "/" + attributeFileName);
 		if (!file.exists()) {
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println(Master.class.getSimpleName());
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
+				pw.print(Master.class.getSimpleName() + "\n");
 			} catch (IOException e) {
 				return false;
 			}
@@ -78,11 +71,7 @@ public abstract class User {
 		// パスワードの登録
 		file = new File(Controller.masterDir + "/" + passwdFileName);
 		if (!file.exists()) {
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println(props.getProperty("root.pw.default"));
-			} catch (IOException e) {
-				return false;
-			}
+			if (!Log.writeInCipher(file, props.getProperty("root.pw.default"), false)) return false;
 		}
 
 		return true;
@@ -98,13 +87,17 @@ public abstract class User {
 			int option = JOptionPane.showConfirmDialog(null, message);
 			if (option != JOptionPane.YES_OPTION) return false;
 
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 				Nics nics = new Nics();
 				for (int n = 0; n < nics.length(); n++) {
 					MacAddress mac = nics.getMacAddress(n);
 					if (mac.get() != null && mac.get() > 0) {
 						// ファイルへの書き込み
-						pw.println(nics.getName(n) + ":[" + nics.getMacAddress(n) + "]");
+						if (!Log.writeInCipher(file,
+											   nics.getName(n) + ":[" + nics.getMacAddress(n) + "]",
+											   false)) {
+							return false;
+						}
 						n = nics.length();
 					}
 				}
@@ -132,8 +125,8 @@ public abstract class User {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy年MM月dd日HH時mm分ss秒");
 			file = new File(Controller.masterDir + "/notification/" + LocalDateTime.now().format(formatter));
 			if(!Controller.mkdirs(dir.toString())) return null;
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-				pw.println(props.getProperty("ttl.illegal"));
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
+				pw.print(props.getProperty("ttl.illegal") + "\n");
 				String operator = Controller.getComputerHolder();
 				String content;
 
@@ -145,7 +138,7 @@ public abstract class User {
 				content += "コンピュータで";
 				content += Controller.getName(id) + "(" + id + ")";
 				content += "へのログインが試みられました．";
-				pw.println(content + "\n");
+				pw.print(content + "\n\n");
 			} catch(IOException e) {
 				Log.error(e);
 				return null;
@@ -156,7 +149,7 @@ public abstract class User {
 
 		// ファイルから属性の読み込み
 		file = new File(Controller.homeDirName + "/" + id + "/" + attributeFileName);
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 			attribute = br.readLine(); // Fileから読み取った行
 		} catch (IOException | NullPointerException e) {
 			Log.error(e);
@@ -194,9 +187,9 @@ public abstract class User {
 			Arrays.sort(fileNames);
 			for (String fileName : fileNames) {
 				File file = new File(dir.toString() + "/" + fileName);
-				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+				try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 					message += "***** " + fileName + " *****\n";
-					String ttl = br. readLine(); // 先頭の行はフレームタイトル
+					String ttl = br.readLine(); // 先頭の行はフレームタイトル
 					if (ttlToContent.get(ttl) == null) ttlToContent.put(ttl, "");
 					String line;
 					while ((line = br.readLine()) != null) {
@@ -235,8 +228,8 @@ public abstract class User {
 
 		// ファイルからパスワードの読み込み
 		File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			pw = br.readLine();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+			pw = Cryptography.decrypt(br.readLine());
 		} catch (FileNotFoundException e) {
 			// 入力されたidを持つユーザがいない
 			return false;
@@ -256,8 +249,8 @@ public abstract class User {
 
 		// ファイルからMACアドレスNIC表示名の読み込み
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-			String line = br.readLine();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+			String line = Cryptography.decrypt(br.readLine());
 			Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]*)\\]");
 			Matcher m = p.matcher(line);
 			if (m.find()) {
@@ -293,7 +286,7 @@ public abstract class User {
 
 		String name;
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nameFileName);
-		try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 			name = br.readLine(); // Fileから読み取った行
 		} catch (IOException | NullPointerException e) {
 			Log.error(e);
@@ -319,7 +312,7 @@ public abstract class User {
 			String fileName = year + "-" + month + "-" + day;
 			String dirName = Controller.homeDirName + "/" + id + "/" + attendanceDirName;
 			File file = new File(dirName + fileName);
-			try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 				// 出席のとき
 				String line = br.readLine();
 				Pattern p = Pattern.compile("([0-9]{2})([0-9]{2}):([0-9]+)$");

@@ -103,4 +103,32 @@ public class AccountInformation {
 	public String getPasswd() {
 		return passwd;
 	}
+
+	/**
+	 * 設定されたアカウント情報が有効なものかどうか
+	 * 半角全角チェックを行う
+     * @return 有効であればtrue，無効ならfalse
+	 */
+	public boolean isValid() {
+		if (id != null && !isHalfWidth(id) ||
+			passwd != null && !isHalfWidth(passwd)) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 含まれる文字が全部半角で構成されているかチェック
+	 * @param str チェックしたい文字列
+	 * @return 文字列がすべて半角で構成されていたらtrue，それ以外ならfalse
+	 */
+	public static boolean isHalfWidth(String str) {
+		char[] chars = str.toCharArray();
+		for (int i = 0; i < chars.length; i++) {
+			if (String.valueOf(chars[i]).getBytes().length >= 2) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

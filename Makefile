@@ -1,5 +1,7 @@
+make: dojar
+
 .PHONY: all
-all: class javadoc
+all: class jar javadoc
 
 .PHONY: class
 class:
@@ -27,3 +29,11 @@ dojar: jar
 .PHONY: clean-file
 clean-file:
 	rm -rf file
+
+.PHONY: cyg
+cyg:
+	mkdir -p bin; javac -J-Dfile.encoding=UTF-8 src/*/*.java -d bin/;\
+	cp Main.mf bin/Main.mf; cd bin/;\
+	jar cfm ../AMS.jar Main.mf * ../src/icon/* ../src/properties/*;\
+	cd ../; chmod +x AMS.jar;\
+	java -jar AMS.jar

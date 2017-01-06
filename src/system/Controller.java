@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,7 +17,6 @@ import java.util.Comparator;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.swing.JOptionPane;
 
 /**
@@ -72,6 +70,10 @@ public class Controller {
 	 * 設定ファイル
 	 */
 	private Properties props;
+	/**
+	 * 暗号化用パスワード
+	 */
+	private static String passwd = "LA-zmr!)NqCf+J.i~B/OcVOOo/*m)S!n,KZr4VpL";
 
 	public Controller() {
 		// ディレクトリの各種設定
@@ -340,7 +342,7 @@ public class Controller {
 	}
 
 	/**
-	 * ディレクトリの作成を行う
+	 * ディレクトリの作成を行う(非推奨)
 	 * @param dir 作成したいディレクトリのパス
 	 * @return 作成成功時true，失敗時false
 	 */
@@ -409,8 +411,8 @@ public class Controller {
 		// ファイルからMACアドレスNIC表示名の読み込み
 		for(String slave : slaves) {
 			File file = new File(Controller.homeDirName + "/" + slave + "/nics");
-			try (BufferedReader br = new BufferedReader(new FileReader(file));) {
-				String line = br.readLine();
+			try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+				String line = Cryptography.decrypt(br.readLine());
 				Pattern p = Pattern.compile("(.*):\\[([0-9A-F:]+)");
 				Matcher m = p.matcher(line);
 				if (m.find()) {

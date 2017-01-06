@@ -3,9 +3,11 @@ package system;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -40,11 +42,11 @@ public class Slave extends User {
 		if (!Controller.mkdirs(dirName)) return false;
 
 		if (!file.exists()) {
-			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
+			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 				// 未出席時のみ記録
 				file.createNewFile();
 				formatter = DateTimeFormatter.ofPattern("HHmm");
-				pw.println(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED);
+				pw.print(ldt.format(formatter) + ":" + AttendanceBook.ATTENDED + "\n");
 				return true;
 			} catch (IOException e) {
 				Log.error(e, "出席登録に失敗しました．教員に報告し，手動による登録を行ってください.");
@@ -99,12 +101,11 @@ public class Slave extends User {
 		File inFile = new File(file);
 		File outFile = new File(outFileName);
 		try {
-			Controller.copyFile(inFile, outFile);
+			return Controller.copyFile(inFile, outFile);
 		} catch (IOException e) {
 			Log.error(e);
 		}
-
-		return true;
+		return false;
 	}
 
 	// 報告書閲覧
@@ -114,6 +115,9 @@ public class Slave extends User {
 
 	// アカウント管理
 	public boolean setAccount(AccountInformation oldAccount, AccountInformation newAccount){
+		// 指定されたAccountInformationが有効なものか
+		if (!oldAccount.isValid() || !newAccount.isValid()) return false;
+
 		// 必要な要素が抜けてたらエラー
 		if (newAccount.getPasswd() == null) {
 			Log.error(new Throwable(), "要素がnull");
@@ -123,12 +127,7 @@ public class Slave extends User {
 		// ファイルを更新する
 		// 更新対象はパスワードのみ
 		File file = new File(Controller.homeDirName + "/" + id + "/" + passwdFileName);
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-			pw.println(newAccount.getPasswd());
-		} catch (IOException | NullPointerException e) {
-			Log.error(e);
-			return false;
-		}
+		if (!Log.writeInCipher(file, newAccount.getPasswd(), false)) return false;
 
 		return true;
 	}
@@ -166,7 +165,7 @@ public class Slave extends User {
 		for (String userDirName: fileDir.list()) {
 			File file = new File(Controller.homeDirName + "/" + userDirName + "/" + attributeFileName);
 			if (file.exists()) {
-				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+				try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
 					if (br.readLine().equals(Slave.class.getSimpleName())) {
 						slaves.add(userDirName);
 					}
