@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -30,6 +31,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
@@ -72,7 +74,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JButton aNextButton;
 	private JButton aBackButton;
 	private JLabel aMonthLabel;
-	private JLabel pMonthLabel;
+	private JTextField yearText;
+	private JTextField montText;
+	private Button goButton;
 
 	/*report*/
 	private JPanel repoPanel;
@@ -88,6 +92,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JButton addPlanButton;
 	private JButton pNextButton;
 	private JButton pBackButton;
+	private JLabel pMonthLabel;
 	private JScrollPane planScrollPane;
 	private JTextArea pTextArea;
 	private Agenda agenda; // 予定
@@ -171,9 +176,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		panelNum[0] = new JPanel();
 		panelNum[0].setLayout(null);
 		labelNum[0] = new JLabel("出席管理");
-		labelNum[0].setBounds(0,10,800,40);
+		labelNum[0].setBounds(0,10,440,40);
 		labelNum[0].setFont(new Font(null, Font.BOLD, 20));
-		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
+		labelNum[0].setHorizontalAlignment(JLabel.RIGHT);
 
 		aNextButton = new JButton();
 		aNextButton.setBounds(550,60,200,50);
@@ -194,7 +199,6 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aBackButton.setContentAreaFilled(false);
 		aBackButton.setBorderPainted(false);
 		aBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
-
 		try{
 			java.net.URL url = getClass().getClassLoader().getResource("src/icon/left.png");
 			ImageIcon left = new ImageIcon(url);
@@ -203,23 +207,27 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			ImageIcon left = new ImageIcon("src/icon/left.png");
 			aBackButton.setIcon(left);
 		}
-		aMonthLabel = new JLabel(year+"年"+month+"月");
-		aMonthLabel.setBounds(340,60,200,40);
+
+		goButton = new Button("GO!!");
+		goButton.setBounds(740,20,40,30);
+
+		aMonthLabel = new JLabel("0000年"+"00月");
+		aMonthLabel.setBounds(380,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 
 		Border border = new EmptyBorder(0,0,0,0);
 		IDScrollPanel = new JScrollPane();
-		IDScrollPanel.setBounds(10,161,70,300);
+		IDScrollPanel.setBounds(10,161,75,300);
 		IDScrollPanel.setBorder(border);
 		IDScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		IDScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		dayScrollPanel = new JScrollPane();
-		dayScrollPanel.setBounds(80,130,683,30);
+		dayScrollPanel.setBounds(85,130,683,30);
 		dayScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		dayScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		dayScrollPanel.setBorder(border);
 		attScrollPanel = new JScrollPane();
-		attScrollPanel.setBounds(80,161,700,300);
+		attScrollPanel.setBounds(85,161,700,300);
 		attScrollPanel.setBorder(border);
 		attScrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		attScrollPanel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -228,15 +236,27 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		dayScrollPanel.getHorizontalScrollBar().setModel(attScrollPanel.getHorizontalScrollBar().getModel());
 
 		ID = new JLabel("名前");
-		ID.setBounds(10,130,70,30);
+		ID.setBounds(10,130,75,30);
 		ID.setHorizontalAlignment(JLabel.CENTER);
 		ID.setOpaque(true);
 		ID.setBackground(new Color(254 ,205 ,21));
 		ID.setBorder(new LineBorder(Color.GRAY, 1, true));
 
+		yearText = new JTextField();
+		yearText.setBounds(300,65,80,35);
+		yearText.setFont(new Font(null, Font.PLAIN, 24));
+		yearText.setHorizontalAlignment(JLabel.CENTER);
+		montText = new JTextField();
+		montText.setBounds(405,65,60,35);
+		montText.setFont(new Font(null, Font.PLAIN, 24));
+		montText.setHorizontalAlignment(JLabel.CENTER);
+
 		attReset();
 
 		panelNum[0].add(labelNum[0]);
+		panelNum[0].add(yearText);
+		panelNum[0].add(montText);
+		panelNum[0].add(goButton);
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
 		panelNum[0].add(aMonthLabel);
@@ -249,7 +269,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void attendCalendar(){
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
-		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
+		//aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
+		aMonthLabel.setText("年"+" ____月");
+		yearText.setText(year[0]+"");
+		montText.setText((month[0]+1)+"");
 		calendar.set(year[0], month[0], 1);
 		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		int maxDate = yearMonth[0].lengthOfMonth();
@@ -332,7 +355,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		int bottom = 300 - (30 * numSize);
 		for(int i=0;i<numSize;i++){	// s12500
 			idLabel[i] = new JLabel(Controller.getName(slaves.get(i)));
-			idLabel[i].setPreferredSize(new Dimension(250,30));
+			idLabel[i].setPreferredSize(new Dimension(78,30));
 			//idLabel[i].setHorizontalAlignment(JLabel.CENTER);
 			idLabel[i].setForeground(Color.WHITE);
 			idLabel[i].setOpaque(true);
@@ -1018,7 +1041,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		// 自動生成されたメソッド・スタブ
 	}
 
-	public void windowIconified(WindowEvent e){	// ウィンドウを最小化したとき
+	public void windowIconified(WindowEvent e){		// ウィンドウを最小化したとき
 		// 自動生成されたメソッド・スタブ
 	}
 
