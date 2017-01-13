@@ -40,6 +40,7 @@ import javax.swing.border.LineBorder;
 import system.Agenda;
 import system.AttendanceBook;
 import system.CheckOS;
+import system.CheckRepaint;
 import system.Controller;
 import system.Slave;
 
@@ -74,9 +75,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JButton aNextButton;
 	private JButton aBackButton;
 	private JLabel aMonthLabel;
-	private JTextField yearText;
-	private JTextField montText;
-	private Button goButton;
+	private JTextField aYearText;
+	private JTextField aMontText;
+	private Button aGoButton;
 
 	/*report*/
 	private JPanel repoPanel;
@@ -97,6 +98,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private JTextArea pTextArea;
 	private Agenda agenda; // 予定
 	private int planday = -1; // ボタンから取得した日
+	private JTextField pYearText;
+	private JTextField pMontText;
+	private Button pGoButton;
 	private final String weekName[] = {"日","月","火","水","木","金","土"};
 
 	/*account*/
@@ -144,6 +148,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 
 		/* 各種設定*/
+		yearMonth[1] = YearMonth.now();
 		PanelButton();	//機能選択ボタンの追加
 		Attendance();	//出席管理パネル設定
 		Report();		//報告書管理パネル設定
@@ -208,10 +213,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			aBackButton.setIcon(left);
 		}
 
-		goButton = new Button("GO!!");
-		goButton.setBounds(740,20,40,30);
+		aGoButton = new Button("GO!!");
+		aGoButton.setBounds(500,65,40,30);
 
-		aMonthLabel = new JLabel("0000年"+"00月");
+		aMonthLabel = new JLabel("年 ____月");
 		aMonthLabel.setBounds(380,60,200,40);
 		aMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 
@@ -242,21 +247,22 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		ID.setBackground(new Color(254 ,205 ,21));
 		ID.setBorder(new LineBorder(Color.GRAY, 1, true));
 
-		yearText = new JTextField();
-		yearText.setBounds(300,65,80,35);
-		yearText.setFont(new Font(null, Font.PLAIN, 24));
-		yearText.setHorizontalAlignment(JLabel.CENTER);
-		montText = new JTextField();
-		montText.setBounds(405,65,60,35);
-		montText.setFont(new Font(null, Font.PLAIN, 24));
-		montText.setHorizontalAlignment(JLabel.CENTER);
+		aYearText = new JTextField();
+		aYearText.setBounds(300,65,80,35);
+		aYearText.setFont(new Font(null, Font.PLAIN, 24));
+		aYearText.setHorizontalAlignment(JLabel.CENTER);
+		aMontText = new JTextField();
+		aMontText.setBounds(405,65,60,35);
+		aMontText.setFont(new Font(null, Font.PLAIN, 24));
+		aMontText.setHorizontalAlignment(JLabel.CENTER);
 
+		yearMonth[0] = YearMonth.now();
 		attReset();
 
 		panelNum[0].add(labelNum[0]);
-		panelNum[0].add(yearText);
-		panelNum[0].add(montText);
-		panelNum[0].add(goButton);
+		panelNum[0].add(aYearText);
+		panelNum[0].add(aMontText);
+		panelNum[0].add(aGoButton);
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
 		panelNum[0].add(aMonthLabel);
@@ -269,11 +275,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void attendCalendar(){
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
-		//aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
-		aMonthLabel.setText("年"+" ____月");
-		yearText.setText(year[0]+"");
-		montText.setText((month[0]+1)+"");
-		calendar.set(year[0], month[0], 1);
+		aYearText.setText(year[0]+"");
+		aMontText.setText((month[0]+1)+"");
 		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		int maxDate = yearMonth[0].lengthOfMonth();
 
@@ -316,6 +319,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			}
 		}
 
+		for (int i = 0; i < 31; i++) {
+			dayLabel[i].setText(String.format("%1$02d", i+1));
+		}
+
 		if(maxDate < 31){
 			for(int i=maxDate;i<31;i++){
 				dayLabel[i].setText("/");
@@ -350,6 +357,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aDayPanel = new JPanel(new GridLayout(1, 31));
 
 		idLabel = new JLabel[numSize];
+		dayLabel = new JLabel[31];
 		attButton = new JButton[numSize][31];
 		attgbc[0].gridx = 0;
 		int bottom = 300 - (30 * numSize);
@@ -546,11 +554,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		ymd.setFont(new Font(null, Font.PLAIN, 20));
 		ymd.setHorizontalAlignment(JLabel.CENTER);
 		pNextButton = new JButton();
-		pNextButton.setBounds(310,60,100,40);
+		pNextButton.setBounds(330,60,100,40);
 		pNextButton.setContentAreaFilled(false);
 		pNextButton.setBorderPainted(false);
 		pBackButton = new JButton();
-		pBackButton.setBounds(040,60,100,40);
+		pBackButton.setBounds(010,60,100,40);
 		pBackButton.setContentAreaFilled(false);
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
@@ -571,6 +579,17 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			pBackButton.setIcon(left);
 		}
 
+		pGoButton = new Button("Go!!");
+		pGoButton.setBounds(280,65,40,35);
+		pYearText = new JTextField();
+		pYearText.setBounds(100,65,70,35);
+		pYearText.setFont(new Font(null, Font.PLAIN, 20));
+		pYearText.setHorizontalAlignment(JLabel.CENTER);
+		pMontText = new JTextField();
+		pMontText.setBounds(195,65,50,35);
+		pMontText.setFont(new Font(null, Font.PLAIN, 20));
+		pMontText.setHorizontalAlignment(JLabel.CENTER);
+
 		planPanel = new JPanel();
 		planPanel.setLayout(new GridLayout(7, 7));
 		planPanel.setBounds(20, 110, 400, 400);
@@ -578,8 +597,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
-		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
-		pMonthLabel.setBounds(160,60,200,40);
+		pMonthLabel = new JLabel("年 ___ 月");
+		pMonthLabel.setBounds(170,60,120,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		pTextArea = new JTextArea(20,24);
 		//pTextArea.setBounds(450, 60, 300, 400);
@@ -618,6 +637,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		}
 
 		panelNum[2].add(labelNum[2]);
+		panelNum[2].add(pGoButton);
+		panelNum[2].add(pYearText);
+		panelNum[2].add(pMontText);
 		panelNum[2].add(addPlanButton);
 		panelNum[2].add(ymd);
 		panelNum[2].add(pMonthLabel);
@@ -631,8 +653,9 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private void planCalendar(){
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
+		pYearText.setText(year[1]+"");
+		pMontText.setText((month[1]+1)+"");
 		calendar.set(year[1], month[1], 1);
-		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
 		yearMonth[1] = YearMonth.of(year[1], month[1]+1);
 		agenda  = controller.getAgenda(yearMonth[1]);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -830,6 +853,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aNextButton.addKeyListener(this);
 		aBackButton.addActionListener(this);
 		aBackButton.addKeyListener(this);
+		aGoButton.addActionListener(this);
+		aGoButton.addKeyListener(this);
 
 		//スクロールを同期する
 		//IDScrollPanel.getViewport().addChangeListener(cl);
@@ -849,6 +874,8 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		pNextButton.addKeyListener(this);
 		pBackButton.addActionListener(this);
 		pBackButton.addKeyListener(this);
+		pGoButton.addActionListener(this);
+		pGoButton.addKeyListener(this);
 		for(int i=0;i<pDayButton.length;i++){
 			pDayButton[i].addActionListener(this);
 			pDayButton[i].addKeyListener(this);
@@ -886,14 +913,27 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 			controller.logout();
 			mainFrame.setVisible(false);
 			Login.loginFrame.setVisible(true);
+		}else if(e.getSource() == aGoButton){		// 年月の指定
+			String yearStr, monthStr;
+			yearStr = aYearText.getText();
+			monthStr = aMontText.getText();
+			int yearInt, monthInt;
+			try{
+				yearInt = Integer.parseInt(yearStr);
+				monthInt = Integer.parseInt(monthStr);
+				calendar.set(Calendar.YEAR, yearInt);
+				calendar.set(Calendar.MONTH, monthInt-1);
+			}catch(NumberFormatException e1){
+			}
+			attendCalendar();
 		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//attendで1ヶ月増やす
 			attendCalendar();
-			panelNum[0].repaint();
+			//panelNum[0].repaint();
 		}else if(e.getSource() == aBackButton){
 			calendar.set(Calendar.MONTH, month[0] -1);	//attendで1ヶ月減らす
 			attendCalendar();
-			panelNum[0].repaint();
+			//panelNum[0].repaint();
 		}else if(e.getActionCommand().matches("attButton" + ".*")){	//出欠情報の変更機能
 			for(int i=0;i<numSize;i++){	//ID用の i
 				for(int j=0;j<31;j++){	//日付用の j
@@ -929,14 +969,25 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 					controller.showReport(user);
 				}
 			}
+		}else if(e.getSource() == pGoButton){
+			String yearStr, monthStr;
+			yearStr = pYearText.getText();
+			monthStr = pMontText.getText();
+			int yearInt, monthInt;
+			try {
+				yearInt = Integer.parseInt(yearStr);
+				monthInt = Integer.parseInt(monthStr);
+				calendar.set(Calendar.YEAR, yearInt);
+				calendar.set(Calendar.MONTH, monthInt-1);
+			} catch (Exception e2) {
+			}
+			planCalendar();
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1]+1);	//planで1ヶ月増やす
 			planCalendar();
-			panelNum[2].repaint();
 		}else if(e.getSource() == pBackButton){
 			calendar.set(Calendar.MONTH, month[1]-1);	//planで1ヶ月減らす
 			planCalendar();
-			panelNum[2].repaint();
 		}else if(e.getActionCommand().matches("pDayButton" + ".*")){/*planで日付を取得するとき*/
 			for(int i=0;i<pDayButton.length;i++){
 				if(e.getSource() == pDayButton[i]){
@@ -1050,7 +1101,10 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	}
 
 	public void windowActivated(WindowEvent e) {	// ウィンドウがアクティブになったとき
-		UpdateAccount(); // 再描画
+		if(CheckRepaint.checkFlag()){
+			UpdateAccount(); // 再描画
+			CheckRepaint.beFalse();
+		}
 	}
 
 	public void windowDeactivated(WindowEvent e) {	// ウィンドウをアクティブでなくしたとき
