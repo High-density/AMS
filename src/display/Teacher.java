@@ -49,13 +49,14 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	private Controller controller;	// 内部動作用
 	private NewAccount newAccount;	// アカウント用
 	private SetAdmin setAdmin; // 教員アカウント用
-	static JFrame mainFrame;
+	public static JFrame mainFrame;
 	private Container contentPane;
 	private JPanel panelButton;
 	private JPanel cardPanel;private CardLayout cLayout;
 	private JPanel panelNum[] = new JPanel[4];
 	private JButton numButton[] = new JButton[5];
 	private JLabel labelNum[] = new JLabel[4];
+	public static boolean repaintFlag = false;
 	private final String[] funcName = {"出席管理","報告書管理",
 			"予定管理","アカウント管理", "ログアウト"};
 
@@ -252,7 +253,11 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 		aYearText.setFont(new Font(null, Font.PLAIN, 24));
 		aYearText.setHorizontalAlignment(JLabel.CENTER);
 		aMontText = new JTextField();
-		aMontText.setBounds(405,65,60,35);
+		if(CheckOS.isWindows()){
+			aMontText.setBounds(405,65,60,35);
+		}else{// if(CheckOS.isLinux()){
+			aMontText.setBounds(405,65,55,35);
+		}
 		aMontText.setFont(new Font(null, Font.PLAIN, 24));
 		aMontText.setHorizontalAlignment(JLabel.CENTER);
 
@@ -1101,12 +1106,12 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	}
 
 	public void windowActivated(WindowEvent e) {	// ウィンドウがアクティブになったとき
-		if(CheckRepaint.checkFlag()){
-			UpdateAccount(); // 再描画
-			CheckRepaint.beFalse();
-		}
+	    if(CheckRepaint.checkFlag()){
+		UpdateAccount(); // 再描画
+		CheckRepaint.beFalse();
+	    }
 	}
-
+    
 	public void windowDeactivated(WindowEvent e) {	// ウィンドウをアクティブでなくしたとき
 		// 自動生成されたメソッド・スタブ
 	}
