@@ -83,10 +83,21 @@ public abstract class User {
 		File file = new File(Controller.homeDirName + "/" + id + "/" + nicFileName);
 
 		if (!file.exists()) {
-			String message = Controller.getName(id) + "(" + id + ")として" + br  +  "このコンピュータを登録しますか？";
+			String message; // ダイアログ用
+
+			// 確認ダイアログ
+			message = Controller.getName(id) + "(" + id + ")として" + br + props.getProperty("msg.cfm.register");
 			int option = JOptionPane.showConfirmDialog(null, message);
 			if (option != JOptionPane.YES_OPTION) return false;
 
+			// すでに登録されいているMACアドレスかどうかチェック
+			if (Controller.getComputerHolder() != null) {
+				message = props.getProperty("msg.err.login.used");
+				JOptionPane.showMessageDialog(null, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
+
+			// MACアドレスを登録
 			try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8")))) {
 				Nics nics = new Nics();
 				for (int n = 0; n < nics.length(); n++) {

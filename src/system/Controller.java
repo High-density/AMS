@@ -428,7 +428,6 @@ public class Controller {
 				}
 			} catch (FileNotFoundException e) {
 				// ID未登録時
-				return null;
 			} catch (IOException | NullPointerException e) {
 				Log.error(e);
 				return null;
