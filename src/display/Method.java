@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.BorderLayout;
+import java.awt.Button;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Container;
@@ -54,6 +55,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private JLabel aMonthLabel;
 	private JLabel[] weekLabel_att = new JLabel[7];
 	private JLabel[] attDayLabel = new JLabel[42];
+	private JTextField aYearText;
+	private JTextField aMontText;
+	private Button aGoButton;
 
 	// report
 	private JButton referButton;
@@ -73,6 +77,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private JTextArea pTextArea; 	// 予定表示
 	private Agenda agenda;
 	private int pday = -1; 		// ボタンを押した時の数字から日付
+	private JTextField pYearText;
+	private JTextField pMontText;
+	private Button pGoButton;
 
 	// account
 	private JLabel IDLabel;
@@ -186,10 +193,27 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		labelNum[0].setHorizontalAlignment(JLabel.CENTER);
 		labelNum[0].setBounds(0,10,800,40);
 
-		aMonthLabel = new JLabel(year+"年"+month+"月");
-		aMonthLabel.setBounds(0,60,800,40);
+		aGoButton = new Button("GO!!");
+		aGoButton.setBounds(480,65,40,30);
+
+		aMonthLabel = new JLabel("年 ____ 月");
+		aMonthLabel.setBounds(315,60,200,40);
 		aMonthLabel.setHorizontalAlignment(JLabel.CENTER);
 		aMonthLabel.setFont(new Font(null, Font.BOLD, 24));
+
+		aYearText = new JTextField();
+		aYearText.setBounds(280,65,80,35);
+		aYearText.setFont(new Font(null, Font.PLAIN, 24));
+		aYearText.setHorizontalAlignment(JLabel.CENTER);
+		aMontText = new JTextField();
+		if(CheckOS.isWindows()){
+			aMontText.setBounds(385,65,60,35);
+		}else{// if(CheckOS.isLinux()){
+			aMontText.setBounds(385,65,55,35);
+		}
+		aMontText.setFont(new Font(null, Font.PLAIN, 24));
+		aMontText.setHorizontalAlignment(JLabel.CENTER);
+
 		for(int i=0;i<7;i++){
 			weekLabel_att[i] = new JLabel(weekName[i]);
 			weekLabel_att[i].setFont(new Font(null, Font.BOLD, 20));
@@ -221,17 +245,20 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		}
 
 		panelNum[0].add(labelNum[0]);
-		panelNum[0].add(calPanel);
+		panelNum[0].add(aYearText);
+		panelNum[0].add(aMontText);
+		panelNum[0].add(aGoButton);
 		panelNum[0].add(aNextButton);
 		panelNum[0].add(aBackButton);
 		panelNum[0].add(aMonthLabel);
+		panelNum[0].add(calPanel);
 	}
 
 	private void attendCalendar(){
 		year[0] = calendar.get(Calendar.YEAR);
 		month[0] = calendar.get(Calendar.MONTH);
-		aMonthLabel.setText(year[0]+"年"+(month[0]+1)+"月");
-		aMonthLabel.setFont(new Font(null, Font.BOLD, 20));
+		aYearText.setText(year[0]+"");
+		aMontText.setText((month[0]+1)+"");
 		calendar.set(year[0], month[0], 1);
 		yearMonth[0] = YearMonth.of(year[0], month[0]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -326,8 +353,8 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		labelNum[2].setBounds(0,10,800,40);
 		labelNum[2].setFont(new Font(null, Font.BOLD, 20));
 		labelNum[2].setHorizontalAlignment(JLabel.CENTER);
-		pMonthLabel = new JLabel(year[1]+"年"+(month[1]+1)+"月");
-		pMonthLabel.setBounds(160,50,200,40);
+		pMonthLabel = new JLabel("年 ___ 月");
+		pMonthLabel.setBounds(180,50,200,40);
 		pMonthLabel.setFont(new Font(null, Font.PLAIN, 24));
 		planDate = new JLabel("指定された日付");
 		planDate.setBounds(520,50,200,40);
@@ -342,11 +369,11 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		planScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		planScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		pNextButton = new JButton();
-		pNextButton.setBounds(300,50,100,40);
+		pNextButton.setBounds(330,50,100,40);
 		pNextButton.setContentAreaFilled(false);
 		pNextButton.setBorderPainted(false);
 		pBackButton = new JButton();
-		pBackButton.setBounds(040,50,100,40);
+		pBackButton.setBounds(020,50,100,40);
 		pBackButton.setContentAreaFilled(false);
 		pBackButton.setBorderPainted(false);
 		//ボタンへのiconの設置
@@ -369,7 +396,16 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		pNextButton.setHorizontalTextPosition(SwingConstants.CENTER);
 		pBackButton.setHorizontalTextPosition(SwingConstants.CENTER);
 
-
+		pGoButton = new Button("Go!!");
+		pGoButton.setBounds(290,50,40,35);
+		pYearText = new JTextField();
+		pYearText.setBounds(110,50,70,35);
+		pYearText.setFont(new Font(null, Font.PLAIN, 20));
+		pYearText.setHorizontalAlignment(JLabel.CENTER);
+		pMontText = new JTextField();
+		pMontText.setBounds(205,50,50,35);
+		pMontText.setFont(new Font(null, Font.PLAIN, 20));
+		pMontText.setHorizontalAlignment(JLabel.CENTER);
 
 		for(int i=0;i<7;i++){
 			weekLabel_plan[i] = new JLabel(weekName[i]);
@@ -398,6 +434,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 
 		panelNum[2].add(planDate);
 		panelNum[2].add(labelNum[2]);
+		panelNum[2].add(pGoButton);
+		panelNum[2].add(pYearText);
+		panelNum[2].add(pMontText);
 		panelNum[2].add(pMonthLabel);
 		panelNum[2].add(pNextButton);
 		panelNum[2].add(pBackButton);
@@ -409,7 +448,9 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	private void planCalendar(){
 		year[1] = calendar.get(Calendar.YEAR);
 		month[1] = calendar.get(Calendar.MONTH);
-		pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
+		//pMonthLabel.setText(year[1]+"年"+(month[1]+1)+"月");
+		pYearText.setText(year[1]+"");
+		pMontText.setText((month[1]+1)+"");
 		calendar.set(year[1], month[1], 1);
 		yearMonth[1] = YearMonth.of(year[1], month[1]+1);
 		int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
@@ -515,10 +556,14 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 		aNextButton.addKeyListener(this);
 		aBackButton.addActionListener(this);
 		aBackButton.addKeyListener(this);
+		aGoButton.addActionListener(this);
+		aGoButton.addKeyListener(this);
 		pNextButton.addActionListener(this);
 		pNextButton.addKeyListener(this);
 		pBackButton.addActionListener(this);
 		pBackButton.addKeyListener(this);
+		pGoButton.addActionListener(this);
+		pGoButton.addKeyListener(this);
 		ChangeButton.addActionListener(this);
 		ChangeButton.addKeyListener(this);
 		for(int i = 0;i < 42;i++){
@@ -529,17 +574,21 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == numButton[0]){			// 機能1
+		if(e.getSource() == numButton[0]){			// 出席
 			calendar.set(Calendar.YEAR, year[0]);
 			calendar.set(Calendar.MONTH, month[0]);
+			attendCalendar();
+			panelNum[0].repaint();
 			cLayout.show(cardPanel, "Meth1");
-		}else if(e.getSource() == numButton[1]){	// 機能2
+		}else if(e.getSource() == numButton[1]){	// 報告書
 			cLayout.show(cardPanel, "Meth2");
-		}else if(e.getSource() == numButton[2]){	// 機能3
+		}else if(e.getSource() == numButton[2]){	// 予定
 			calendar.set(Calendar.YEAR, year[1]);
 			calendar.set(Calendar.MONTH, month[1]);
+			planCalendar();
+			panelNum[2].repaint();
 			cLayout.show(cardPanel, "Meth3");
-		}else if(e.getSource() == numButton[3]){	// 機能4
+		}else if(e.getSource() == numButton[3]){	// アカウント
 			cLayout.show(cardPanel, "Meth4");
 		}else if(e.getSource() == numButton[4]){	// ログアウト
 			controller.logout();
@@ -573,6 +622,19 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 				}
 				JOptionPane.showMessageDialog(mainFrame, mess);
 			}
+		}else if(e.getSource() == aGoButton){		// 年月の指定
+			String yearStr, monthStr;
+			yearStr = aYearText.getText();
+			monthStr = aMontText.getText();
+			int yearInt, monthInt;
+			try{
+				yearInt = Integer.parseInt(yearStr);
+				monthInt = Integer.parseInt(monthStr);
+				calendar.set(Calendar.YEAR, yearInt);
+				calendar.set(Calendar.MONTH, monthInt-1);
+			}catch(NumberFormatException e1){
+			}
+			attendCalendar();
 		}else if(e.getSource() == aNextButton){
 			calendar.set(Calendar.MONTH, month[0] +1);	//1ヶ月増やす
 			attendCalendar();
@@ -581,6 +643,19 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			calendar.set(Calendar.MONTH, month[0] -1);	//1ヶ月減らす
 			attendCalendar();
 			panelNum[0].repaint();
+		}else if(e.getSource() == pGoButton){
+			String yearStr, monthStr;
+			yearStr = pYearText.getText();
+			monthStr = pMontText.getText();
+			int yearInt, monthInt;
+			try {
+				yearInt = Integer.parseInt(yearStr);
+				monthInt = Integer.parseInt(monthStr);
+				calendar.set(Calendar.YEAR, yearInt);
+				calendar.set(Calendar.MONTH, monthInt-1);
+			} catch (Exception e2) {
+			}
+			planCalendar();
 		}else if(e.getSource() == pNextButton){
 			calendar.set(Calendar.MONTH, month[1] +1);	//1ヶ月増やす
 			planCalendar();
@@ -590,6 +665,8 @@ class Method extends KeyAdapter implements ActionListener{// 機能選択クラ�
 			planCalendar();
 			panelNum[2].repaint();
 		}else if(e.getActionCommand().matches("dayButton_plan" + ".*")){ // 予定の取得
+			planCalendar();
+			panelNum[2].repaint();
 			for(int i=0;i<42;i++){
 				if(e.getSource() == dayButton_plan[i]){
 					String dayName = dayButton_plan[i].getText();

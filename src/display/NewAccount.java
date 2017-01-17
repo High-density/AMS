@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import system.AccountInformation;
+import system.CheckRepaint;
 import system.Controller;
 
 public class NewAccount extends KeyAdapter implements ActionListener{
@@ -141,11 +142,13 @@ public class NewAccount extends KeyAdapter implements ActionListener{
 					//System.out.println("チェック無し");
 				}
 				controller.setAccount(oldAccount, newAccount);
+				CheckRepaint.beTrue();
 			}else if(na == 0){
 				String newId = idField.getText();
 				String newName = nameField.getText();
 				AccountInformation newAccount = AccountInformation.ofAll(newId, newName, newId);
 				controller.createUser(newAccount);
+				CheckRepaint.beTrue();
 			}
 			newAccFrame.setVisible(false);
 			newAccFrame.dispose();
