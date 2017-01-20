@@ -1106,6 +1106,7 @@ class Teacher extends KeyAdapter implements ActionListener, WindowListener{// �
 	}
 
 	public void windowActivated(WindowEvent e) {	// ウィンドウがアクティブになったとき
+	        reportUpdate();
 		if(CheckRepaint.checkFlag()){
 			UpdateAccount(); // 再描画
 			CheckRepaint.beFalse();
