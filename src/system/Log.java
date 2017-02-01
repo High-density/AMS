@@ -85,7 +85,7 @@ class Log {
 	// 指定したファイルに指定された文字列を暗号化して記述する
 	public static boolean writeInCipher(File file, String message, boolean add) {
 		(new File(file.getParent())).mkdirs(); // ディレクトリがない場合に作成
-		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, true), "UTF-8")))) {
+		try (PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file, add), "UTF-8")))) {
 			pw.print(Cryptography.encrypt(message, passwd) + "\n");
 			return true;
 		} catch(IOException e) {
